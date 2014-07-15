@@ -1,0 +1,638 @@
+\begin{algorithm}[ht]
+\SetAlgoLined
+\KwData{\textit{T}: lista de vértices que ya están en el árbol de expansión, y $v_{1}$: vértice inicial.}
+\KwOut{$A_{MST}$: Aristas asociadas al árbol de expansión mínima del grafo.}
+\textit{T}:= lista vacía;\\
+\For{$i:=1\hspace{0.1cm}\textbf{to}\hspace{0.1cm}\left| V \right|$}{
+    $Q\left[ i \right] = p_{1,i}$;\\
+    $P\left[ i \right] = 1$;
+}
+$agregar \left(T, v_{1} \right)$;\\
+\caption[Pseudocódigo de \textit{Prim} para obtener \textit{MST}]{Pseudocódigo de la implementación de \textit{Prim} para obtener el \textit{MST} a partir de un grafo.}
+\label{algo:mst}
+\end{algorithm}
+
+%When a clustering algorithm is proposed, the authors show the performance on certain data sets for which it performs well, even comparing with others using one of the many proposed clustering evaluation indexes. However, there is no single clustering algorithm that can be presented as the best alternative for any situation. Specifically for microarrays, the unsupervised clustering aims to discover groups of genes that are related, having the output of the gene (gene expression) in a few samples. There is no “gold true” for genes, many algorithms can produce clusters with different meaning that are useful for the analysis of the data. Because of that, algorithms that do not require a specific parametrization step should be used, specifically those that do not require a predetermined number of clusters.
+
+%Chapter 4
+
+%The algorithms presented in chapters 2 and 3 are general and independent of the source of the data, and they can be used on different scenarios and different number of objects. In this chapter we present the application of the algorithms on three completely different data sets. First, we analyze the components of the S&P100 stock market index, aiming to uncover hidden relationships between stocks. Then, we study the ranking of the top 500 world universities according to the data published by the Institute of Higher Education, Shanghai Jiao Tong University. Finally, we show the application of the MSTkNN-QAPgrid to analyze samples and genes of a microarray data set of the budding yeast. The algorithms were already presented in the previous chapters, so we will only refer to the particularities of each data set and the analysis of the results.
+
+
+% **************************************************
+
+%GO distingue los atributos de un gen en alguna de las tres ontologías mediante un identificador GO-\textit{term}, donde cada relación gen-GO-\textit{term} se realiza mediante el proceso de anotación las cuales son realizadas por cada laboratorio con su propia nomenclatura de genes, haciendo posible que dos laboratorios diferentes puedan comparar los procesos biológicos más significativos en los que participa aunque se usen nomenclaturas diferentes. El proyecto cuenta con una herramienta \textit{Web} llamada \textit{AmiGO} [6].
+
+%Respecto del análisis de \textit{microarray} permite obtener los genes más significativos de una muestra real de ADN de las células de un organismo (que puede ser una parte específica afectada por una anomalía). Una vez obtenido el conjunto de genes, se someten a un experimento de detección de sobre-representación de GO-\textit{term} para obtener los más significativos. Para calcular la significancia estadística de cada término se hace una prueba hypergeométrica que retorna un \textit{p-value}, cuyo significado es la probabilidad de que un gen se haya anotado en un término por casualidad, por lo que un \textit{p-value} bajo (menor a 0,05) indica que el término es significativo.
+
+%La genética, según [1] es la \textit{``rama de la biología que se ocupa de los fenómenos de herencia y variación, y estudia las leyes que rigen las semenjanzas y diferencias entre individuos con ascendientes comunes''}, la genética molecular según [2] es el \textit{``estudio de los agentes que pasan la información de generación en generación''}.
+
+%Referente a la base de datos de GO, luego de descargar los archivos oficiales provistos por el sitio \textit{Web} oficial \href{http://geneontology.org}{GeneOntology.org} en la versión completa (\textit{full}) para \textit{MySQL} de la misma, se identifican las siguientes tablas (en el orden en que deben insertarse en la base de datos) con sus principales características:
+
+%[1] - Claude A. Vilee. Biología 8va edición. McGraw-Hill, Naucalpan, México, 2003.
+%[2] - National Center for Biotechnology Information. About, A Science Primer, Molecular Genetics. Obtenido el 9 de Febrero de 2010. http://www.ncbi.nlm.nih.gov/About/primer/genetics_molecular.html
+%[5] Ashburner M (2000).
+%[6] Seth Carbon 2009. 
+
+% **************************************************
+
+%OK
+%Según el estudio realizado por \citep{bhavani:2011}, es posible identificar una especie biológica en base a los datos asociados a su secuencia de ADN, ya que especies relacionadas entre sí serían agrupadas al considerar un contador de las características que describirían cada secuencia de ADN, las cuales se representan por palabras claves de tres letras utilizando los nucleótidos base \textit{A} (adenina, o \textit{adenine}), \textit{T} (timina, o \textit{thymine}), \textit{C} (citosina, o \textit{cytosine}) y \textit{G} (guanina, o \textit{guanine}), así pues $(AAA, AAC, AAG, AAT, ACA, ..., TTT)$ serían los descriptores de características que se almacenarían en una estructura de vector de tamaño $(1 \times 64)$. Para generar el agrupamiento se propone un modelo basado en \textit{MapReduce} que utiliza K-Medias, Evolución Diferencial (\textit{Differential Evolution}, que permite actualizar los centros de los grupos del algoritmo K-Medias) y la Optimización de Colonia de Hormigas (\textit{Ant Colony Optimization}, que permite resolver problemas convencionales del agrupamiento, como grupos con formas arbitrarias, grupos con datos erróneos o puentes entre los grupos). El modelo de \textit{MapReduce} mejoró la precisión al poder trabajar con una secuenciación completa y, dado el paralelismo y distribución de carga de trabajo inherente que posee el modelo, se mejoró tanto la eficiencia como el tiempo de ejecución. Dado que los volúmenes de datos asociados a secuencia de ADN son grandes, es un avance llevar el problema de agrupamiento de datos de secuencia a un paradigma y herramientas orientados al trabajo distribuido y paralelo, permitiendo así su adaptación y uso bajo marcos de trabajo como \textit{Hadoop}, lo que se traduce además en tener una respuesta satisfactoria en un intervalo de tiempo menor al de una aplicación no distribuída o paralela, siendo esto (junto con tener resultados coherentes y correctos desde el punto de vista analítico) de gran utilidad para el investigador.
+
+%Otro avance de esta línea investigativa es el propuesto por \citep{mukhopadhyay:2012}, donde motivados porque la mayoría de los algoritmos de agrupamiento basados en datos de expresión genética optimizan un único criterio, reduciendo su capacidad de trabajar bien con diversos tipos de datos, se genera una mejora de la técnica de agrupamiento multiobjetivo que optimiza la compactación y separación de los grupos de forma simultánea, con ayuda de la clasificación con Máquinas de Vectores Soporte basada en Métodos de Conjunto (\textit{MultiObjective Clustering Support Vector Machine based ENsemble}, o MOCSVMEN), donde al comparar esta técnica con algoritmos de agrupamiento que trabajan con datos de  \textit{microarray} (K-Medias, PAM, FCM, UPGMA, SOM, SGA y SiMM-TS) se denota superioriad en el rendimiento (medido con el índice de homogeneidad biológica, BHI).
+
+%\subsubsection{Avances en índices y medidas de similitud entre genes basados en anotaciones biológicas}
+%\label{indices}
+
+%OK
+%Según la investigación realizada por \citep{benabderrahmane:2010}, \textit{Gene Ontology} (GO) es el vocabulario que describe procesos biológicos, funciones moleculares y aspectos de componentes celulares de una anotación genética, que permiten medir la similitud semántica de genes más importantes con cerca de $30,000$ términos que se pueden estructurar como un grafo acíclico dirigido, donde los términos GO son los nodos conectados por diferentes relaciones jerárquicas, generalmente del tipo ``es\_un'' (\textit{is\_a}, que describe el hecho de que un término es una especialización de otro) y ``parte\_de'' (\textit{part\_of}, que denota que un término es un componente de otro). Los investigadores presentan una nueva medida de similitud semántica llamada \textit{IntelliGO} que integra varias propiedades complementarias en un nuevo modelo de espacio vectorial. Los coeficientes asociados con cada término GO que describen un gen o proteína, incluyen información como un valor personalizado para cada tipo de código GO. La medida de similitud de coseno, utilizada para calcular el producto punto entre dos vectores, ha sido adaptada rigurosamente para el contexto del grafo de GO, e \textit{IntelliGO} fue probada en dos conjuntos, considerando los procesos biológicos de GO y los términos de función molecular para un total de 683 genes humanos y de levadura, involucrando más de $67,900$ comparaciones de pares, mostrando una capacidad de expresar la coheción biológica comparabale a otras medidas de similitud y entregando una correlación adecuada con datos de secuencia de ADN, sugiriendo utilidad para el agrupamiento funcional. La presente investigación da cuenta de que la similitud entre anotaciones se puede considerar como ``un problema resuelto'' y la medida propuesta entrega una idea de cómo relacionar las anotaciones biológicas entre sí para generar una estructura de grafo apropiada para así relacionarla con las actualmente utilizadas por el algoritmo \textit{MST-kNN}. El aporte de la nueva medida es básicamente el apoyo a la actualización de la base de datos de anotaciones GO, para asignar adecuadamente términos a genes, resumido también en un código de evidencia (EC, o \textit{evidence code}) que indica el proceso usado para asignar un término GO específico a un gen dado.
+
+%OK
+%Según la investigación realizada por \citep{datta:2006}, dada la cantidad de algoritmos de agrupamiento que trabajan con datos de expresión para comprender cómo una clase de genes actúan asociadamente durante un proceso biológico (sobretodo al considerar los parámetros variables de dichos algoritmos de agrupamiento, que permiten adaptar los resultados esperados), se proponen dos medidas de validación de algoritmos de agrupamiento que constan de dos partes, una que mide la consistencia estadística (o estabilidad) de los grupos generados, y la otra que representa la consistencia biológica funcional, de manera que un algoritmo ``bueno'' deba tener valores pequeños para dichas medidas. Para ilustrar los métodos fueron usados conjuntos de datos de expresión y seis algoritmos de agrupamiento (\textit{UPGMA}, K-Medias, \textit{Diana}, \textit{Fanny}, \textit{Model-Based} y SOM). Uno de los problemas mencionados a la hora de seleccionar con qué trabajar, es la selección de la ``mejor'' parametrización para un algoritmo dado, por lo que uno de los objetivos implícitos al utilizar los índices de validación, es parametrizar el algoritmo en cuestión hasta que dichos índices indiquen valores adecuados de agrupamiento (algo así como, ``jugar'' con los valores de los parámetros hasta encontrar parametrización ``óptima''). Un algoritmo de agrupamiento se reporta como exitoso si genera grupos de genes funcionalmente similares, lo cual debe ser un requerimiento de la estrategia de evaluación al comparar algoritmos. Según los investigadores, los índices propuestos para comparar los grupos generados por algoritmos de agrupamiento basados en similitud biológica, entregan un puntaje numérico pero sin validación estadística, por lo que se propone una extensión de las medidas de validación existentes combinando estabilidad estadística y relevancia biológica de los grupos generados por los algoritmos, las cuales son de interpretación simple y  permiten una puntuación de significancia estadística. Respecto de los resultados de la investigación, se probaron las medidas de validación sobre seis algoritmos de agrupamiento encontrados en la literatura, pudiendo definir un rango adecuado para el tamaño de los grupos, en base a la cantidad de datos y de clases funcionales conocidas. En la comparación el algoritmo \textit{Diana} fue el mejor con un conjunto de datos de prueba dado, seguido de UPGMA y SOM. Al aplicar una validación que mide la distancia promedio, utilizando como métrica de distancia la Euclidiana, dio como resultado que \textit{Diana} y \textit{SOM} fueran mal evaluados, mientras que UPGMA tuvo el mejor rendimiento. De todas maneras, todos los algoritmos para ambas métricas de evaluación fueron mejores que utiliar simplemente agrupamiento aleatorio. En conclusión, el aporte del trabajo consiste en la intruducción de medidas de consistencia estadística con relevancia biológica para grupos generados por algún algoritmo, combinando así la estabilidad estadística y similitud funcional para grupos de genes con funciones biológicas conocidas, y siendo de fácil interpretación para el análisis del rendimiento de algún algoritmo. Es importante destacar que los resultados arrojaban distintos rendimientos de acuerdo a lo que se pensara medir para comparar los resultados de los algoritmos, por tanto, se ha de seleccionar una medida adecuada para el caso de análisis de homogeneidad biológica y similitud de expresión, pues una elección de índice inadecuado puede influenciar en los resultados haciendo que éstos pierdan credibilidad. Por otro lado, está el factor de ``parametrización adecuada'', lo que podría considerarse como una forma de obtener resultados positivos para la investigación al modificar ciertos factores y dejándolos sujetos a tipos de muestras específicas. Es necesario, entonces, evaluar la solución encontrada tanto con un conjunto de datos de prueba (por ejemplo, la información de expresión genética y anotaciones biológicas del \textit{Yeast Saccharomyce Cerevisiae}), como también un conjunto de datos no considerado inicialmente durante el desarrollo de la solución (un conjunto de datos que permita validar los resultados, como por ejemplo los datos de expresión y de anotaciones genéticas del genoma humano), sólo de esa manera, se puede tener certeza que la solución entregada no está sujeta a restricciones que la hagan inutilizable bajo otros contextos.
+
+%OK
+%Entre los trabajos de esta misma línea investigativa, se tiene el de \citep{gibbons:2002}, donde se propone una medida de validación para comparar algoritmos de agrupamiento basados en expresión genética midiendo la información en común entre los miembros de un grupo y los atributos conocidos de los genes (anotaciones genéticas), luego de concluir que el enriquecimiento de los grupos para las funciones biológicas es alto para un número bajo de ellos. Como resultados, se obtuvo que como medida de disimilitud entre los patrones de expresión de dos genes, ningún método supera la distancia Euclidiana para mediciones no basadas en proporción, o la distancia de Pearson para mediciones no basadas en proporción al elegir el número óptimo de grupos, y para números altos de grupos, el enfoque de Mapas Auto-organizados es el mejor con ambos tipos de medidas. Otro trabajo desarrollado por \cite{speer:2005} propuso dos índices de validación de grupos, con el fin de evaluar los grupos de genes de expresión de una manera biológica, bajo el concepto de que los términos más cercanos a la raíz entregan menor información que los términos ubicados más cerca de las hojas (en particular, la probabilidad del nodo raíz es uno, y dado que se utiliza el logaritmo natural de la probabilidad, la raíz entrega cero información). Los índices fueron probados para la ontología de Procesos Biológicos de GO, el aporte es una medida de calidad de un algoritmo de agrupamiento y de su parametrización para obtener resultados más prometedores en el agrupamiento de datos de expresión. Otra investigación desarrollado por \citep{schlicker:2006} presentan un nuevo método para comparar conjuntos de términos GO y así evaluar la similitud funcional de productos de genes, basándose en dos medidas de similitud: \textit{simRel} (aplicada en la comparación de procesos biológicos encontrados en diferentes grupos de organismos) y \textit{funSim} (utilizada para encontrar productos de genes relacionados funcionalmente, dentro de un mismo o entre diferentes genomas). El método entrega un modo de identificación de proteínas relacionadas funcionalmente, independiente de las relaciones evolutivas. El método se aplicó para estimar la similitud funcional entre todas las proteínas de \textit{Saccharomyces Cerevisiae}, y para visualizar el espacio de función molecular de la levadura en un mapa del espacio funcional, validándose la capacidad de comparación de la biología molecular subyacente de diferentes grupos taxonómicos, entregando una nueva herramienta genómica para identificar productos de genes relacionados funcionalmente, y el mapa del espacio funcional propuesto entrega una nueva visión global de las relaciones funcionales entre productos de genes o familias de proteínas. Otro avance en esta área es el desarrollado por \citep{richards:2010} quienes se dieron cuenta que para un conjunto dado de genes, el estudio de las funciones asociadas a ellos se analiza en base a la observación (enriquecimiento) de anotaciones ontológicas, el cual debe ser medido con algún método numérico, ello en vez de encontrar el significado de términos individuales. Se propone solucionar la tarea de evaluar la coherencia funcional global de grupos de genes a través nuevas métricas y métodos estadísticos, basadas en las propiedades topológicas de los grafos compuestos de genes y sus términos, en GO, considerándose tanto el enriquecimiento de las anotaciones biológicas como la relación entre anotaciones permiten determinar la coherencia funcional. Al probar el método, se demuestra que es altamente discriminativo en términos de diferenciar conjuntos de genes coherentes de los aleatorios, proveyendo evaluaciones biológicas sensibles en el análisis de \textit{microarray}. Se hizo uso además de visualizaciones de grafos como una herramienta para estudiar la coherencia funcional de conjuntos de genes.
+
+%\subsubsection{Utilización de anotaciones biológicas como una forma de validación al agrupamiento basado en perfiles de expresión}
+%\label{validacion}
+
+%OK
+%En el estudio hecho por \citep{romero-zaliz:2008}, se indica que hay incertidumbre respecto a qué tipo de conocimiento biológico (procesos moleculares, componentes moleculares o funciones moleculares) utilizar para analizar genes co-expresados, ello sumado a que bases de datos de \textit{Gene Ontology} están incompletas o influenciadas por el conocimiento disponible en una rama específica de la ontología, básicamente, la calidad de las anotaciones depende sólo del conocimiento disponible y al estudiar un proceso biológico con mayor detalle que otro se generan ramas u ontologías muy específicas de términos GO, mientras que otras a penas son descritas. A pesar de ello, la tendencia es utilizar y agrupar esos términos en conjunto con datos de expresión de manera que permitan explicar los conjuntos de genes co-expresados de experimientos con \textit{microarray}, en lugar de considerarlos como fuentes independientes de validación (como datos de expresión \textit{versus} las anotaciones biológicas), y más aún, se suele utilizar las ontologías de manera independiente, perdiéndose relaciones importantes entre términos de diferentes ontologías. En base a lo anterior, se propone el desarrollo de una herramienta que valida el agrupamiento de genes en base a las anotaciones biológicas de \textit{GO}, reduciendo la incertidumbre al identificar agrupaciones conceptuales óptimas que combinan términos de diferentes ontologías y de diferentes niveles de jerarquía de especificidad de \textit{GO} en forma simultánea, permitiendo la gestión de potenciales hipótesis paralelas, sobre los conjuntos de grupos generados. La aplicación fue utilizada de forma exitosa para probar diferentes hipótesis médicas y biológicas, incluídas la explicación y predicción de perfiles de expresión genética. El aporte de esta investigación radica en la perspectiva que ofrece de la información contenida en la base de datos de \textit{Gene Ontology}, describiéndola de forma práctica y orientada al trabajo de análisis de datos de expresión. Permite tener una visión amplia de los objetivos planteados en la tesis, o bien proyectar un trabajo futuro que permita tener en consideración la implementación de mejoras que soporten la organización jerárquica de la información contenida en GO, o trate con todas las ontologías de forma simultánea, evitando así la limitación de buscar a través de las complejas relaciones contenidas en el grafo acíclico dirigido de la base de datos GO. Además, da una perspectiva de los elementos importantes de considerar a la hora de formar una estructura con los datos de GO, por ejemplo, la especificidad, diversidad y cantidad de producto generado por el gen. A pesar de la importancia, o el avance entregado por el estudio, la no orientación a la incorporación de anotaciones a algún algoritmo de agrupamiento, hacen que no entregue finalmente alguna idea relevante en ese aspecto, sino que sólo en cómo poder modelar las anotaciones biológicas (incluso de diferentes ontologías) y agruparlas entre sí de forma óptima (evitando redundancia y permitiendo la descripción de un gen desde varios puntos de vista).
+
+%OK
+%Otro avance, realizado por \citep{tang:2012}, indica que el trabajo con complejos de proteínas (asociación de diferentes cadenas de polipéptidos, que son obtenidas de la condensación de aminoácidos) es importante para comprender procesos y funciones biológicas. Un aumento de la cantidad de datos de la interacción proteína-proteína (PPI, \textit{protein-protein interaction}) permite y requiere del desarrollo de métodos computacionales para predecir complejos de proteínas. Si bien a la fecha hay bastantes algoritmos para trabajar con esos datos, sigue siendo un análisis insuficiente por la falta en la cantidad de datos PPI, traduciéndose en una baja precisión de los métodos. Bajo esa motivación se propone el método CMBI que integra los datos de fuentes biológicas, datos de perfiles de expresión, información esencial de proteínas y datos PPI para descubrir complejos de proteínas. CMBI define primero la similitud funcional de cada par de proteínas en interacción en base al coeficiente de aristas del agrupamiento (ECC, \textit{edge-clustering coefficient}) de la red PPI, y el coeficiente de correlación de \textit{Pearson} (PCC, \textit{Pearson correlation coefficient}) de los datos de expresión genética. Luego, selecciona algunas proteínas como semillas para construir el núcleo del complejo de proteínas, las cuales se van agrupando con las proteínas vecinas cuya similitud funcional (FS, \textit{functional similarity}) supera un valor umbral. Si bien la investigación es un avance para el estudio de proteínas, sólo utiliza las fuentes de anotaciones biológicas GO para analizar los complejos de proteínas encontrados por la solución propuesta, siendo la mezcla de datos de expresión con conocimiento biológico que no es parte del presente trabajo de tesis.
+
+%OK
+%Otros avances en esta línea de investigación incluyen el trabajo de \citep{ghosh:2012}, donde teniendo como objetivo una reducción de la dimensionalidad de los datos, se propone un algoritmo de Agrupamiento Difuso para Aplicaciones Grandes basado en Búsqueda Aleatoria (\textit{Fuzzy Clustering Large Applications base on RAN-domized Search}, o FCLARANS), el cual reduce dimensionalidad en base al estudio de GO y expresiones genéticas diferenciales, utilizando el conocimiento de GO para una selección de grupos biológicamente significativos, y estadísticamente significativos (enriquecimiento). Haciendo uso de \textit{Foldchange} para medir la expresión genética diferencial y \textbf{Eisen Plot} para analizar la coherencia de los grupos, de manera que grupos de genes enriquecidos reduzcan el espacio de genes y por ende, disminución de carga computacional. Otro estudio que utiliza el enriquecimiento de los datos de GO para identificar términos de GO estadísticamente sobrerrepresentados (dando una idea de los procesos biológicos relevantes), es el desarrollado por \citep{jusufi:2012}, donde se propone un método de visualización de grupos de genes utilizando agrupamiento jerárquico y el enriquecimiento de las ontologías de GO. Siguiendo con ésta línea investigativa, se encuentra el trabajo de \citep{lee:2004} quienes teniendo como motivación el descubrimiento de patrones ocultos tras los datos de expresión genética, identifican que los algoritmos de agrupamiento basados en técnicas matemáticos no entregan información biológica relevante. Bajo esa premisa, presentan una metodología para una interpretación biológica de grupos de genes basada en grafos, que extrae atributos biológicos (del árbol de GO) en común de los genes de un grupo, para así utilizar la naturaleza jerárquica de los términos y encontrar así un significado biológico representativo de los grupos, el cual se puede cuantificar tras definir una medida de distancia para los términos GO. Luego de aplicar la metodología a un conjunto de datos se obtuvo con éxito características biológicas de los grupos de genes.
+
+%\subsubsection{Avances en la incorporación de anotaciones biológicas a algoritmos de agrupamiento}
+%\label{incorporacion}
+
+%OK
+%A continuación se presentan las principales conclusiones, desde la perspectiva del aporte que presentan los desarrollos de las cuatro líneas investigativas presentadas anteriormente a la investigación personal relacionada al agrupamiento de datos de expresión genética y anotaciones biológicas. Se menciona además información relacionada a cómo se llevó a cabo la revisión bibliográfica, cuáles fueron los parámetros y criterios de búsqueda y análisis de resultados encontrados.
+
+%OK
+%Como primer punto, es relevante destacar las revistas que fueron utilizadas para la búsqueda de investigaciones y trabajos. Todas ellas permiten el acceso a publicaciones a través de un convenio de bibliotecas digitales con la Universidad de Santiago de Chile, lo que otorga un grado extra de respaldo y confiabilidad a las publicaciones a las que se tuvo acceso. En específio, las revistas utilizadas para la búsqueda de información fueron: \textit{IEEE Explore}, \textit{ISI Web of knowledge}, \textit{Scopus}, \textit{Science Direct}, \textit{Nature Magazine}, \textit{Science AAAS}, \textit{BioMed} y \textit{PLoS}. Por otro lado, las palabras clave para realizar la búsqueda, de manera que los resultados fueran específicos para el tipo de publicación que se pretendía encontrar, fueron:  \textit{clustering}, \textit{annotation}, \textit{expression} y \textit{gen}, ello con el fin de encontrar trabajos relacionados a algoritmos de agrupamiento, o métodos de agrupamiento o validación de grupos que trabajaran específicamente con los tipos de datos de perfiles de expresión genética y anotaciones biológicas.
+
+%OK
+%Como era de esperar, los resultados de la búsqueda arrojaron enormes cantidades de publicaciones relacionadas, y al revisarlas una a una se detectó que la gran mayoría podía clasificarse sin problemas en ``tipos'' de investigaciones, o dicho de otro modo, avances en una misma línea de desarrollo. Una de las líneas de investigación identificada, y presentada en la sección \ref{expresion}, indica los avances en los métodos de agrupamiento que trabajan con datos de expresión genética. Esta área presenta una amplia variedad de desarrollos, muchos de los cuales se basan en modificar algoritmos de agrupamiento para hacer frente de forma adecuada a los datos de expresión genética, entregando como resultado grupos de genes que posean niveles de coherencia biológica adecuados. El principal aporte de esta línea investigativa, está en el contenido teórico referente a las expresiones genéticas, en la forma que se modela dicha información, la forma en que se validan los grupos generados sólo en niveles de expresión (similitud de perfiles de expresión) y el estado del arte general de los algoritmos que no incorporan conocimiento biológico externo, el cual puede usarse como un punto de referencia a la hora de querer hacer estudios comparativos, teniendo en consideración que actualmente los desarrollos de algoritmos de agrupamiento sólo basados en expresión genética se puede considerar insuficiente, dado que responden a características específicas de algún problema dado, sin poder generalizarse a cualquier tipo de dato. Es importante considerar que no se trataron a fondo todos los avances en esta línea investigativa que fueron encontrados, pues se pueden mencionar algunos como \citep{nazeer:2010} o \citep{ceccarelli:2006}, los cuales también tienen una orientación a la mejora de un algoritmo de agrupamiento basado en expresión genética.
+
+%OK
+%La segunda línea investigativa implícita, es la relacionada a los desarrollos de índices o medidas de similitud entre genes en base al conocimiento biológico existente (por lo general, extraído de las anotaciones biológicas de GO), los cuales pueden observarse en la sección \ref{indices}. Estos desarrollos presentan un grado de aporte mayor a la investigación que los de la sección \ref{expresion}, dado que efectivamente se debe plantear una manera de relacionar genes entre sí, utilizando conocimiento biológico externo (como por ejemplo, los términos de GO). En esta línea investigativa se puede encontrar como variantes formas de relacionar una anotación biológica de GO a un gen; de relacionar genes entre sí utilizando anotaciones biológicas, o bien, de relacionar anotaciones biológicas entre sí. Todas estas variantes deben estudiarse a fondo para presentar una propuesta de relación gen-anotación biológica que entregue resultados con el mayor grado de coherencia biológica posible, teniéndose presente que no es trivial la elección de desarrollar una medida de distancia (o de similitud) entre genes utilizando anotaciones biológicas, entre anotaciones biológicas para luego incorporarlo a las similitud de perfiles de expresión, o entre anotaciones biológicas y genes para ver si grupos determinados de genes tienen coherencia. Al igual que con la sección \ref{expresion}, los desarrollos de índices o medidas de similitud expuestos en la sección \ref{indices} no son los únicos encontrados, ya que deben tenerse presente trabajos como \citep{sheehan:2008}, \citep{pozo:2008}, o \citep{devignes:2012}.
+
+%OK
+%Una tercera variante de investigación común, que se observa en detalle en la sección \ref{validacion}, es la que hace referencia al uso de anotaciones biológicas (como por ejemplo, términos GO) para validar grupos generados sólo con similitudes de perfiles de expresión genética. Gran parte de estas validaciones involucran una forma de modelar las anotaciones biológicas, lo que puede considerarse un aporte dado que para lograr la incorporación de anotaciones biológicas a algún algoritmo de agrupamiento, se debe de alguna forma modelar dicha información para así poder integrarla a procesos que trabajan con otros tipos de datos. Para un nivel de sólo validación de grupos por lo general se analiza una relación de un término de GO con un gen, de manera que si en un grupo (construído con un algoritmo de agrupamiento sólo basado en perfiles de expresión) se mantienen genes que comparten términos de GO, entonces ese grupo es coherente biológicamente. El principal aporte de estos desarrollos radica la utilización de medidas creadas y validadas para medir el rendimiento y capacidad de agrupamiento de algún método alternativo nuevo, que considere conocimiento biológico externo además de perfiles de expresión genética. Además de permitir su uso, pueden dar una orientación para crear nuevas medidas de validación alternativas respaldadas en otras bases teóricas, con el fin de medir el rendimiento de un algoritmo de agrupamiento a través de una correlación entre los grupos generados y el conocimiento biológico existente. Al igual que los casos vistos en las secciones \ref{expresion} y \ref{indices}, hay más trabajos en esta línea que los mencionados en la revisión bibliográfica, como por ejemplo el desarrollado por \citep{steuer:2006}.
+
+%OK
+%La última variante en desarrollos investigativos está relacionada directamente con el objetivo del proyecto de tesis, vista en profundidad en la sección \ref{incorporacion} hace referencia a trabajos que han incorporado directamente el conocimiento biológico externo (representado en forma de anotaciones biológicas o términos de GO) a un algoritmo de agrupamiento basado en expresión genética, permitiendo el uso de ambos tipos de información para discriminar qué genes están más o menos emparentados entre sí. A diferencia de las otras líneas investigativas detectadas, estos trabajos son escasos y de hecho los presentados son los únicos de los cuales se encontró mayor información (además del trabajo realizado por \citep{brameier:2007}, quienes mezclaron ambos tipos de datos y se basaron en SOM para encontrar grupos), ya que el grueso de los desarrollos investigativos se concentran en los tipos de estudio tratados en las secciones \ref{expresion}, \ref{indice} y \ref{validacion}. A pesar de ser pocos desarrollos, presentan un gran aporte en temas teóricos, dan lineamientos de cómo enfrentar el problema de la integración de información, de cómo validar los resultados, entre otras variantes fundamentales a la hora de plantear una solución propia. Una conclusión importante en esta línea investigativa, es que los cuatro trabajos encontrados tienen como motivación mejorar la calidad de los grupos generados por algoritmos o métodos de agrupamiento, y que incluso, las cuatro propuestas mejoran la coherencia biológica de los grupos luego de la incorporación de conocimiento biológico externo al proceso de agrupamiento mismo, lo que da cuenta de que la motivación y objetivos analizados como propuesta de tesis, e incluso la tesis asociada a que: ``es posible incorporar anotaciones biológicas a un algoritmo de agrupamiento basado en expresión genética, para encontrar grupos similares según sus perfiles de expresión y que también sean coherentes biológicamente''.
+
+%Como se pudo observar, toda la información recopilada es importante en diferentes niveles, y aportan conocimiento bajo diferentes perspectivas que pueden ser útiles para diversas etapas del desarrollo de una propuesta algorítima que implique la incorporación de anotaciones biológicas a un algoritmo de agrupamiento. Si bien las orientaciones investigativas parecen a primera vista diferentes, todas comparten un objetivo en común que es, mejorar la calidad de los grupos generados con algoritmos de agrupamiento, y de los datos considerados para realizar dicho agrupamiento, para generar así grupos que presenten altos niveles de coherencia biológica y que puedan ser útiles en estudios de secuenciación.
+
+% -----------------------------------------------------------------------------------------------------
+
+%\subsection{Resumen}
+
+% -----------------------------------------------------------------------------------------------------
+
+%\section{Un nuevo algoritmo de agrupamiento de genes no supervisado basado en la integración de conocimiento biológico en datos de expresión}
+
+%\subsection{Resumen}
+
+%Los algoritmos de agrupamiento de genes son usados masivamente por biólogos cuando analizan datos ómicas (del sufijo ``oma'', \textit{conjunto de}). Las estrategias clásicas de agrupamiento de genes están basadas únicamente en el uso de datos de expresión, por ejemplo, de manera directa como en los mapas de calor (\textit{Heatmaps}, o representación gráfica de datos donde los valores contenidos en una matriz son representados por colores de forma jerárquica), o de manera indirecta como en el agrupamiento basado en redes de co-expresión (a menudo usadas para extraer información sobre grupos de genes que están `funcionalmente' relacionados o co-regulados). Sin embargo las estrategias clásicas pueden no ser suficientes para llevar a cabo todas las relaciones potenciales entre genes.
+
+%Proponemos un nuevo algoritmo de agrupamiento de genes no supervisado basado en la integración de conocimiento biológico externo, como las anotaciones de \textit{Gene Ontology}, en los datos de expresión. Introdujimos una nueva distancia entre genes que consiste en la integración de conocimiento biológico al análisis de datos de expresión. Por tanto, dos genes son cercanos si ambos poseen al mismo tiempo perfiles de expresión similares y perfiles funcionales similares. Entonces, un algoritmo clásico (por ejemplo, K-Medias) se usa para obtener grupos de genes. Además, proponemos un procedimiento de evaluación automático de grupos de genes. Este procedimiento está basado en dos indicadores que miden la co-expresión global y homogeneidad biológica de los grupos de genes. Ellos están asociados con pruebas de hipótesis que permiten complementar cada indicador con un p-valor (probabilidad de obtener un resultado al menos tan extremo como el que realmente se ha obtenido, suponiendo que la hipótesis nula es cierta, la cual es la hipótesis a refutar con el objetivo de apoyar una hipótesis alternativa).
+
+%Nuestro algoritmo de agrupamiento es comparado al agrupamiento de Mapa de Calor y al agrupamiento basado en redes de co-expresión de genes, en una simulación con datos reales. En ambos casos supera a las otras metodologías al proporcionar la más alta proporción de grupos de genes significativamente co-expresados y biológicamente homogéneos, los cuales son buenos candidatos para interpretación.
+
+%Nuestro nuevo algoritmo de agrupamiento provee una proporción más alta de buenos candidatos para interpretación. Por tanto, esperamos que la interpretación de estos grupos ayude a biólogos a formular nuevas hipótesis sobre las relaciones entre genes.
+
+%\subsection{Antecedentes}
+
+%Desde que los datos ómicas, tal como los datos de perfiles de transcriptoma (información biológica de la parte del genoma que se expresa en una célula en una etapa específica de su desarrollo, se evidencia en el conjunto transcritos entre el ADN y el ARN, o del genoma [información genética común a todas las células del organismo] y el proteoma, o perfil de una proteínas que interactúan para dar a una célula su caracter individual) proporcionan medidas sobre un número considerable de genes, los datos son clásicamente descompuestos a un nivel más comprensible al agrupar genes en módulos. Entre las estrategias de agrupamiento no supervisado, podemos recordar las dos técnicas que son principalmente utilizadas: Mapas de Calor [1] que consiste en clasificación jerárquica, y el agrupamiento basado en redes de co-expresión [2]. El agrupamiento de genes no es sólo práctico ya que reduce el número de objetos a estudiar, pero se espera también que lleve una realidad biológica certera. De hecho, esperamos que las similitudes entre las expresiones de genes reflejen la similitud entre las funciones de los genes. Los grupos de genes son interpretados con el fin de generar nuevas hipótesis sobre los roles funcionales de genes y sus relaciones.
+
+%En la práctica, para interpretar grupos de genes, se usa información de conocimiento biológico externo como \textit{Gene Ontology} (GO) [3]. Los procedimientos más clásicos consisten en el análisis de enriquecimiento del conjunto de genes con el objetivo de caracterizar cada grupo por un conjunto de funciones biológicas. Se han propuesto intentos de mejorar el análisis de enriquecimiento de conjunto de genes, por ejemplo [4] proponen un análisis de enriquecimiento Bayesiano. El último consiste en representar términos GO en una red Bayesiana y la respuesta de cada gen, en términos de expresión, es modelada como una función de activación del término GO. En Análisis Multivariado (MVA, o \textit{Multivariate Analysis}), existen algunos intentos de superponer directamente el conocimiento biológico en las salidas del MVA [5, 6]. El objetivo es faciliar la interpretación de las expresiones genéticas, o grupos de genes, mientras MVA provee una matrices de distancia que pueden usarse para agrupar.
+
+%En estas metodologías, los grupos de genes son obtenidos solamente sobre la base de los datos de expresión y el conocimiento biológico es usado posteriormente para sacar mayor provecho a los grupos. Los límites de tales procedimiento son claros: Grupos de genes basados sólo en los datos de expresión permite aislar la co-expresión, no obstante, no necesariamente unidades biológicas coherentes [7, 8]. De hecho, una estructura de agrupación sólo puede ser tan buena como la matriz de similitud/distancia en la que esté basada. Por eso la idea de integrar activamente el conocimiento biológico a los datos de expresión, para aislar entidades biológicas más significativas.
+
+%En otros contextos, el tema de integrar activamente el conocimiento biológico en datos de expresión se ha cubierto. En la propuesta de inferencia de redes biológicas [9] se propone un método de aprendizaje semi-supervisado. La similitud entre los perfiles de expresión y las secuencias de amino ácidos en especies dadas es reforzada si se observa la misma similitud entre especies primas (en relación al parentezco). Con el fin de predecir clases funcionales de genes, tal como la asociación entre genes y términos GO, [10] combina dos tipos de información: la similitud de perfiles de expresión genética y la similitud basada en GO. El promedio de ambos índices de similitud es usado para agrupar genes. Con el mismo objetivo de predecir clases funcionales de genes, en [11] los datos de expresión son combinados con conocimiento biológico al considerar subgrupos de genes asociados con una misma anotación funcional. Los subgrupos de genes son entonces agrupados sobre la base de sus similitudes en perfiles de expresión.
+
+%El objetivo del trabajo es proponer un nuevo algoritmo de agrupamiento no-supervisado basado en una nueva distancia entre genes que integran activamente conocimiento biológico externo en datos de expresión. Un grupo es considerado como satisfactorio si reúne genes co-expresados que están implicados en funciones biológicas similares de acuerdo con el conocimiento biológico. Tal grupo se espera que sea biológicamente interesante y se convierte en un buen candidato para interpretación biológica.
+
+%En la práctica, introducimos la noción de funciones biológicamente co-expresadas que permiten la integración de una información de co-expresión dentro de las anotaciones funcionales. Combinar datos de expresión con anotaciones GO define una nueva distancia entre genes. Dos genes están cerca si son co-expresados, y al mismo tiempo implicados dentro del mismo conjunto de funciones biológicas. Después, un algoritmo de agrupamiento clásico (K-Medias o clasificación jerárquica ascendente) es usado para obtener grupos de genes. En este trabajo enfatizamos el principio biológico que respalda la metodología y discutimos la distancia propuesta.
+
+%Para complementar el procedimiento de agrupamiento, proponemos un procedimiento de validación automática de los grupos de genes para facilitar su interpretación. el objetivo de este procedimiento es el de resaltar buenos candidatos para interpretación que son grupos de genes relacionados significativamente biológicamente y significativamente co-expresados. Está basado en dos indicadores asociados por la hipótesis de prueba. Un indicador mide la co-expresión de los genes dentro de un grupo, mientras el otro cuantifica la homogeneidad biológica.
+
+%El código R que es usado para realizar todos los análisis está disponible en la forma de un paquete R en: ``marie. verbanck.free.fr/packages''
+
+%\subsection{Método}
+
+%\textbf{Integración de conocimiento biológico en datos de expresión: principio biológico}. Recordemos que la mayoría de las estrategias de agrupamiento de genes clásicas están basadas sólo en los datos de expresión. Los datos de expresión pueden utilizarse directamente en Mapas de Calor, o indirectamente en el caso del agrupamiento basado en redes de co-expresión. Así, grupos obtenidos son candidatos para interpretación y continuar siendo biológicamente caracterizados. La caracterización biológica es hecha usando el conocimiento biológico externo, como las anotaciones de \textit{Gene Ontology}. Estas son establecidas de acuerdo a experimentos reportados en la literatura, o deducidos por Bioinformáticos. Esta aproximación clásica se basa en dos hipótesis implícitas. Primero, la caracterización biológica de grupos co-expresados implica que existen sistemáticamente conexiones biológicas entre genes co-expresados. Segundo, la caracterización biológica está puramente basada en el conocimiento biológico externo, por lo tanto, se espera que parte del conocimiento biológico externo esté relacionado al experimento en estudio.
+
+%La primera hipótesis puede ser cuestionable [7. 8] y en este trabajo consideramos un nuevo punto de vista en la relación entre co-expresión y conexiones biológicas. En términos generales, la co-expresión entre dos genes puede deberse a dos fenómenos, que sea una conexión biológica verdadera (por ejemplo, de una red de regulación genética real), o la activación paralela e independiente de diferentes respuestas biológicas a la misma condición experimental. Para diferenciar estas dos situaciones, proponemos dar mayor crédito a la segunda hipótesis y así confiar activamente en el conocimiento biológico externo. Por tanto, consideramos que si dos genes co-expresados ya han sido caracterizados como biológicamente relacionados en el conocimiento biológico existente, su co-expresión es más propable de reflejar una conexión biológica genuina.
+
+%En la práctica, usamos la ontología relacionada a "Procesos Biológicos" de las anotaciones GO que provee para cada gen una lista de funciones biológicas en las que el gen está involucrado: a partir de ahora, esta lista será llamada perfil funcional del gen. Por tanto, si dos genes co-expresados están asociados con perfiles funcionales similares, se presume que su co-expresión resulte de una conexión biológica genuina. al contrario, si dos genes co-expresados tienen perfiles funcionales totalmente divergentes, su co-expresión puede resultar de la activación paralela de diferentes respuestas biológicas.
+
+%\textbf{Algoritmo de agrupamiento no supervisado}. En esta sección proponemos una nueva distancia entre genes, que corresponde al principio biológico expuesto, y para ser usado en una perspectiva de agrupamiento. Esta distancia permite cuantificar los perfiles de co-expresión y similitud funcional entre dos genes.
+
+%\textbf{Codificando el conocimiento biológico}. Consideremos $K$ los genes y $J$ los términos GO. La asociación entre genes y anotaciones GO es codificada en una matriz binaria $\mathcal{T} \in \mathcal{M(K,J)}$, donde cada $k$ representa uno de los $K$ genes y cada columna $j$ uno de los términos $J$ de GO. El término general $T_{kj}$ igual a $1$ si el gen $k$ está asociado con el término GO $j$, y $0$ de otra manera (Figura 1). Una fila $k$ de la matriz puede interpretarse como un perfil funcional del gen, que es el conjunto de funciones biológicas con las que el gen está asociado. Una columna $j$ de la matriz representa una función biológica que puede ser asimilada al subconjunto de genes que están asociados a la función en cuestión. Sea $K^{j}=\{k|T_{kj}=1\}$ el subconjunto de genes asociados a la función $j$.
+
+%\textbf{Figura 1 Matriz $T$: codificando las asociaciones entre genes y funciones biológicas}. Las asociaciones entre genes y funciones biológicas se sintetizan en la matriz $T$. Cada fila representa un perfil funcional de un gen, mientras que cada columna representa la asociación entre una función biológica y los genes. El término general $T_{kj}$ es igual a $1$ si el gen $k$ está asociado con la función biológica $j$, $0$ de otro modo. El margen de fila $T_{k.}$ es el número de funciones biológicas que con las que el gen $k$ está asociado. El margen de columna $T_{.j}$ es el número de genes con las que la función $j$ está asociada. Finalmente, $T_{..}$ es igual al número total de asociaciones entre genes y funciones biológicas.
+
+%\textbf{Una nueva distancia entre genes: funciones biológicas co-expresadas}. Con el fin de ajustar el principio biológico expuesto previamente, definimos una distancia que cuantifica la similitud de perfiles funcionales de genes co-expresados $\{T_{kj}; j \in J\}$. Para hacerlo, aplicamos una restricción al conocimiento biológico al definir una \textit{función biológica co-expresada}, como la restricción de la función a sólo los genes que son co-expresados. En otras palabras, si $K^{j}$ puede dividirse en $L_{j}$ grupos co-expresados, dará lugar a tantas funciones biológicas co-expresadas a considerar. Con el fin de obtener estas funciones biológicas co-expresadas, proponemos el siguiente algoritmo basado en agrupamiento jerárquico.
+
+%\begin{enumerate}
+%    \item Se calcula una matriz de distancia entre los genes de $K^{j}$ en base al coeficiente de correlación de Pearson. La distancia entre dos genes $k$ y $k'$ puede expresarse como sigue:
+%    \begin{equation}
+%    \label{distanciakk}
+%        d_{g}\left( k,k' \right) = 1-\frac{1}{I}\displaystyle\sum_{i=1}^{I} \left( \frac{G_{ik}-G_{.k}}{S_{k}} \right) \left( \frac{G_{ik'}-G_{.k'}}{S_{k'}} \right)
+%    \end{equation}
+%         donde  $I$ es el número de muestras, $G_{ik}$ y $G_{ik'}$ son respectivamente la expresión de los genes $k$ y $k'$ por muestra $i$, $G_{.k}$ y $G_{.k'}$ son respectivamente la media de los valores de expresión $I$ de los genes $k$ y $k'$, $S_{k}$ y $S_{k'}$ son respectivamente las desviaciones estándar de los valores de expresión $I$ de los genes $k$ y $k'$.
+%    \item Un procedimiento de agrupamiento jerárquico se realiza a la matriz de distancia definida previamente (\ref{distanciakk}): Dejar $P^{j}=\left \{ K_{1}^{j};...;K_{l}^{j};...;K_{L_{j}}^{j} \right \}$ ser una partición en $K^{j}$ en los grupos $L_{j}$. Para todo $l=1,...,L_{j},K_{l}^{j}$ está compuesto de genes co-expresados.
+%    \item Construimos una matriz $T^{j} \in \mathcal{M \left(K,L \right)}$ al dividir la $j^{th}$ columna de $T$ en las columnas $L_{j}$. En $T^{j}$ cada línea $k$ representa uno de los $K$ genes y cada columna es una variable ficticia tal que $T_{kl}^{j}$ es igual a 1 si el gen $k$ pertenece a $K_{l}^{j}$ y 0 si no: una columna de $T^{j}$ puede interpretarse como una función biológica co-expresada.
+%\end{enumerate}
+
+%Definimos $T_{coexp}$ a la yuxtaposición de todas las $J$ matrices $T^{j}$ (figura 2). $T_{coexp}$ resulta de la combinación de ambos tipos de información. El análisis de $T_{coexp}$ permite el estudio del grado de similitud de perfiles de funcionalidad genética bajo la condición de co-expresión. Por tanto, se puede calcular una nueva distancia entre genes de $T_{coexp}$:
+
+%    \begin{equation}
+%    \label{tcoexp}
+%        d_{T_{coexp}} \left( k,k' \right) = \displaystyle \sum_{j=1}^{J} \sum_{l=1}^{L_{j}} \frac{T_{..}}{card \left( K_{l}^{j} \right)} \left( \frac{T_{kj}}{T_{k.}} \mathds{1}_{k \in K_{l}^{j}} - \frac{T_{k'j}}{T_{k'.}} \mathds{1}_{k' \in K_{l}^{j}} \right)^2
+%    \end{equation}
+
+%donde $T_{k.}$ y $T_{k'.}$ son respectivamente las filas márgenes asociadas con los genes $k$ y $k'$, $T_{..}$ es el número total de asociaciones entre genes y funciones biológicas y $\mathds{1}_{k \in K_{l}^{j}}$ la variable ficticia que es igual a $1$ si $k \in K_{l}^{j}$, y $0$ de otro modo. Los genes $k$ y $k'$ están asociados con $j$: si ellos no están co-expresado ellos no pertenecen al mismo grupo co-expresado de $P^{j}$. En este caso, el $j^{th}$ término del cálculo de la distancia (en \ref{tcoexp}) es alto. Así, genes con perfiles de expresión similares y perfiles funcionales similares están cercanos. Esta distancia corresponde a la distancia entre genes en el Análisis de Correspondencia de $T_{coexp}$.
+
+%\textit{Nota técnica 1: en el paso 2, $P^{j}$ es la partición en $L_{j}$ grupos co-expresados de los genes asociados con la función biológica $j$. $P^{j}$ está determinado por cortar el árbol de clasificación. Cortar el árbol de agrupamiento provee una partición que permite calcular la suma de las inercias intra-grupos para la partición en cuestión. La pérdida relativa de inercia se calcula entre la partición en $L$ grupos y la partición en $L+1$ grupos como $\frac{\sum_{l=1}^{L+1} inertia \left( l \right)}{\sum_{l=1}^{L} inertia \left( l \right)}$. $P^{j}$ es obtenido por cortar el árbol de agrupamiento para obtener la partición con la mayor pérdida de inercia relativa.}
+
+%\textit{Nota técnica 2: en el caso particular donde todos los genes asociados con $j$, están co-expresados, $j$ es entonces considerado como una función biológica co-expresada. Añadimos un paso $0$ consistente en filtrar funciones biológicas: ello permite definir si una función biológica $j$ puede ser considerada como co-expresada. Para ese caso, la co-expresión de los subconjuntos de genes asociados con $j$ es probada con el cálculo del valor-p del indicador de co-expresión de acuerdo al procedimiento presentado en la sección siguiente. Si este valor-p es más bajo que un umbral elegido (por ejemplo, 10\%), la función en cuestión es considerada como una función co-expresada y no debe dividirse en $T_{coexp}$ sino que conservase como es.}
+
+%\textit{Nota: en un contexto totalmente diferente, con el objetivo de predecir clases funcionales de genes, [11] propuso un algoritmo de grupos-cercanos difusos basado en la idea de detectar subgrupos de genes co-expresados homogéneos en clases funcionales heterogéneas que es cercano a la nuestra. Esta detección permitió tener una mejor predicción de clases de genes funcionales.}
+
+%\textbf{Figura 2, Matriz $T_{coexp}$: descomposición de la matriz $T$}. Descomponer funciones biológicas en funciones biológicas co-expresadas lleva a construir la matriz $T_{coexp}$ donde una fila representa un gen y una columna una función biológica co-expresada. El término general de $T_{coexp}$, $T_{kj}\mathds{1}_{k \in K_{l}^{j}}$ es igual a 1 si el gen $k$ está asociado con la función $j$ y si pertenece al grupo $K_{l}^{j}$, o 0 en otro caso. La columna margen de la función biológica co-expresada $l$ es igual al número de genes en el grupo correspondiente, que es $card\left(K_{l}^{j}\right)$. Además, para cada función $j$, la suma de las columnas márgenes asociada con las funciones biológicas co-expresadas derivadas de $j$ es igual a la columna margen asociada con la función $j$: $\sum_{l=1}^{L_{j}} card\left(K_{l}^{j}\right)=T_{.j}$. Finalmente, podemos destacar que las filas márgenes y el número total de asociaciones son iguales a las de $T$.
+
+%\textbf{Obteniendo grupos de genes}.
+
+%Para obtener grupos de genes, un algoritmo de agrupamiento, como K-Medias o clasificación ascendente jerárquica, son aplicados a la matriz de distancia. Esperamos, de este procedimiento, obtener grupos de genes co-expresados y biológicamente relacionados.
+
+%\textbf{Evaluación de grupos de genes}.
+
+%Para que un grupo sea un buen candidato a interpretación, debe reunir genes con co-expresión y relación biológica. La evaluación clásica produce focos en lo que puede llamarse la \textit{homogeneidad biológica} de un grupo y su caracterización por funciones biológicas. Sin embargo, en nuestro procedimiento clásico, la co-expresión está necesariamente compitiendo con la homogeneidad biológica, ya que ambos tipos de información están combinados activamente. Por tanto, proponemos un procedimiento de evaluación de grupos de genes basado en dos indicadores: un indicador de co-expresión y un indicador de homogeneidad biológica asociados a la hipótesis de prueba.
+
+%\textbf{Indicador de co-expresión}.
+
+%La co-expresión es definida como correlación positiva entre dos genes. De hecho, si dos genes están correlacionados positivamente, están sobre y bajo-co-expresados en las mismas condiciones experimentales. Queremos encontrar un indicador de co-expresión (CI, o \textit{coexpression indicator}) que sintetice correlaciones dentro de un grupo. Consideramos un empírico, pero conveniente, indicador que es el promedio de correlaciones entre los genes de un mismo grupo $K_{l}$. Este indicador es calculado como sigue:
+
+%    \begin{equation}
+%    \label{indiceexpresion}
+%        CI\left(K_{l}\right)=\frac{1}{\frac{card\left(K_{l}\right)\left(card\left(K_{l}\right)-1\right)}{2}} \displaystyle \sum_{k|k\in K_{l}} \left( \sum_{k'|k' \in K_{l},k'>k} \frac{1}{I} \sum_{i=1}^{I} \left( \frac{G_{ik}-G_{.k}}{S_{k}} \right) \left( \frac{G_{ik'}-G_{.k'}}{S_{k'}} \right) \right)
+%    \end{equation}
+
+%donde $I$ es el número de muestras, $G_{ik}$ y $G_{ik'}$ son respectivamente la expresión para la muestra $i$ del gen $k$ y $k'$, $G_{.k}$ y $G_{.k'}$ son respectivamente la media de los valores de expresión de $I$ de los genes $k$ y $k'$, $S_{k}$ y $S_{k'}$ son respectivamente las desviaciones estándar de los valores de expresión $I$ de los genes $k$ y $k'$.
+
+%El indicador de co-expresión de hecho ofrece una medida de la situación global de co-expresión de los grupos de genes. Si el rango es de $-\frac{1}{3}$ a $1$ (ver apéndice 1). Si todos los genes están perfectamente co-expresados, el indicador es igual a 1. De lo contrario, vamos a considerar un grupo cuyos genes no están co-expresados, hasta el punto que dos sub-grupos sean distinguibles: dentor de cada sub-grupo, los genes están correlacionados positivamente, y entre sub-grupos, están negativamente correlacionados. En este caso, el indicador es cercano a $0$ y podría ser menor que $0$.
+
+%\textbf{Indicador de homogeneidad biológica}.
+
+%Nuestro objetivo es definir un indicador de homogeneidad biológica basado en la similitud de perfiles de funcionalidad genética. Clásicamente, la homogeneidad biológica de un grupo de genes se evaluado por el número y la naturaleza del enriquecimiento de funciones biológicas que están asociadas a él. Sin embargo, la caracterización de un grupo por pruebas de enriquecimiento no garantiza la similitud de perfiles funcionales como las pruebas de enriquecimiento son realizados separadamente por cada función biológica. [12] proponen un indicador de homogeneidad biológica multidimensional con el objetivo de evaluar todo el procedimiento de agrupamiento, no los grupos mismos. Adaptamos esta idea para medir la homogeneidad biológica de grupos de genes. Consideramos como indicador de homogeneidad biológica (BHI, o \textit{Biological Homogeneity Indicator}) un coeficiente derivado del coeficiente de Cramer \textit{V} [13], el cualofrece una medida de grado de similitud de perfiles funcionales de genes de $K_{l}$. El indicador es calculado como:
+
+%    \begin{equation}
+%    \label{indicebiologico}
+%        BHI\left( K_{l} \right) = 1 - \sqrt \frac{\sum_{k \in K_{l}} \left( \sum_{j=1}^{J} \frac{\left( T_{kj} - \frac{T_{k.} T_{.j}}{T_{..}} \right)^2}{\frac{T_{k.}T_{.j}}{T_{..}}} \right)}{T_{..}\left( card\left( K_{l} \right) - 1 \right)}
+%    \end{equation}
+
+%donde $T_{kj}$ es igual a $1$ si el gene $k$ está asociado con la función biológica $j$, y $0$ en otro caso, $T_{k.}$ es la fila margen asociada con el gen $k$.
+
+%El indicador de homogeneidad biológica varía entre $0$ y $1$ (ver apéndice 2). Por tanto, si todos los genes de un grupo tienen perfiles funcionales perfectamente similares, el indicador de homogeneidad biológica es igual a $1$. Al contrario, si ninguno de los genes tiene perfiles funcionales similares, al punto que ninguna de las funciones biológicas está asociada con dos de los genes de $K_{l}$, entonces el indicador de homogeneidad biológica es igual a $0$.
+
+%Aunque este indicador tiene sus límites, como homogeneidad biológica debe basarse principalmente en la interpretación biológica, no obstante, pasa que es útil ser capaz automáticamente de evaluar el interés biológico de gupos de genes.
+
+%\textbf{Procedimiento de prueba de hipótesis}
+
+%Complementamos el indicador con un procedimiento de prueba de hipótesis que es tanto más legítimo que ambos indicadores fuertemente dependientes del tamaño de los grupos.
+
+%\begin{itemize}
+%    \item indicador de co-expresión: en su cálculo \ref{indiceexpresion}, se realiza la división por $\frac{card\left( K_{l} \right) \left( card \left( K_{l} -1 \right) \right)}{2}$, el valor CI se decrementa mecánicamente con el tamaño de los grupos
+%    \item indicador de homogeneidad biológica: se realiza una división por $card\left( K_{l} \right)-1$ en el segundo término del cálculo de \ref{indicebiologico}, y como este segundo término varía entre $0$ y $1$, el valor BHI se incrementa mecánicamente con el tamaño del grupo.
+%\end{itemize}
+
+%El objetivo es evaluar a qué punto una metodología provee grupos cuya co-expresión y homogeneidad biológica son altos en una situación de agrupamiento aleatoria. Por consiguiente, el agrupamiento aleatorio corresponde a la hipótesis nula de la prueba, y los valores de los indicadores de grupos aleatorios son tomados como una situación de referencia. En la práctica, para asociar un valor-p a un grupo $K_{l}$ para un indicador, los grupos de un mismo tamaño están constituidos simplemente por ilustrar genes sin reemplazo. El indicador es entonces calculado para cada grupo y se obtiene entonces una distribución de los valores del indicador bajo la hipótesis nula. Como es usual, el valor observado corresponde al valor del indicador para el grupo a ser probado, es posicionado en la distribución correspondinte bajo la hipótesis nula. Finalmente, el valor-p es estimado por la proporción de grupos constituidos aleatoriamente cuyo valor de indicador es superior al valor observado.
+
+%\textit{Nota 1: El interés del procedimiento reside en la forma que se obtiene una distribución bajo la hipótesis nula. Como el cálculo de los indicadores se basa en datos reales, las distribuciones bajo la hipótesis nula respecto de las distribuciones de los datos.}
+
+%\textit{Nota 2: Obviamente los grupos compuestos de un único gen no son probados.}
+
+%\textbf{Resultados}.
+
+%Como proponemos un nuevo algoritmo de agrupamiento no supervisado asociado con una evaluación automática de los grupos, validamos toda la metodología en conjuntos de datos reales y simulados, al compararlo con dos de las estrategias de agrupamiento de genes clásicas más utilizadas. Por un lado comparamos con los grupos derivados de mapas de calor de datos de expresión. Por otro lado, elegimos generar una red de co-expresión de los datos de expresión usando una Red de Co-expresión de Genes Ponderada (WGCNA, o \textit{Weighted Gene Coexpression Network}) [2]. La red de co-expresión permite calcular una matriz de disimilitud entre genes basados en una superposició topológica de los nodos de la red. Finalmente se calcula un algoritmo de agrupamiento jerárquico en la matriz de disimilitud entregando grupos de genes.
+
+%\textbf{Estudio de simulación}.
+
+%\textbf{Conjuntos de datos simulados}.
+
+%En esta sección, explicamos cómo simular conjuntos de datos de expresión GO. Para simular datos de expresión, usamos el mismo procedimiento que [14]. Una matriz de datos de expresión $G_{sim}$, constituida de $K$ genes e $I$ muestras se simula al dibujar al dibujar aleatoriamente en una distribución Gausiana multivariada con una cierta estructura de correlación de modo que se tienen grupos subyacentes de genes co-expresados. Dado que este forma de simular datos numéricos es algo clásica, insistimos en la simulación de datos de anotaciones GO, que no es común en la literatura.
+
+%Para simular datos de anotaciones GO nos ajustamos al principio biológico expuesto previamente: Las anotaciones GO están constituidas por información que puede relacionarse al experimento en estudio e información que no. En otras palabras, una parte de las anotaciones GO simuladas debe tener una estructura que es similar a la estructura de datos de expresión y la otra debe tener una estructura aleatoria. Así, una matriz simulada de GO $T_{sim}$ se obtiene por la yuxtaposición de dos tipos de matrices.
+
+%\begin{itemize}
+%    \item T_{sim}^{e}: perfiles funcionales de genes emulados de perfiles de expresión de genes, así cuando dos genes tienen perfiles de expresión similares en $G_{sim}$, tienen perfiles funcionales similares en $T_{sim}^{e}$.
+%    \item T_{sim}^{r}: perfiles funcionales de genes no relacionados a perfiles de expresión.
+%\end{itemize}
+
+%En la práctica, para obtener $T_{sim}^{e}$, se construye primero un árbol de clasificación de genes basado en las correlaciones sólo entre sus perfiles de expresión. Luego consideramos que cada nodo $j$ del árbol de clasificación como una función biológica. Si el gen $k$ está asociado con el nodo $j$ del árbol de clasificación, $T_{sim}^{e} \left( k, j \right)=1$, y $0$ en otro caso. Como resultado, genes que tienen perfiles de expresión similares comparten mecánicamente perfiles funcionales cercanos. Para obtener $T_{sim}^{r}$, se yuxtapone $r$ veces la matriz $T_{sim}^{e}$ y se permutan filas independientemente dentro de cada columna, donde $r$ es un entero que representa la intensidad de la aleatoriedad de $T_{sim}$: concretamente, hay $r$ veces más funciones biológicas aleatorias, que funciones biológicas estructuradas en $T_{sim}$.
+
+%Esta forma de generar la matriz de similitud de $T_{sim}^{e}$ es eligiendo una imitación de la estructura jerárquica de información de GO. Esta forma de generar la matriz aleatoria $T_{sim}^{r}$ permite conservar los márgenes de funciones biológicas, lo que es importante ya que representan el número de genes que están asociados con las funciones y pueden interpretarse como el grado de especificidad de las funciones
+
+%\textbf{Resultados}.
+
+%En la práctica, aplicamos los tres métodos para simular conjuntos de datos. Consideramos dos tamaños de datos de expresión simulados. Un primer tipo compuesto de $10$ individuos y $300$ genes de los cuales obtenemos una partición de $20$ grupos por cada método. Un segundo tipo compuesto de $25$ individuos y $1000$ genes para los cuales se obtuvo una partición con $100$ grupos para cada método. Con ambos tipos de conjuntos de datos de expresión simulados, asociamos anotaciones simuladas GO cuya intensidad de aleatoriedad varía entre $1$ y $3$. Para cada configuración, se generaron $100$ conjuntos de datos.
+
+%Cualquiera sea el método de agrupamiento, asociamos con cada grupo dos valores-p correspondientes al indicador de co-expresión y al indicador de homogeneidad biológica. Para una partición dada, calculamos la proporción de los grupos donde:
+
+%\begin{itemize}
+%    \item co-expresión significativa: valor-p asociado con el CI más bajo que un umbral dado.
+%    \item homogeneidad biológica significativa: valor-p asociado con el BHI más bajo que un umbral dado.
+%    \item co-expresión significativa y homogeneidad biológica significativa: ambos p-valores asociados con el CI y el BHI más bajos que un umbral dado.
+%\end{itemize}
+
+%Los resultados se reunen en la Tabla 1. En promedio, los tres métodos entregan particiones con una alta proporción de grupos co-expresados significativos. Esta proporción no depende de la intentsidad de la aleatoriedad del Mapa de Calor y WGCNA. Sin embargo, para nuestro algoritmo de agrupamiento, observamos una ligera disminución en la proporción de grupos significativamente co-expresados cuando la intensidad de la aleatoriedad incrementa. Esto es esperado como la co-expresión está compitiendo aun más con la homogeneidad biológica cuando la intensidad de la aleatoriedad es alta.
+
+%\textbf{Tabla 1}. Resultados del estudio de simulación para los tres algoritmos de agrupamiento: Clasificación con Mapas de Calor, agrupamiento basado en redes de co-expresión (WGCNA) y nuestro algoritmo de agrupamiento (Integración). Los conjuntos de datos simulados varían de acuerdo al número de muestras ($I$), el número de genes ($K$), y la intensidad de aleatoriedad ($r$). Damos la proporción promedio de los grupos (\%), entre particiones dadas, que son significativamente co-expresadas (CI), biológicamente homogeneas (BHI) o ambas, co-expresadas y biológicamente homogeneas (ambas, o \textit{Both}). Tomemos el ejemplo de conjuntos de datos de expresión simulados con $10$ individuos y $300$ variables, asociados con anotaciones de GO simuladas con una intensidad de aleatoriedad de $1$. En promedio los Mapas de Calor de estos conjuntos de datos entregan particiones con $92.15\%$ de grupos co-expresados significativos.
+
+%En promedio, las particiones derivadas de los Mapas de Calor tienen bajas proporciones de grupos que son significativamente biológicamente homogéneos. Esta proporción decrece severamente cuando la intensidad de aleatoriedad incrementa. Tener en cuenta una estructura de red detrás de la expresión genética es beneficioso ya que provee una mayor proporción de grupos homogéneos biológicamente significativos que los Mapas de Calor. Sin embargo, la proporción de grupos homogéneamente biológicos entregados por WGCNA literalmente dismuye cuando la intensidad de aleatoriedad es muy alta. Nuestro algoritmo de agrupamiento provee una proporción razonablemente alta de grupos biológicamente homogeneos incluso cuando la intensidad de aleatoriedad es igual a $3$.
+
+%Si nos enfocamos en la proporción de grupos que tienen co-expresión y homogeneidad biológica significativa, nuestro algoritmo de agrupamiento supera los otros dos métodos.
+
+%\textbf{Análisis del conjunto de datos de la gallina}.
+
+%La metodología es aplicada a un conjunto de datos de transcriptoma de ejemplo que está relacionado a un conjunto de datos publicado [15]. El objetivo, a través del experimento, es comprender el mecanismo genético implementado en respuesta al ayuno de gallinas. Por tanto, la expresión de cerca de de $12000$ genes hepáticos fue recogida de $27$ gallinas que presentaba $4$ estados nutricionales: $16$-horas de ayuno ``F16'', 16-horas de ayuno seguido de 5-horas de una fase de re-nutrición ``F16R5'', 16-horas de ayuno seguidas de 16-horas de una fase de re-nutrición ``F16R16'' y finalmente, un estado de alimentación contínuo ``F''. Elegimos en nuestro ejemplo para llevar a cabo una selección degenes cuya expresión varía de acuerdo al factor experimental, lo que nos hizo retener cerca de $3600$ genes gracias al método de Factor de Análisis para Prueba Múltiple [16].
+
+%Además, similar a [5], usamos información de GO donde la estructura jerárquica entre los términos GO es tomada en cuenta: cuando un gen está asociado con un término, está asociado automáticamente con sus padres.
+
+%Como en el estudio de simulación, realizamos tres agrupamientos de genes correspondientes a Mapas de Calor, a agrupamiento basado en redes de co-expresión (WGCNA) y nuestro propio procedimiento de agrupamiento. Elegimos para establecer el número de grupos obtenidos de cada procedimiento a 200. Para una partición dada, asociamos con cada grupo dos p-valores para el indicador de co-expresión y el indicador de homogeneidad biológica que se visualizan en un gráfico. En la figura 3, un punto representa un grupo cuyo valor en el eje-x es igual al p-valor indicador de co-expresión y cuyo valor en el eje-y es igual al p-valor indicador de homogeneidad biológica. Además, la tabla 2 provee la proporción de grupos entre cada una de las tres particiones, que son significativamente co-expresadas (CI) y biológicamente homogéneas (BHI) o ambas, co-expresadas y biológicamente homogéneas (Both), como en el estudio de simulación.
+
+%\textbf{Figura 3, representación de p-valores asociados con el indicador de co-expresión y el indicador de homogeneidad biológica, para los tres procedimientos de agrupamiento}. Se representan los resultado de los tres procedimientos de agrupamiento aplicados a los datos de expresión de la gallina: Mapas de Calor, agrupamiento basado en redes de co-expresión (WGCNA) y nuestro propio algoritmo de agrupamiento (Integración). Cualquiera sea el método de agrupamiento, para cada grupo se le asocia un valor-p correspondiente al indicador de co-expresión y un p-valor correspondiente al indicador de homogeneidad biológica. Los valores-p son representados de forma conjunta, donde cada punto representa un grupo, y los valores-p asociados con el indicador de co-expresión están representados en el eje-x, mientras que los valores-p asociados al indicador de homogeneidad biológica están representados por el eje-y.
+
+%\textbf{tabla 2, resultados del caso de estudio}. Resultados para el conjunto de datos de la gallina utilizando tres algoritmos de agrupamiento: Clasificación de Mapas de Calor, agrupamiento basado en redes de co-expresión (WGCNA) y nuestro propio algoritmo de agrupamiento (Integración). damos un porcentaje de grupos (\%), entre una partición dada que son significativamente co-expresados (CI), biológicamente homogéneos (BHI) o ambos, co-expresados y biológicamente homogéneos (Both).
+
+%Primero, la partición entregada por el Mapa de Calor está constituida por una larga mayoría de grupos que son significativamente co-expresados ($91,50\%$). Sin embargo, una proporción pequeña de los grupos son significativamente biológicamente homogéneos al punto que los valores-p asociados con el BHI parece estar ditribuido de acuerdo a una distribución uniforme. Un gráfico-QQ (figura 4) confirma actualmente que la distribución del valor-p asociado con el indicador de homogeneidad biológica puede considerarse como uniforme, lo que corresponde a una distribución seguida por valores-p bajo la hipótesis nula. Por tanto, el agrupamiento con Mapas de Calor puede  llevar a grupos de genes independientes de una homogeneidad biológica.
+
+%\textbf{Figura 4, gráfico-QQ de los valores-p asociados con el indicador de homogeneidad biológica y el agrupamiento de Mapas de Calor}. Nos enfocamos aquí en los valores-p asociados con  el indicador de homogeneidad biológica de grupos obtenidos con el agrupamiento de Mapas de Calor de los datos de expresión de la gallina. El gráfico-QQ intersecta probabilidades que son esperadas entre las distribuciones uniformes (eje-x), con los valores-p del indicador de homogeneidad biológica (eje-y).
+
+%Segundo, comparado con el Mapa de Calor, una red de co-expresión mejora considerablemente los resultados. Así un WGCNA entre una proporción mucho más alta de grupos biológicamente homogéneos (68\%). Sin embargo, la proporción de grupos co-expresados decrementa. Ultimamente WGCNA provee una proporción razonable de buenos candidatos para interpretación (46\%).
+
+%Tercero, con nuestro algoritmo de agrupamiento, la proporción de grupos significativamente co-expresados decrece en comparación con los otros dos métodos. Esto esperado  ya que la co-expresión está compitiendo con la homogeneidad biológica. Sin embargo, la proporción de grupos homogéneos biológicamente significativos incrementa considerablemente (79.50\%). Este resultado es una proporción alta de buenos candidatos para interpretación (53.50\%).
+
+%\textit{Nota: Los grupos hechos de un único gen son consideramos automáticamente como malos candidatos. Por tanto, como nuestra estrategia de agrupamiento provee una proporción de estos grupos que no es despreciable, el porcentaje de buenos candidatos es mecánicamente bajo.}
+
+%En conlusión, al integrar el conocimiento biológico a datos de expresión, manejamos para obtener una proporción de grupos razonable, que reúnen  genes significativos co-expresados y biológicamente relacionados. Estos grupos son buenos candidatos y su interpretación puede llevar a revelar nuevas relaciones entre genes.
+
+%\textbf{Interpretación de grupos}. Los grupos obtenidos al integrar el conocmiento biológico a datos de expresión, presenta propiedades interesantes, son entonces buenos candidatos para la interpretación. Con el fin de asociar anotaciones de GO representativas con grupos, elegimos aplicar el procedimiento de prueba de enriquecimiento clásico que consiste en en las pruebas exactas de fisher asociadas con una corrección de múltiples pruebas (Benjamini-Hochberg con un 5\% de corte). La impresión general acerca de los resultados del procedimiento de enriquecimiento  es la coherencia de las anotaciones GO asociadas a los grupos. El enriquecimiento de las anotaciones GO asociadas con un grupo es cercano en la jerarquía GO. Esto transmite directamente la homogeneidad biológica de grupos de genes que es garantizada en nuestro procedimiento.
+
+%En comparación con el trabajo [15], el mecanismo general y bien conocido implementado en respuesta al ayuno es también destacado a través del enriquecimiento de los grupos con anotaciones. Además, nuestro procedimiento trae a la luz nuevas pistas. Por ejemplo, algunos grupos están asociados con mecanismos Fosfolípidos y Esfingolípidos, y cuyos genes están expresados en el ayuno de las gallinas no están descirtos en [15]. Estos grupos reúnen varias encimas que están implicadas en la hidrólisis de estos lípidos que resulta en la liberación de ácidos grasos. Entonces, pensamos que en los pollos después de cierto período de ayuno, los ácidos grasos pueden consumirse a través de la membrana plasmática.
+
+%\textbf{Discusión y conclusión}. Proponemos un nuevo algoritmo de agrupamiento de genes no supervisado basado en una nueva distancia entre genes al integrar conocimiento biológico en datos de expresión. Para hacerlo, proponemos una codificación juiciosa que se basa en el concepto de función biológica co-expresada. Como una función biológica puede ser asimilada como un conjunto de genes que están involucrados en una función, podemos asimilar una función biológica co-expresada a una restricción del conjunto de genes co-expresados. Naturalmente, esta distancia es usada para agrupar genes.
+
+%Las propiedades del agrupamiento de genes son entonces evaluadas por medio de dos indicadores que también proponemos, y que permiten cuantificar la co-expresión y homogeneidad biológica. Por un lado, la co-expresión es evaluada por un indicador basado en correlaciones entre genes. Este indicador es puramente empírico, pero muy conveniente y fácil de interpretar. Por otro lado, la homogeneidad biológica es medida por un indicador basado en el coeficiente de Cramer's V, calculado de una matriz que codifica las anotaciones GO. Aunque este indicador tiene sus límites como la homogeneidad biológica debe confiar principalmente en la interpretación biológica, pasa a ser útil para automáticamente tener una idea del interés biológico de los grupos de genes. Además, proponemos una prueba de hipótesis para mejorar estos indicadores con valores-p, con el fin de verificar si los grupos son significativamente co-expresados y biológicamente homogéneos.
+
+%Para probar nuestro algoritmo de agrupamiento así como nuestro procedimiento de evaluación, lo aplicamos a conjuntos de datos simulados y reales. Además, para posicionar nuestro método lo  comparámos con dos estratégias de agrupamiento de genes que son clásicamente usadas por biólogos: Mapas de Calor y agrupamiento basado en redes de co-expresión.
+
+%Concretamente nuestra metodología muestra algunas limitaciones ya que provee una proporción relativamente importante de grupos constituidos con un único gen. Sin embargo, supera a los otros dos métodos: integrar actívamente el conocimiento biológico en datos de expresión provee particiones con la proporción más alta de buenos candidatos. Estos grupos de hecho parecen ser buenos candidatos para interpretación como pueden testificar los relacionados con mecanísmos de Fosfolípidos y Esfingolípidos. Sin embargo, queda por hacer una validación biológica externa, que consiste en realizar interpretaciones biológicas más avanzadas.
+
+%\textbf{Conflicto de interés}. Los autores declaran que no tienen conflicto de interés.
+
+%\textbf{Contribuciones de los autores}. MV, SL y JP desarrollaron la metodología y redactaron el manuscrito. MV implementó el algoritmo. Todos los autores aprovaron el manuscrito final.
+
+%\textbf{Agradecimientos}. Los autores agradecen a Sandrine Lagarrigue, del Departamento de Genética del Agrocampo Ouest, por su disponibilidad y por permitir usar los datos. Los autores agradecen a los revisores por su valiosos comentarios.
+
+%\textbf{Apéndice 1: Rango de variación del indicador de co-expresión}. El indicador de co-expresión consiste en calcular el promedio de genes correlacionados dentro de un grupo $K_{l}$. Recordemos el cálculo del indicador de co-expresión:
+
+%    \begin{equation}
+%    \label{indiceexpresion2}
+%        CI\left(K_{l}\right)=\frac{1}{\frac{card\left(K_{l}\right)\left(card\left(K_{l}\right)-1\right)}{2}} \displaystyle \sum_{k|k\in K_{l}} \left( \sum_{k'|k' \in K_{l},k'>k} \frac{1}{I} \sum_{i=1}^{I} \left( \frac{G_{ik}-G_{.k}}{S_{k}} \right) \left( \frac{G_{ik'}-G_{.k'}}{S_{k'}} \right) \right)
+%    \end{equation}
+
+%El mínimo de CI varía de acuerdo a $card \left( K_{l} \right)$. Para obtener un máximo de correlaciones negativas dentro de $K_{l}$, consideramos dos sub-grupos como una correlación intra-grupo igual a 1 y una correlación inter-grupo igual a $-1$. Todos los genes de $K_{l}$ están igualmente distribuidos entre ambos sub-grupos.
+
+%\textbf{Si $card \left( K_{l} \right)$ es par}. En este caso, cada sub-grupo formado por $\frac{card \left( K_{l} \right)}{2}$ genes. El número máximo de correlaciones negativas es igual a $\frac{card \left( K_{l} \right)}{2} \times \frac{card \left( K_{l} \right)}{2}$.
+
+%    \begin{equation}
+%    \label{cardpar}
+%        CI\left( K_{l} \right)=\frac{\left[ \frac{card \left( K_{l} \right) \left( card \left( K_{l} \right)-1 \right)}{2}-\left( \frac{card \left( K_{l} \right)}{2} \right)^2 \right]-\left( \frac{card \left( K_{l} \right)}{2} \right)^2}{\frac{card \left( K_{l} \right) \left( card \left( K_{l} \right)-1 \right)}{2}}
+%    \end{equation}
+
+%    \begin{equation}
+%    \label{cardpar2}
+%        CI \left( K_{l} \right)=-\frac{1}{card \left( K_{l} \right)-1}
+%    \end{equation}
+
+%\textbf{Si $card \left( K_{l} \right)$ es impar}. En esta situación, uno de los sub-grupos está constituido por $\frac{card \left( K_{l} \right)-1}{2}$ genes, el otro por $\frac{card \left( K_{l} \right)+1}{2}$. El máximo número de correlaciones negativas es igual a $\frac{card \left( K_{l} \right)-1}{2} \times \frac{card \left( K_{l} \right)+1}{2}$.
+
+%    \begin{equation}
+%    \label{cardimpar}
+%        CI\left( K_{l} \right)=\frac{\left[ \frac{card \left( K_{l} \right) \left( card \left( K_{l} \right)-1 \right)}{2}-\frac{card \left( K_{l} \right)-1}{2} \times \frac{card \left( K_{l} \right)+1}{2} \right]-\frac{card \left( K_{l} \right)-1}{2} \times \frac{card \left( K_{l} \right)+1}{2}}{\frac{card \left( K_{l} \right) \left( card \left( K_{l} \right)-1 \right)}{2}}
+%    \end{equation}
+
+%    \begin{equation}
+%    \label{cardpar2}
+%        CI \left( K_{l} \right)=-\frac{1}{card \left( K_{l} \right)}
+%    \end{equation}
+
+%CI es máximo e igual a 1 cuando todos los genes de $K_{l}$ están perfecta y positivamente correlacionados.
+
+%\textbf{Apéndice 2: Rango de variación del indicador de homogeneidad biológica}. Recordemos el cálculo del indicador de homogeneidad biológica:
+
+%    \begin{equation}
+%    \label{indicebiologicov2}
+%        BHI\left( K_{l} \right) = 1 - \sqrt \frac{\sum_{k \in K_{l}} \left( \sum_{j=1}^{J} \frac{\left( T_{kj} - \frac{T_{k.} T_{.j}}{T_{..}} \right)^2}{\frac{T_{k.}T_{.j}}{T_{..}}} \right)}{T_{..}\left( card\left( K_{l} \right) - 1 \right)}
+%    \end{equation}
+
+%donde $T_{kj}$ es igual a 1 si el gen $k$ está asociado con la función biológica $j$, y 0 en otro caso. $T_{k}$ es la el margen de fila asociado con el gen $k$.
+
+%BHI es mínimo e igual a 0 cunado ninguno de los genes de $K_{l}$ tiene firma funcional similar en una cantidad tal que ninguna de las funciones biológicas está asociada con dos genes de $K_{l}$:
+
+%    \begin{equation}
+%    \label{indicebiologicov3}
+%        BHI\left( K_{l} \right) = 1 - \sqrt \frac{\sum_{k \in K_{l}} \left( \sum_{j=1}^{J} \frac{\left( T_{kj} - \frac{T_{k.} T_{.j}}{T_{..}} \right)^2}{\frac{T_{k.}T_{.j}}{T_{..}}} \right)}{T_{..}\left( card\left( K_{l} \right) - 1 \right)}
+%    \end{equation}
+
+%$\forall j|T_{kj}=1, T_{.j}=1$
+
+%$\forall j|T_{kj}=0, T_{.j}=0$
+
+%    \begin{equation}
+%    \label{indicebiologicov4}
+%        BHI\left( K_{l} \right) = 1 - \sqrt \frac{\sum_{k \in K_{l}} \left( T_{k.} \frac{\left(1- \frac{T_{k.}}{T_{..}} \right)^2}{\frac{T_{k.}}{T_{..}}}+\left( T_{..}-T_{k.} \right) \frac{T_{k.}}{T_{..}} \right)}{T_{..}\left( card\left( K_{l} \right) - 1 \right)}
+%    \end{equation}
+
+%    \begin{equation}
+%    \label{indicebiologicov5}
+%        BHI\left( K_{l} \right) = 1 - \sqrt \frac{\sum_{k\in K_{l}} \left(T_{..} \left( 1- \frac{T_{k.}}{T_{..}} \right)^2 + T_{k.} - \frac{T_{k.}^{2}}{T_{..}} \right)}{T_{..}\left( card\left( K_{l} \right) - 1 \right)}
+%    \end{equation}
+
+%    \begin{equation}
+%    \label{indicebiologicov6}
+%        BHI\left( K_{l} \right) = 1 - \sqrt \frac{\sum_{k\in K_{l}} \left( \frac{T_{..}^{2}-2T_{..}T_{k.}+T_{k.}^{2}+T_{..}T_{k.}-T_{k.}^{2}}{T_{..}} \right)}{T_{..}\left( card\left( K_{l} \right) - 1 \right)}
+%    \end{equation}
+
+%    \begin{equation}
+%    \label{indicebiologicov7}
+%        BHI\left( K_{l} \right) = 1 - \sqrt \frac{ \sum_{k\in K_{l}} T_{..}- \sum_{k \in K_{l}} T_{k.}} {T_{..}\left( card\left( K_{l} \right) - 1 \right)}
+%    \end{equation}
+
+%    \begin{equation}
+%    \label{indicebiologicov8}
+%        BHI\left( K_{l} \right) = 1 - \sqrt \frac{ card \left( K_{l} \right) T_{..} - T_{..} } {T_{..}\left( card\left( K_{l} \right) - 1 \right)}
+%    \end{equation}
+
+%    \begin{equation}
+%    \label{indicebiologicov9}
+%        BHI\left( K_{l} \right) = 0
+%    \end{equation}
+
+%BHI es máximo e igual a 1 cuando todos los genes de $K_{l}$ tienen perfiles funcionales perfectamente similares:
+
+%    \begin{equation}
+%    \label{indicebiologicov10}
+%        BHI\left( K_{l} \right) = 1 - \sqrt \frac{ \sum_{k \in K_{l}} \left( \sum_{j=1}^{J} \frac{\left( T_{kj} - \frac{T_{k.}T_{.j}}{T_{..}} \right)^2}{ \frac{T_{k.}T_{.j}}{T_{..}} } \right)  } {T_{..}\left( card\left( K_{l} \right) - 1 \right)}
+%    \end{equation}
+
+%$\forall j|T_{kj}=1, T_{.j}=card\left( K_{l} \right) \& T_{.k}=\frac{T_{..}}{card K_{l}} $
+
+%$\forall j|T_{kj}=0, T_{.j}=0$
+
+%Por lo tanto:
+
+%    \begin{equation}
+%    \label{indicebiologicov11}
+%        BHI\left( K_{l} \right) = 1 - \sqrt \frac{ \sum_{k \in K_{l}} \left( \sum_{j=1}^{J} \frac{\left( 1 - \frac{\frac{T_{..}}{card \left( K_{l} \right)} card \left( K_{l} \right)}{T_{..}} \right)^2}{ \frac{\frac{T_{..}}{card \left( K_{l} \right)} card\left( K_{l} \right)}{T_{..}} } \right)  } {T_{..}\left( card\left( K_{l} \right) - 1 \right)}
+%    \end{equation}
+
+%    \begin{equation}
+%    \label{indicebiologicov12}
+%        BHI\left( K_{l} \right) = 1
+%    \end{equation}
+
+%-----------------------------------------------------------------------------------------------------------------RESULTADOS ANTIGUOS
+
+
+
+%A continuación se presentan los resultados más relevantes del total de ejecuciones, en relación a las medidas de distancia entre genes en base a la expresión genética (las cuales son las distancias de $Dist_{pearson}\left( g_{i},g_{j}\right)$, $Dist_{pearsonAbs}\left( g_{i},g_{j}\right)$ y \textit{Pearson}$+$\textit{Spearman} descritas en la sección \ref{des:simexpresion}), por lo que para cada una de las funciones se genera un total de $70$ diferentes combinaciones a revisar por un índice de validación adecuado, considerando que el \textit{IHB} es transversal al tipo de medida de distancia entre genes del cual se haya hecho uso.
+
+%En cada una de las siguientes figuras, \textit{Rank} representa el valor de clasificación. ``Expresión'', ``Semántica'', ``Términos'' y ``Mezcla'' indican respectivamente la medida de distancia para crear la matriz de distancia entre genes en base a los perfiles de expresión, la medida de distancia para crear la matriz de distancia entre términos en base a la similitud semántica, la medida de distancia para crear una matriz de distancia entre genes en base a sus conjuntos de términos y la medida de distancia para crear una matriz de distancia entre genes considerando tanto a los perfiles de expresión como los perfiles funcionales.
+
+%La sección de ``Mezcla'' representa el análisis sobre el agrupamiento generado a partir de la matriz de distancias en base a datos de expresión y términos biológicos, entregándose para cada caso, los valores del índice correspondiente para los grupos dentro de cada caso de ejecución distinto, destacándose así los valores promedio (de todos los grupos para cada agrupamiento), máximo y mínimo obtenidos. ``Sólo Expresión'' y ``Sólo Términos'' representan respectivamente los valores para el índice indicado aplicados a los agrupamientos generados a partir de una matriz de distancia que sólo consideró datos de expresión y términos biológicos.
+
+%Así pues, cada figura con valores ordenados en tablas muestra las cinco mejores combinaciones de funciones, ordenadas de acuerdo a los valores evaluados para los grupos generados a partir de la matriz de distancia de ``Mezlca'', por un índice de validación determinado y adecuado para cada caso.
+
+%Para facilitar el análisis, las tablas que presentan los resultados de los experimentos poseen colores representativos para los valores de los índices, de manera que colores cercanos a rojo indican que el valor del índice no es adecuado (ya sea porque no existe correlación, o bien no hay suficiente coherencia biológica), mientras que colores cercanos al color verde representan valores adecuados para el índice (hay correlación entre los perfiles de expresión del grupo en evaluación, o bien el agrupamiento genera grupos de genes coherentes biológicamente). Además, cada función asociada a la similitud semántica entre términos biológicos posee un color asociado, de manera que el color púrpura describe a los casos en que se utilizó la medida descrita por la ecuación \ref{eq:wu-palmer}, el color verde la medida presentada en la ecuación \ref{eq:slimani}, el color anaranjado la medida vista en la ecuación \ref{eq:leacock}, el color rosa la medida descrita por la ecuación \ref{eq:jiangconrath} y el color cyan para la medida presentada en la ecuación \ref{eq:lin}.
+
+%  - - - - - - - - - - - - - - - - - - - - - - - - -
+
+%\subsubsection{Resultados relevantes para $Dist_{pearson}\left( g_{i},g_{j}\right)$}
+%\label{res:resultadosPearson}
+
+%En la figura \ref{fig:analisisCI1} se presentan los cinco mejores casos ordenados según el índice de validación presentado en la ecuación \ref{indiceexpresion}, el cual es identificado en la tabla bajo el nombre de ``HCI Normal''. Los resultados se pueden contrastar con los presentes en la figura \ref{fig:analisisCI2}, donde (siguiendo el mismo orden impuesto por el índice ``HCI Normal'' a la matriz de ``Mezcla''), se presentan los valores del mismo índice aplicado sobre la matriz de distancia basada sólo en perfiles de expresión (encabezado que indica ``Sólo Expresión''), y sobre la matriz de distancia basada sólo en perfiles funcionales (encabezado de ``Sólo Términos''), para cada caso en evaluación.
+
+%El las figuras figuras \ref{fig:analisisCI3} y \ref{fig:analisisCI4} se indican las mismas comparaciones, pero analizando el índice presentado en la sección \ref{concep:bhi}, tanto para la ``Mezcla'' (grupos generados a partir de la matriz de distancia que considera ambos tipos de información) como de ``Sólo Expresión'' y ``Sólo Términos'' (grupos generados a partir de las matrices de distancia generadas sólo por los datos de expresión y términos biológicos, respectivamente).
+
+%El panorama cambia cuando el índice bajo el cual se ordenan los resultados generados es el \textit{IHB} presente en la equación \ref{indicebiologico}, dado que son otros los casos mejor evaluados cuando se analiza con respecto a la homogeneidad biológica de los grupos. En la figura \ref{fig:analisisCI5} se presentan los valores del índice presente en la ecuación \ref{indiceexpresion} al evaluar los grupos generados a partir de una matriz de ``Mezcla'', al ordenar los casos de prueba con respecto al índice \ref{indicebiologico}, los que se pueden contrastar con los expuestos en la figura \ref{fig:analisisCI6} donde se evalúan los agrupamientos a partir de las matrices de ``Sólo Expresión'' y ``Sólo Términos''.
+
+%En las figuras \ref{fig:analisisCI7} y \ref{fig:analisisCI8} se analiza los propios valores del \textit{IHB} para los agrupamientos generados a partir de las matrices de ``Mezcla'' (figura \ref{fig:analisisCI7}) y ``Sólo Expresión'' más ``Sólo Términos'' (figura \ref{fig:analisisCI8}).
+
+%\begin{figure}[tp]
+%  \centering
+%  \includegraphics[scale=.55]{images/Dan02}
+%  \caption{\em Mejores resultados según el índice de la ecuación \ref{indiceexpresion}, del agrupamiento generado a partir de la matriz de distancia que considera datos de expresión y términos biológicos, y $Dist_{pearson}\left( g_{i},g_{j}\right)$ para agrupar genes según su expresión.}
+%  \label{fig:analisisCI1}
+%\end{figure}
+
+%\begin{figure}[tp]
+%  \centering
+%  \includegraphics[scale=.53]{images/Dan03}
+%  \caption{\em Mejores resultados según el índice de la ecuación \ref{indiceexpresion}, del agrupamiento generado a partir de una matriz de distancia que considera ``Sólo Expresión'' y ``Sólo Términos'', y $Dist_{pearson}\left( g_{i},g_{j}\right)$ para agrupar genes según su expresión.}
+%  \label{fig:analisisCI2}
+%\end{figure}
+
+%\begin{figure}[tp]
+%  \centering
+%  \includegraphics[scale=.48]{images/Dan04}
+%  \caption{\em Valores del índice de la ecuación \ref{indicebiologico} de los mejores resultados para el índice de la ecuación \ref{indiceexpresion}, del agrupamiento generado a partir de la matriz de distancia que considera datos de expresión y términos biológicos, y $Dist_{pearson}\left( g_{i},g_{j}\right)$ para agrupar genes según su expresión.}
+%  \label{fig:analisisCI3}
+%\end{figure}
+
+%\begin{figure}[tp]
+%  \centering
+%  \includegraphics[scale=.45]{images/Dan05}
+%  \caption{\em Valores del índice de la ecuación \ref{indicebiologico} de los mejores resultados para el índice de la ecuación \ref{indiceexpresion}, del agrupamiento generado a partir de una matriz de distancia que considera ``Sólo Expresión'' y ``Sólo Términos'', y $Dist_{pearson}\left( g_{i},g_{j}\right)$ para agrupar genes según su expresión.}
+%  \label{fig:analisisCI4}
+%\end{figure}
+
+% ---
+
+%\begin{figure}[tp]
+%  \centering
+%  \includegraphics[scale=.48]{images/Dan06}
+%  \caption{\em Mejores resultados según el índice de la ecuación \ref{indicebiologico}, del agrupamiento generado a partir de la matriz de distancia que considera datos de expresión y términos biológicos, y $Dist_{pearson}\left( g_{i},g_{j}\right)$ para agrupar genes según su expresión.}
+%  \label{fig:analisisCI5}
+%\end{figure}
+
+%\begin{figure}[tp]
+%  \centering
+%  \includegraphics[scale=.53]{images/Dan07}
+%  \caption{\em Mejores resultados según el índice de la ecuación \ref{indicebiologico}, del agrupamiento generado a partir de una matriz de distancia que considera ``Sólo Expresión'' y ``Sólo Términos'', y $Dist_{pearson}\left( g_{i},g_{j}\right)$ para agrupar genes según su expresión.}
+%  \label{fig:analisisCI6}
+%\end{figure}
+
+%\begin{figure}[tp]
+%  \centering
+%  \includegraphics[scale=.55]{images/Dan08}
+%  \caption{\em Valores del índice de la ecuación \ref{indicebiologico} de los mejores resultados según el mismo índice, para el agrupamiento generado a partir de una matriz de distancia que considera datos de expresión y términos biológicos, y $Dist_{pearson}\left( g_{i},g_{j}\right)$ para agrupar genes según su expresión.}
+%  \label{fig:analisisCI7}
+%\end{figure}
+
+%\begin{figure}[tp]
+%  \centering
+%  \includegraphics[scale=.53]{images/Dan09}
+%  \caption{\em Valores del índice de la ecuación \ref{indicebiologico} de los mejores resultados según el mismo índice, del agrupamiento generado a partir de una matriz de distancia que considera ``Sólo Expresión'' y ``Sólo Términos'', y $Dist_{pearson}\left( g_{i},g_{j}\right)$ para agrupar genes según su expresión.}
+%  \label{fig:analisisCI8}
+%\end{figure}
+
+%  - - - - - - - - - - - - - - - - - - - - - - - - -
+
+%\subsubsection{Resultados relevantes para $Dist_{pearsonAbs}\left( g_{i},g_{j}\right)$}
+%\label{res:resultadosPearsonAbs}
+
+%En la figura \ref{fig:analisisCI9} se presentan los cinco mejores casos ordenados según el índice de validación presentado en la ecuación \ref{eq:indiceexpresionabs}, el cual es identificado en la tabla bajo el nombre de ``HCI Absoluta''. Los resultados se pueden contrastar con los presentes en la figura \ref{fig:analisisCI10}, donde (siguiendo el mismo orden impuesto por el índice ``HCI Normal'' a la matriz de ``Mezcla''), se presentan los valores del mismo índice aplicado sobre la matriz de distancia basada sólo en perfiles de expresión (encabezado que indica ``Sólo Expresión''), y sobre la matriz de distancia basada sólo en perfiles funcionales (encabezado de ``Sólo Términos''), para cada caso en evaluación.
+
+%El las figuras figuras \ref{fig:analisisCI11} y \ref{fig:analisisCI12} se indican las mismas comparaciones, pero analizando el índice presentado en la sección \ref{concep:bhi}, tanto para la ``Mezcla'' (grupos generados a partir de la matriz de distancia que considera ambos tipos de información) como de ``Sólo Expresión'' y ``Sólo Términos'' (grupos generados a partir de las matrices de distancia generadas sólo por los datos de expresión y términos biológicos, respectivamente).
+
+%El panorama cambia cuando el índice bajo el cual se ordenan los resultados generados es el \textit{IHB} presente en la equación \ref{indicebiologico}, dado que son otros los casos mejor evaluados cuando se analiza con respecto a la homogeneidad biológica de los grupos. En la figura \ref{fig:analisisCI13} se presentan los valores del índice presente en la ecuación \ref{eq:indiceexpresionabs} al evaluar los grupos generados a partir de una matriz de ``Mezcla'', al ordenar los casos de prueba con respecto al índice \ref{indicebiologico}, los que se pueden contrastar con los expuestos en la figura \ref{fig:analisisCI14} donde se evalúan los agrupamientos a partir de las matrices de ``Sólo Expresión'' y ``Sólo Términos''.
+
+%En las figuras \ref{fig:analisisCI15} y \ref{fig:analisisCI16} se analiza los propios valores del \textit{IHB} para los agrupamientos generados a partir de las matrices de ``Mezcla'' (figura \ref{fig:analisisCI15}) y ``Sólo Expresión'' más ``Sólo Términos'' (figura \ref{fig:analisisCI16}).
+
+%\begin{figure}[tp]
+%  \centering
+%  \includegraphics[scale=.55]{images/Dan10}
+%  \caption{\em Mejores resultados según el índice de la ecuación \ref{eq:indiceexpresionabs}, del agrupamiento generado a partir de la matriz de distancia que considera datos de expresión y términos biológicos, y $Dist_{pearsonAbs}\left( g_{i},g_{j}\right)$ para agrupar genes según su expresión.}
+%  \label{fig:analisisCI9}
+%\end{figure}
+
+%\begin{figure}[tp]
+%  \centering
+%  \includegraphics[scale=.48]{images/Dan11}
+%  \caption{\em Mejores resultados según el índice de la ecuación \ref{eq:indiceexpresionabs}, del agrupamiento generado a partir de una matriz de distancia que considera ``Sólo Expresión'' y ``Sólo Términos'', y $Dist_{pearsonAbs}\left( g_{i},g_{j}\right)$ para agrupar genes según su expresión.}
+%  \label{fig:analisisCI10}
+%\end{figure}
+
+%\begin{figure}[tp]
+%  \centering
+%  \includegraphics[scale=.49]{images/Dan12}
+%  \caption{\em Valores del índice de la ecuación \ref{indicebiologico} de los mejores resultados para el índice de la ecuación \ref{eq:indiceexpresionabs}, del agrupamiento generado a partir de la matriz de distancia que considera datos de expresión y términos biológicos, y $Dist_{pearsonAbs}\left( g_{i},g_{j}\right)$ para agrupar genes según su expresión.}
+%  \label{fig:analisisCI11}
+%\end{figure}
+
+%\begin{figure}[tp]
+%  \centering
+%  \includegraphics[scale=.46]{images/Dan13}
+%  \caption{\em Valores del índice de la ecuación \ref{indicebiologico} de los mejores resultados para el índice de la ecuación \ref{eq:indiceexpresionabs}, del agrupamiento generado a partir de una matriz de distancia que considera ``Sólo Expresión'' y ``Sólo Términos'', y $Dist_{pearsonAbs}\left( g_{i},g_{j}\right)$ para agrupar genes según su expresión.}
+%  \label{fig:analisisCI12}
+%\end{figure}
+
+% ---
+
+%\begin{figure}[tp]
+%  \centering
+%  \includegraphics[scale=.49]{images/Dan14}
+%  \caption{\em Mejores resultados según el índice de la ecuación \ref{indicebiologico}, del agrupamiento generado a partir de la matriz de distancia que considera datos de expresión y términos biológicos, y $Dist_{pearsonAbs}\left( g_{i},g_{j}\right)$ para agrupar genes según su expresión.}
+%  \label{fig:analisisCI13}
+%\end{figure}
+
+%\begin{figure}[tp]
+%  \centering
+%  \includegraphics[scale=.47]{images/Dan15}
+%  \caption{\em Mejores resultados según el índice de la ecuación \ref{indicebiologico}, del agrupamiento generado a partir de una matriz de distancia que considera ``Sólo Expresión'' y ``Sólo Términos'', y $Dist_{pearsonAbs}\left( g_{i},g_{j}\right)$ para agrupar genes según su expresión.}
+%  \label{fig:analisisCI14}
+%\end{figure}
+
+%\begin{figure}[tp]
+%  \centering
+%  \includegraphics[scale=.53]{images/Dan16}
+%  \caption{\em Valores del índice de la ecuación \ref{indicebiologico} de los mejores resultados según el mismo índice, para el agrupamiento generado a partir de una matriz de distancia que considera datos de expresión y términos biológicos, y $Dist_{pearsonAbs}\left( g_{i},g_{j}\right)$ para agrupar genes según su expresión.}
+%  \label{fig:analisisCI15}
+%\end{figure}
+
+%\begin{figure}[tp]
+%  \centering
+%  \includegraphics[scale=.47]{images/Dan17}
+%  \caption{\em Valores del índice de la ecuación \ref{indicebiologico} de los mejores resultados según el mismo índice, del agrupamiento generado a partir de una matriz de distancia que considera ``Sólo Expresión'' y ``Sólo Términos'', y $Dist_{pearsonAbs}\left( g_{i},g_{j}\right)$ para agrupar genes según su expresión.}
+%  \label{fig:analisisCI16}
+%\end{figure}
+
+%  - - - - - - - - - - - - - - - - - - - - - - - - -
+
+%\subsubsection{Resultados relevantes para \textit{Pearson}$+$\textit{Spearman}}
+%\label{res:resultadosPearsonSpearman}
+
+%En la figura \ref{fig:analisisCI17} se presentan los cinco mejores casos ordenados según el índice de validación presentado en la ecuación \ref{eq:indiceexpresionabs}, el cual es identificado en la tabla bajo el nombre de ``HCI Absoluta''. Los resultados se pueden contrastar con los presentes en la figura \ref{fig:analisisCI18}, donde (siguiendo el mismo orden impuesto por el índice ``HCI Normal'' a la matriz de ``Mezcla''), se presentan los valores del mismo índice aplicado sobre la matriz de distancia basada sólo en perfiles de expresión (encabezado que indica ``Sólo Expresión''), y sobre la matriz de distancia basada sólo en perfiles funcionales (encabezado de ``Sólo Términos''), para cada caso en evaluación.
+
+%El las figuras figuras \ref{fig:analisisCI19} y \ref{fig:analisisCI20} se indican las mismas comparaciones, pero analizando el índice presentado en la sección \ref{concep:bhi}, tanto para la ``Mezcla'' (grupos generados a partir de la matriz de distancia que considera ambos tipos de información) como de ``Sólo Expresión'' y ``Sólo Términos'' (grupos generados a partir de las matrices de distancia generadas sólo por los datos de expresión y términos biológicos, respectivamente).
+
+%El panorama cambia cuando el índice bajo el cual se ordenan los resultados generados es el \textit{IHB} presente en la equación \ref{indicebiologico}, dado que son otros los casos mejor evaluados cuando se analiza con respecto a la homogeneidad biológica de los grupos. En la figura \ref{fig:analisisCI21} se presentan los valores del índice presente en la ecuación \ref{eq:indiceexpresionabs} al evaluar los grupos generados a partir de una matriz de ``Mezcla'', al ordenar los casos de prueba con respecto al índice \ref{indicebiologico}, los que se pueden contrastar con los expuestos en la figura \ref{fig:analisisCI22} donde se evalúan los agrupamientos a partir de las matrices de ``Sólo Expresión'' y ``Sólo Términos''.
+
+%En las figuras \ref{fig:analisisCI23} y \ref{fig:analisisCI24} se analiza los propios valores del \textit{IHB} para los agrupamientos generados a partir de las matrices de ``Mezcla'' (figura \ref{fig:analisisCI23}) y ``Sólo Expresión'' más ``Sólo Términos'' (figura \ref{fig:analisisCI24}).
+
+%\begin{figure}[tp]
+%  \centering
+%  \includegraphics[scale=.53]{images/Dan18}
+%  \caption{\em Mejores resultados según el índice de la ecuación \ref{eq:indiceexpresionabs}, del agrupamiento generado a partir de la matriz de distancia que considera datos de expresión y términos biológicos, y \textit{Pearson}$+$\textit{Spearman} para agrupar genes según su expresión.}
+%  \label{fig:analisisCI17}
+%\end{figure}
+
+%\begin{figure}[tp]
+%  \centering
+%  \includegraphics[scale=.52]{images/Dan19}
+%  \caption{\em Mejores resultados según el índice de la ecuación \ref{eq:indiceexpresionabs}, del agrupamiento generado a partir de una matriz de distancia que considera ``Sólo Expresión'' y ``Sólo Términos'', y \textit{Pearson}$+$\textit{Spearman} para agrupar genes según su expresión.}
+%  \label{fig:analisisCI18}
+%\end{figure}
+
+%\begin{figure}[tp]
+%  \centering
+%  \includegraphics[scale=.52]{images/Dan20}
+%  \caption{\em Valores del índice de la ecuación \ref{indicebiologico} de los mejores resultados para el índice de la ecuación \ref{eq:indiceexpresionabs}, del agrupamiento generado a partir de la matriz de distancia que considera datos de expresión y términos biológicos, y \textit{Pearson}$+$\textit{Spearman} para agrupar genes según su expresión.}
+%  \label{fig:analisisCI19}
+%\end{figure}
+
+%\begin{figure}[tp]
+%  \centering
+%  \includegraphics[scale=.5]{images/Dan21}
+%  \caption{\em Valores del índice de la ecuación \ref{indicebiologico} de los mejores resultados para el índice de la ecuación \ref{eq:indiceexpresionabs}, del agrupamiento generado a partir de una matriz de distancia que considera ``Sólo Expresión'' y ``Sólo Términos'', y \textit{Pearson}$+$\textit{Spearman} para agrupar genes según su expresión.}
+%  \label{fig:analisisCI20}
+%\end{figure}
+
+% ---
+
+%\begin{figure}[tp]
+%  \centering
+%  \includegraphics[scale=.51]{images/Dan22}
+%  \caption{\em Mejores resultados según el índice de la ecuación \ref{indicebiologico}, del agrupamiento generado a partir de la matriz de distancia que considera datos de expresión y términos biológicos, y \textit{Pearson}$+$\textit{Spearman} para agrupar genes según su expresión.}
+%  \label{fig:analisisCI21}
+%\end{figure}
+
+%\begin{figure}[tp]
+%  \centering
+%  \includegraphics[scale=.52]{images/Dan23}
+%  \caption{\em Mejores resultados según el índice de la ecuación \ref{indicebiologico}, del agrupamiento generado a partir de una matriz de distancia que considera ``Sólo Expresión'' y ``Sólo Términos'', y \textit{Pearson}$+$\textit{Spearman} para agrupar genes según su expresión.}
+%  \label{fig:analisisCI22}
+%\end{figure}
+
+%\begin{figure}[tp]
+%  \centering
+%  \includegraphics[scale=.55]{images/Dan24}
+%  \caption{\em Valores del índice de la ecuación \ref{indicebiologico} de los mejores resultados según el mismo índice, para el agrupamiento generado a partir de una matriz de distancia que considera datos de expresión y términos biológicos, y \textit{Pearson}$+$\textit{Spearman} para agrupar genes según su expresión.}
+%  \label{fig:analisisCI23}
+%\end{figure}
+
+%\begin{figure}[tp]
+%  \centering
+%  \includegraphics[scale=.52]{images/Dan25}
+%  \caption{\em Valores del índice de la ecuación \ref{indicebiologico} de los mejores resultados según el mismo índice, para el agrupamiento generado a partir de una matriz de distancia que considera ``Sólo Expresión'' y ``Sólo Términos'', y \textit{Pearson}$+$\textit{Spearman} para agrupar genes según su expresión.}
+%  \label{fig:analisisCI24}
+%\end{figure}

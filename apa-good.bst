@@ -198,84 +198,121 @@ FUNCTION {capitalize}
 
 FUNCTION {space.word}
 { " " swap$ * " " * }
- % Here are the language-specific definitions for explicit words.
- % Each function has a name bbl.xxx where xxx is the English word.
- % The language selected here is ENGLISH
+% Here are the language-specific definitions for explicit words.
+% Each function has a name bbl.xxx where xxx is the English word.
+% The language selected here is ENGLISH
+% Acá se pone la definición para palabras explícitas. Cada función tiene un nombre bbl.x, donde x es la palabra en inglés. 
+% El lenguaje del código original es inglés, pero yo dejé algunas palabras en español.
+% --------------------------------------------------
+%FUNCTION {bbl.and}
+%{ "and"}
 FUNCTION {bbl.and}
-{ "and"}
-
+{ "&"}
+% --------------------------------------------------
 FUNCTION {bbl.etal}
 { "et~al." }
-
+% --------------------------------------------------
+%FUNCTION {bbl.editors}
+%{ "eds." }
 FUNCTION {bbl.editors}
-{ "eds." }
-
+{ "editores" }
+% --------------------------------------------------
 FUNCTION {bbl.editor}
 { "ed." }
-
+% --------------------------------------------------
+%FUNCTION {bbl.edby}
+%{ "edited by" }
 FUNCTION {bbl.edby}
-{ "edited by" }
-
+{ "editado por" }
+% --------------------------------------------------
 FUNCTION {bbl.edition}
 { "ed." }
-
+% --------------------------------------------------
 FUNCTION {bbl.volume}
 { "vol." }
-
+% --------------------------------------------------
+%FUNCTION {bbl.of}
+%{ "of" }
 FUNCTION {bbl.of}
-{ "of" }
-
+{ "de" }
+% --------------------------------------------------
+%FUNCTION {bbl.number}
+%{ "no." }
 FUNCTION {bbl.number}
-{ "no." }
-
+{ "n°" }
+% --------------------------------------------------
+%FUNCTION {bbl.nr}
+%{ "no." }
 FUNCTION {bbl.nr}
-{ "no." }
-
+{ "n°" }
+% --------------------------------------------------
+%FUNCTION {bbl.in}
+%{ "in" }
 FUNCTION {bbl.in}
-{ "in" }
-
+{ "en" }
+% --------------------------------------------------
+%FUNCTION {bbl.pages}
+%{ "pp." }
 FUNCTION {bbl.pages}
-{ "pp." }
-
+{ "pág." }
+% --------------------------------------------------
 FUNCTION {bbl.page}
 { "p." }
-
+% --------------------------------------------------
+%FUNCTION {bbl.chapter}
+%{ "chap." }
 FUNCTION {bbl.chapter}
-{ "chap." }
-
+{ "cap." }
+% --------------------------------------------------
 FUNCTION {bbl.techrep}
 { "Tech. Rep." }
-
+% --------------------------------------------------
+%FUNCTION {bbl.mthesis}
+%{ "Master's thesis" }
 FUNCTION {bbl.mthesis}
-{ "Master's thesis" }
-
+{ "Tesis de Mag\'ister" }
+% --------------------------------------------------
+%FUNCTION {bbl.phdthesis}
+%{ "Ph.D. thesis" }
 FUNCTION {bbl.phdthesis}
-{ "Ph.D. thesis" }
-
-MACRO {jan} {"Jan."}
-
+{ "Tesis de Doctorado" }
+% --------------------------------------------------
+%MACRO {jan} {"Jan."}
+MACRO {jan} {"Ene."}
+% --------------------------------------------------
+%MACRO {feb} {"Feb."}
 MACRO {feb} {"Feb."}
-
+% --------------------------------------------------
+%MACRO {mar} {"Mar."}
 MACRO {mar} {"Mar."}
-
-MACRO {apr} {"Apr."}
-
-MACRO {may} {"May"}
-
+% --------------------------------------------------
+%MACRO {apr} {"Apr."}
+MACRO {apr} {"Abr."}
+% --------------------------------------------------
+%MACRO {may} {"May"}
+MACRO {may} {"Mayo"}
+% --------------------------------------------------
+%MACRO {jun} {"Jun."}
 MACRO {jun} {"Jun."}
-
+% --------------------------------------------------
+%MACRO {jul} {"Jul."}
 MACRO {jul} {"Jul."}
-
-MACRO {aug} {"Aug."}
-
-MACRO {sep} {"Sep."}
-
+% --------------------------------------------------
+%MACRO {aug} {"Aug."}
+MACRO {aug} {"Ago."}
+% --------------------------------------------------
+%MACRO {sep} {"Sep."}
+MACRO {sep} {"Sept."}
+% --------------------------------------------------
+%MACRO {oct} {"Oct."}
 MACRO {oct} {"Oct."}
-
+% --------------------------------------------------
+%MACRO {nov} {"Nov."}
 MACRO {nov} {"Nov."}
-
-MACRO {dec} {"Dec."}
-
+% --------------------------------------------------
+%MACRO {dec} {"Dec."}
+MACRO {dec} {"Dic."}
+% --------------------------------------------------
 MACRO {acmcs} {"ACM Computing Surveys"}
 
 MACRO {acta} {"Acta Informatica"}
@@ -459,11 +496,9 @@ FUNCTION {format.key}
   if$
 }
 
-FUNCTION {format.authors}
-{ author "author" format.names
-}
-FUNCTION {get.bbl.editor}
-{ editor num.names$ #1 > 'bbl.editors 'bbl.editor if$ }
+FUNCTION {format.authors} { author "author" format.names }
+
+FUNCTION {get.bbl.editor} { editor num.names$ #1 > 'bbl.editors 'bbl.editor if$ }
 
 FUNCTION {format.editors}
 { editor "editor" format.names duplicate$ empty$ 'skip$
@@ -898,14 +933,14 @@ FUNCTION {format.publisher.address}
 FUNCTION {format.organization.address}
 { organization "organization" bibinfo.check format.org.or.pub
 }
-
+% -------------------------------------------------- ARTÍCULO: Autor, año, título
 FUNCTION {article}
 { output.bibitem
-  format.authors "author" output.check
+  format.authors "author" output.check      %Imprime el autor
   author format.key output
-  format.date "year" output.check
+  format.date "year" output.check           %Imprime el año
   date.block
-  format.title "title" output.check
+  format.title "title" output.check         %Imprime el título
   new.block
   crossref missing$
     {
@@ -913,17 +948,18 @@ FUNCTION {article}
       "journal" bibinfo.check
       emphasize
       "journal" output.check
-      format.vol.num.pages output
+      format.vol.num.pages output           %Imprime el volumen y número
     }
     { format.article.crossref output.nonnull
-      format.pages output
+      format.pages output                   %Imprime las páginas
     }
   if$
   new.block
-  format.note output
+  format.note output                        %Imprime la nota
   fin.entry
-  write.url
+  write.url                                 %Imprime la url
 }
+% -------------------------------------------------- LIBRO: Autor, Date (Year), Title, Volume, Series, Address, Publisher, Edition, Note, URL.
 FUNCTION {book}
 { output.bibitem
   author empty$
@@ -931,34 +967,35 @@ FUNCTION {book}
       editor format.key output
       add.blank
     }
-    { format.authors output.nonnull
+    { format.authors output.nonnull         %Imprime el autor
       crossref missing$
         { "author and editor" editor either.or.check }
         'skip$
       if$
     }
   if$
-  format.date "year" output.check
+  format.date "year" output.check           %Imprime el año
   date.block
-  format.btitle "title" output.check
+  format.btitle "title" output.check        %Imprime el título
   crossref missing$
-    { format.bvolume output
+    { format.bvolume output                 %Imprime el volumen
       new.block
-      format.number.series output
+      format.number.series output           %Imprime la serie   
       new.sentence
-      format.publisher.address output
+      format.publisher.address output       %Imprimer el nombre del editor
     }
     {
       new.block
       format.book.crossref output.nonnull
     }
   if$
-  format.edition output
+  format.edition output                     %Imprime la edición
   new.block
-  format.note output
+  format.note output                        %Imprime la nota
   fin.entry
-  write.url
+  write.url                                 %Imprime la url
 }
+% -------------------------------------------------- BOOKLET:
 FUNCTION {booklet}
 { output.bibitem
   format.authors output

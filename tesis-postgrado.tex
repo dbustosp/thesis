@@ -1,54 +1,87 @@
-\documentclass[logo,dosguias,magister,propuesta]{tesis-postgrado}
-% opciones: logo,dosguias,magister,doctorado,propuesta,txfonts
+\documentclass[logo,magister]{tesis-postgrado}
+
+% % Declaración para colocar código Java
+%\usepackage{listings}
+%\usepackage{color}
+%
+%\definecolor{dkgreen}{rgb}{0,0.6,0}
+%\definecolor{gray}{rgb}{0.5,0.5,0.5}
+%\definecolor{mauve}{rgb}{0.58,0,0.82}
+%
+%\lstset{frame=tb,
+%  captionpos=b, 
+%  language=Java,
+%  numbers=left,
+%  aboveskip=3mm,
+%  belowskip=3mm,
+%  showstringspaces=false,
+%  columns=flexible,
+%  basicstyle={\small\ttfamily},
+%  %numbers=none,
+%  numberstyle=\tiny\color{gray},
+%  keywordstyle=\color{blue},
+%  commentstyle=\color{dkgreen},
+%  stringstyle=\color{mauve},
+%  breaklines=true,
+%  breakatwhitespace=true,
+%  tabsize=3
+%}
+
+\renewcommand{\lstlistingname}{C\'ODIGO}
+
+% % Pa usar quotes
+\usepackage{csquotes}
 
 \keywords{XML; Key Implication}
 
 \begin{document}
 \baselineskip 23pt
 % ----------------------------------------------------------
-% ----------- PARTE INICIAL --------------------------------
 \thispagestyle{empty}
 \include{cubierta}
-\makecopyright % si es propuesta no se mostrará
+\makecopyright
 % ----------------------------------------------------------
-% ----------- PRIMERA PARTE --------------------------------
 \frontmatter
-% ### Resumen e Indices ####
+
 \include{chapters/gracias}
+% % AGREGADO PARA IMPRIMIR EN DOBLE CARA
+\newpage\null\thispagestyle{empty}\newpage
 \include{chapters/dedicatoria}
+% % AGREGADO PARA IMPRIMIR EN DOBLE CARA
+\newpage\null\thispagestyle{empty}\newpage
 \include{chapters/abstract}
 \pagestyle{fancy}
 \fancyhead[L]{\slshape \leftmark}
 \fancyhead[C]{}
 \fancyhead[R]{\thepage}
-\tableofcontents        %% Indice general
-\listoffigures          %% Indice de figuras
-\listoftables           %% Indice de tablas
-\listofalgorithms       %% Indice de algoritmos
+\pagenumbering{roman}
+\tableofcontents
+\listoffigures
+\listoftables
+% % AGREGADO PARA IMPRIMIR EN DOBLE CARA
+\newpage\null\thispagestyle{empty}\newpage
+%\listofalgorithms
 % ----------------------------------------------------------
-% ----------- SEGUNDA PARTE --------------------------------
 \mainmatter
-% ### Configuración del header ###
-\pagestyle{fancy}
 \fancyhead[L]{\slshape \leftmark}
 \fancyhead[C]{}
-\fancyhead[R]{\thepage}
 \pagenumbering{arabic}
-% ### Capitulos de la tesis ###
+\hyphenation{de-di-ca-da a-no-ta-cio-nes re-sul-ta-dos fun-cio-na-les se-man-ti-ca}
 \include{chapters/1-intro}
-\include{chapters/2-preliminares}
+\include{chapters/2-marco-teorico}
+\include{chapters/3-modelo}
+\include{chapters/4-diseno}
+\include{chapters/5-casos}
+\include{chapters/6-conclusiones}
 % ----------------------------------------------------------
-% ----------- TERCERA PARTE --------------------------------
-% \backmatter %Elimina la numeración
-% ### Bibliografía de este documento ###
 \bibliographystyle{apa-good}
 \bibliography{referencias}
 % ----------------------------------------------------------
-% ----------- CUARTA PARTE ---------------------------------
-\appendix
-\addappheadtotoc %agregar Apéndice al índice. Si no tiene apéndices COMENTAR o BORRAR
-% \noappendicestocpagenum %quitar número de páginas a los apéndices
-% ### ANEXOS ###
-\include{chapters/Apendice-1} % Manuales de Usuario
+% NO TIENE APENDICES
+%\appendix
+%\addappheadtotoc 
+% ----------------------------------------------------------
+%\include{chapters/ApendiceA}
+%\include{chapters/ApendiceB}
+%\include{chapters/ApendiceC}
 \end{document}
-%\\end

@@ -1,0 +1,180 @@
+\chapter{Ejemplos de aplicación}
+
+En el presente capítulo se muestran dos ejemplos de aplicación del \textit{framework} donde se realiza la construcción de SR que permiten validar la eficacia del modelo propuesto.
+
+\section{Sistemas de recomendación para \textit{Movielens}}
+
+\textit{Movielens}\footnote{http://movielens.umn.edu/} es un servicio libre, no comercial y personalizado ofrecido por \textit{Grouplens}\footnote{http://grouplens.org/} de la Universidad de \textit{Minnesota}\footnote{www.umn.edu/}. Este permite realizar recomendaciones de películas basándose en interacciones de tipo \textit{rating}. El \textit{dataset} usado de \textit{Movielens} en este trabajo fue presentado en el \textit{workshop} \textit{HetRec} 2011\footnote{The 2nd International Workshop on Information Heterogeneity and Fusion in Recommender Systems}. Este se basa en dos tipos de interacciones \textit{rating} y \textit{tagging}, el detalle estadístico del \textit{dataset} es el siguiente:
+
+\begin{itemize}
+	\item 2113 usuarios.
+	\item 10197 películas.
+	\item 13222 \textit{tags}.
+	\item 47957 asignaciones de \textit{tags}, por ejemplo tuplas [\textit{user}, \textit{tag}, \textit{movie}].
+	\item Un promedio de 22.696 asignaciones de \textit{tags} por usuario.
+	\item Un promedio de 8.117 asignaciones de \textit{tags} por ítem.
+	\item 855598 \textit{ratings}.
+	\item Un promedio de 404.921 \textit{ratings} por usuario.
+	\item Un promedio de 84.637 \textit{ratings} por película.
+\end{itemize}
+
+Según la método propuesto para la construcción(véase sección \ref{fig:procesoconstruccionSR}) el primer paso consiste en realizar la selección del repositorio de datos a usar. En este caso corresponde a un conjunto de archivos de texto que poseen la información sobre los usuarios, películas e interacciones.
+
+Una vez seleccionado el repositorio de datos se debe decidir que estrategia de acceso a los datos se usará, una consolidación dentro una BD \textit{3-Ontology} o un acceso mediante una implementación DAO. En este caso, se decide realizar una implementación de la capa DAO dado que el objetivo fundamental es experimentar para realizar mejoras en el filtrado colaborativo basado en \textit{rating}. Por lo tanto, se hace uso de un FileDAO que implementa las interfaces EventDAO, CommunityDAO y PlaceDAO para un acceso de datos a archivos de texto plano. En el código \ref{cod:constructorFileDao} se presenta el constructor del FileDAO. Cabe destacar que en esta etapa se determinan los tres contenedores de sentido provenientes desde los archivos de texto.
+
+\begin{lstlisting}[float, caption = Constructor FileDAO, label = cod:constructorFileDao]
+	public FileDAO(String pathRatingFile, String pathTaggingFile, char delim) throws IOException{
+		ratingFile = new ReaderRatingFile(pathRatingFile, delim);
+		taggingFile = new ReaderTaggingFile(pathTaggingFile, delim);
+		events = Lists.newArrayList(ratingFile);
+		events.addAll(Lists.newArrayList(taggingFile));
+		ratingFile.close();
+		taggingFile.close();
+		userIds = new LongOpenHashSet();
+		itemIds = new LongOpenHashSet();
+		communities = Lists.newArrayList();
+		places = Lists.newArrayList();
+		loadData();
+	}
+\end{lstlisting}
+
+Una vez implementado el acceso a los datos con su respectiva representación en los contenedores de sentido se debe implementar un algoritmo de recomendación. Existen diversas API que proveen implementaciones de algoritmos de recomendación, en este caso se hará uso de las implementaciones provistas por \textit{Lenskit} para filtrado colaborativo. Específicamente se usará el enfoque de vecinos más cercanos \textit{user-user}, que es una heurística que dada las preferencias de usuarios cercanos realiza una aproximación de la preferencia del usuario activo (véase la sección 2.2).
+
+A partir del FileDAO se construye una traza, un retrato y un mapa que son la representación lógica de los tres contenedores de sentido de la \textit{3-Ontology}. Luego cada objeto relacionado con el algoritmo de recomendación hace uso de la traza, retrato y mapa, para obtener los eventos, comunidades, lugares, usuarios e ítems relevantes para realizar el cálculo de la recomendación. Finalmente, se implementa la interfaz RboxRecommender para realizar el cálculo de la recomendación para un usuario activo. En el código \ref{cod:srknn} se muestra un ejemplo de implementación de un SR basado en el método propuesto.
+
+\begin{lstlisting}[float, caption = SR \textit{knn-user/user}, label = cod:srknn]
+		/*Creacion del FileDAO para acceder a los datos*/
+		FileDAO fileDAO = new FileDAO("/home/rodrigo/user_ratedmovies-timestamps.dat", 
+				"/home/rodrigo/user_taggedmovies-timestamps.dat", '\t');
+		/*Creacion de las 3 representaciones de la 3-ontology a partir de los contenedores de sentido*/
+		Trace trace = new GenericTrace(fileDAO.getEvents());
+		Portrait portrait = new GenericPortrait(fileDAO.getCommunities());
+		Map map = new GenericMap(fileDAO.getPlaces());
+		
+		/*Creacion de los objetos relacionados con el algoritmo de recomendacion*/
+		VectorSimilarity similarity =  new PearsonCorrelation();
+		UserSimilarity userSimilarity = new UserVectorSimilarity(similarity);
+		VectorNormalizer norm = new MeanVarianceNormalizer();
+		UserVectorNormalizer vectorNormalizer = new DefaultUserVectorNormalizer(norm);
+		NeighborhoodFinder finder = new SimpleNeighborhoodFinder(trace,10, userSimilarity, vectorNormalizer);
+		ItemScorer userUserItemScorer = new UserUserItemScorer(trace, finder, vectorNormalizer);
+		TopNItemRecommender itemRecommender = new TopNItemRecommender(trace, portrait, map, userUserItemScorer);
+		ItemScorer baseline = new ItemMeanRatingItemScorer.Builder(trace, 0).get();
+		PreferenceDomain domain = new PreferenceDomain(0, 5);
+		SimpleRatingPredictor ratingPredictor = new SimpleRatingPredictor(userUserItemScorer, baseline, domain);
+		
+		/*Construccion de un SR basado en la logica de la 3-Ontology*/
+		RboxRecommender rboxRecommender = new RboxRecommenderBasedItemScorer(trace, map, portrait, itemRecommender, ratingPredictor.getBaselineScorer());
+\end{lstlisting}
+
+El uso del SR se realiza mediante una lista de ScoredItem que corresponden a ítems con un puntaje asignado por los algoritmos de recomendación. Un ejemplo de uso del algoritmo se presenta en el código \ref{cod:ejemplouso} donde se imprimen las 10 primeras recomendaciones para el usuario 75. Este algoritmo está basado en memoria por esta razón se debe re-calcular la lista de recomendaciones cada vez que el sistema es consultado.
+
+\begin{lstlisting}[float, caption = Ejemplo de uso, label = cod:ejemplouso]
+for(ScoredItem scoredItem: rboxRecommender.recommend(75, 10)){
+			System.out.println(scoredItem.toString());
+		}
+\end{lstlisting}
+
+Es importante notar que la lógica de la \textit{3-Ontology} provee métodos de pre-filtrado que permiten la implementación de CARS \citep{Adomavicius:2011}, obteniendo así eventos relevantes para el cálculo de la recomendación en un contexto dado. Por ejemplo, para realizar una recomendación de películas un día sábado, se pueden obtener solo los eventos sucedidos los sábados. De esta forma se calcula una lista de recomendación para el usuario basada en el contexto temporal donde él asigna una valoración a la película.
+
+
+\section{Sistemas de recomendación para un proceso de generación de noticias}
+
+\cite{Alonso:2012} en su trabajo de titulación modela un proceso de negocio de generación de noticias de la empresa \textit{Observatorio News} que incluye un etiquetado de los periodistas para agregar valor al negocio. \cite{Rivera:2012} presenta un modelo 4+1 vistas para describir la arquitectura de software que debe ser soportado para el proceso de negocio. \cite{Mendez:2013} realiza la descripción arquitectural para el sistema, especificando cada componente del proceso. RBOX 2.0 según estos trabajos es la herramienta que permite generar SR de tipo \textit{plug-in} que pueden ser integrados en la arquitectura propuesta. Bajo estas premisas se propone como caso de estudio el desarrollo de un SR basado en \textit{tags} para el proceso de negocio de la empresa \textit{Observatorio News}, cabe destacar que el desarrollo de este SR está suscrito al proyecto FONDEF D09I1185, luego los datos usados pertenecen a la empresa socia del proyecto \textit{Observatorio News}.
+
+\textit{Observatorio News} necesita que los periodistas novatos aprendan de los \textit{Senior} a etiquetar noticias, esto se justifica debido a que dependiendo del nivel de etiquetado que apliquen los periodistas se le puede recomendar noticias de mejor calidad a los usuarios. Para lograr este objetivo la lógica de la \textit{3-Ontology} provee el método \textit{getEventsForUser(userId)} que permite obtener solo los eventos que han efectuado los periodistas Senior. De esta forma el algoritmo puede aprender sobre como etiquetan los periodistas Senior y recomendar a los novatos etiquetas que apoyen su proceso de etiquetado.
+
+El \textit{dataset} de \textit{Observatorio News} corresponde a noticias etiquetadas por periodistas en sectores e incluye la siguiente información:
+
+\begin{itemize}
+	\item id\_noticia: corresponde al identificador de la noticia.
+	\item id\_idioma: idioma de la noticia, pudiendo ser ingles, español o portugués.
+	\item fec\_publicacion: fecha de publicación del artículo. Formato DD-MM-YY.
+	\item id\_paises: códigos de países separados por coma.
+	\item paises: nombres de países separados por coma.
+	\item id\_sector: código del sector asociado al artículo.
+	\item sector: nombre del sector asociado al artículo.
+	\item id\_sub\_sectores: códigos de subsectores asociados al artículo.
+	\item sub\_sectores: nombres de subsectores asociadas al artículo.
+	\item titulo: título del artículo.
+	\item cuerpo: contenido del cuerpo del artículo (párrafos separados por el carácter '|').
+	\item id\_usuario: usuario que creó la noticia y selecciono los \textit{tags}.
+\end{itemize}
+
+Los datos obtenidos se consolidan en el esquema relacional de la \textit{3-Ontology}, para esto se siguió el siguiente procedimiento:
+
+\begin{itemize}
+	\item Se eliminan los campos irrelevantes.
+	\item Se cambia el enfoque desde la noticia hacia el evento.
+	\item Cambiar el formato de la fecha a \textit{UNIX timestamp}.
+	\item Se crean los archivos necesarios para la carga en un motor de base de datos relacional con esquema \textit{3-Ontology}.
+\end{itemize}
+
+Los archivos que resultan del proceso de normalización de datos son \textit{event\_bna.dat}, \textit{user\_bna.dat} y \textit{item\_bna.dat}.
+
+Descripción del archivo event\_bna.dat:
+\begin{enumerate}
+	\item id\_event: identificador del evento.
+	\item id\_noticia: identificador de la noticia.
+	\item id\_usuario: identificador del usuario.
+	\item id\_subsector: identificador del subsector.
+	\item timestamp\_noticia: timestamp del evento en formato UNIX timestamp.
+	\item type\_event: corresponde al tipo de evento (en este caso \textit{tagging}).
+\end{enumerate}
+
+Los eventos son uni-valuados, luego si se seleccionan más de un subsector se identifican como eventos distintos.
+
+Descripción del archivo user\_bna.dat:
+\begin{enumerate}
+	\item id\_usuario: identificador del usuario.
+	\item nombre\_usuario: nombre del usuario.
+\end{enumerate}
+
+Descripción del archivo item\_bna.dat:
+\begin{enumerate}
+	\item id\_noticia: identificador de la noticia.
+	\item titulo\_noticia: título de la noticia.
+\end{enumerate}
+
+En resumen el \textit{dataset} dispone de 438571 eventos, 150 periodistas, 209846 noticias. Con los archivos se puede realizar la carga de datos en una base de datos que disponga del esquema de datos de la \textit{3-Ontology} (véase sección 4.4). En este caso la columna \textit{value} dentro de la tabla \textit{event} corresponderá al subsector colocado por el periodista al momento de escribir la noticia. 
+
+En este caso, se hará uso del paquete \textit{sql} de RBOX 2.0 que provee un conjunto de clases que permiten el acceso a una base de datos relacional con el esquema \textit{3-Ontology} mediante JDBC. El motor de bases de datos usado fue \textit{Mysql}\footnote{http://www.mysql.com/}. En el código \ref{cod:JDBCDAO} se muestra como se realiza el acceso a los datos de \textit{ABC News} mediante los componentes de RBOX 2.0.
+
+\begin{lstlisting}[float, caption = Ejemplo de uso mediante JDBCDAO, label = cod:JDBCDAO]
+	MysqlDataSource dataSource = new MysqlDataSource();
+	Properties properties = new Properties();
+	properties.load(new FileInputStream("algorithm.properties"));
+	dataSource.setServerName(tabla.getString("db.principal.ip"));
+	dataSource.setDatabaseName(tabla.getString("db.principal.schema"));
+	dataSource.setUser(tabla.getString("db.principal.user"));
+	dataSource.setPassword(tabla.getString("db.principal.pass"));
+	Connection con = dataSource.getConnection();
+	JDBCDAO dao = new JDBCDAO(con, 
+								new BasicSQLStatementFactory(), 
+								new BasicSQLStatementFactory(),
+								new BasicSQLStatementFactory(),
+								new BasicSQLStatementFactory(),
+								new BasicSQLStatementFactory(),
+								true);
+	Trace trace = new GenericTrace(dao.getEvents());
+	Portrait portrait  = new GenericPortrait(dao.getCommunities());
+	Map map = new GenericMap(dao.getPlaces());
+\end{lstlisting}
+
+
+ 
+
+\subsection{Algoritmo de Tag Clustering}
+
+\cite{Hernandez:2014} realiza un conjunto de implementaciones de algoritmos de recomendación de \textit{tags} para una red social de generación de noticias basados en el modelo de construcción propuesto en este trabajo de tesis. El algoritmo que se presenta como caso de estudio   se basa en un modificación del algoritmo presentado por \cite{Begelman:2006}. La modificación corresponde al reemplazo del algoritmo de \textit{clustering} por RRW \textit{(Repeated random walks)} \citep{Macropol:2009}. Este algoritmo a partir de un \textit{tag} busca los \textit{tags} relacionados y los retorna como recomendaciones. Luego se genera un modelo que puede ser consultado para obtener recomendaciones. Este  debe ser actualizado cuando deteriore sus resultados y/o existan nuevos eventos en el sistema.
+
+%\section{Resumen}
+%
+%En este capítulo se presentó dos casos de estudio que permiten validar la eficacia del modelo propuesto. El primero corresponde a un SR basado en un algoritmo de filtrado colaborativo con eventos de tipo \textit{ratings} y el segundo basado en un algoritmo de \textit{tag clustering} con eventos de tipo \textit{tagging}. Se especificó la representación de datos usando las posibles alternativas de solución presentadas en el capítulo 4, se describió los \textit{datasets} a utilizar, luego se describieron los algoritmos utilizados, para finalmente describir como implementar la interfaz de recomendación.
+
+
+
+
+
+
+
