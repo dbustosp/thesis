@@ -1,7 +1,7 @@
 \chapter{Marco te\'orico}
 \label{cap:marco}
 
-En este capítulo se exponen los conceptos teóricos del presente trabajo de tesis. 
+En este capítulo se exponen los conceptos teóricos del presente trabajo de tesis. <Rellenar al final>
 
 
 \section{Motores de búsqueda verticales}
@@ -26,11 +26,17 @@ Lo que se hace hoy en día es agrupar computadores para procesar una consulta y 
 La diferencia entre un motor de búsqueda vertical y uno general, es que el primero se centra solo en un contenido específico de la Web. El \textit{crawler} también debe extraer solo el contenido de aquellas páginas Web que están dentro del dominio permitido. Al ser un dominio acotado, las páginas Web a procesar serán menos y por tanto la lista de los términos del índice invertido serán eventualmente de menor tamaño. Sin embargo, en un motor de búsqueda vertical las actualizaciones al índice invertido ocurren con mayor frecuencia.
 
 
+\section{\'Indice invertido}
+\label{marco:ii}
+Es una estructura de datos que contiene todos los términos (palabras) encontrados. A cada uno de los términos, está asociado una lista de punteros a los documentos (páginas Web) que contienen dicho término. Además se almacena información que permita realizar el \textit{ranking} de las respuestas a las consultas que llegan al sistema, por ejemplo, el número de veces que aparece el término en el documento. Esta lista recibe el nombre de lista invertida.
 
+Para construir un índice invertido se debe procesar cada palabra que existe en un documento, registrando su posición y la cantidad de veces que éste se repite. Cuando se procesa el término con la información asociada correspondiente, se almacena en el índice invertido (ver Figura \ref{fig:invertedindex}).
 
+\begin{figure}[tp]
+\centering
+\includegraphics[scale=.75]{images/invertedindex.png}
+\caption{\'Indice invertido}
+\label{fig:invertedindex}
+\end{figure}
 
-
-
-
-
-
+El tamaño del índice invertido crece rápido y eventualmente la memoria RAM se agotará antes de procesar toda la colección de documentos. Cuando la memoria RAM se agota, se almacena en disco el índice parcial hasta aquel momento, se libera la memoria y se continúa con el proceso. Además, se debe hacer un \textit{merge} de los índices parciales uniéndo las listas invertidas de cada uno de los términos involucrados.
