@@ -382,11 +382,15 @@
         \normalsize
         \hspace{7.4cm} Profesor Gu\'ia: {\capitalize{\@profesorguia}}\\
         
+%        \vspace{1cm}
+%        \hspace{7.4cm} Tesis de Grado presentado en conformidad\\
+%        \hspace{7.4cm} a los requisitos para obtener el Grado de\\
+%        \hspace{7.4cm} Mag\'ister en Ingenier\'ia Inform\'atica\\
+        
         \vspace{1cm}
-        \hspace{7.4cm} TESIS DE GRADO PRESENTADO\\
-        \hspace{7.4cm} EN CONFORMIDAD A LOS REQUISITOS PARA\\
-        \hspace{7.4cm} OBTENER EL GRADO DE MAG\'ISTER EN \\
-        \hspace{7.4cm} INGENIER\'IA INFORM\'ATICA\\      
+        \hspace{7.4cm} Trabajo de Titulac\'ion presentado en conformidad\\
+        \hspace{7.4cm} a \space los \space requisitos \space para obtener \space el \space T\'itulo \space de\\
+        \hspace{7.4cm} Ingeniero Civil Inform\'atico\\
         
 
         \end{flushleft}
