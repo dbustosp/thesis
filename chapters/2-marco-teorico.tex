@@ -1,11 +1,11 @@
 \chapter{Marco te\'orico}
 \label{cap:marco}
 
-En este capítulo se exponen los conceptos teóricos del presente trabajo de tesis.
+En este capítulo se exponen los conceptos teóricos del presente trabajo de tesis. 
 
 
-\section{Sistemas de recomendaci\'on}
-\label{marco:sr}
+\section{Motores de búsqueda verticales}
+\label{marco:mbv}
 A medida que pasa el tiempo y la Web sigue creciendo, los motores de búsqueda se convierten en una herramienta cada vez más importante para los usuarios. Estas máquinas ayudan a los usuarios a buscar contenido dentro de la Web, puesto que conocen en qué páginas de la Web aparecen qué palabras. Sin un buscador los usuarios estarían obligados a conocer los localizadores de recursos uniformes (URL) de cada uno de los sitios a visitar. Además, los motores de búsquedas en cierto modo conectan la Web, ya que existe un gran número de páginas Web que no tienen referencia desde otras páginas, siendo el único modo de acceder a ellas a través de un motor de búsqueda.
 
 Un motor de búsqueda está construído por diversos componentes, y su arquitectura típica la podemos ver en la Figura \ref{fig:searchenginearchitecture}. Existe un proceso denominado \textit{crawling}, éste posee una tabla con las páginas Web iniciales en las que se extrae el contenido de cada una de ellas. A medida que el \textit{crawler} comienza a encontrar enlaces a otras páginas Web, la tabla de páginas a visitar crece. El contenido que se extrae en el procedimiento de \textit{crawling} es enviado al proceso de indexamiento, este se encarga de crear un índice de las páginas visitadas por el \textit{crawler}. 
@@ -18,8 +18,6 @@ Un motor de búsqueda está construído por diversos componentes, y su arquitect
 \end{figure}
 
 Dado el volúmen de datos involucrado en el procesamiento, se debe tener una estructura de datos que permita encontrar cuáles páginas contienen las palabras presentes en la búsqueda, todo esto dentro de un período de tiempo aceptable. El índice invertido es una estructura de datos que contiene una lista con todas las palabras que el proceso de \textit{crawling} ha visto, y asociada a cada palabra se tiene una lista de todas las páginas Web donde ésta palabra aparece mencionada. El motor de búsqueda construye esta estructura con el objetivo de acelerar el proceso de las búsquedas que llegan al sistema. El proceso de búsqueda es el encargado de recibir la consulta, generar un \textit{ranking} de las páginas Web que contienen las palabras de la consulta y finalmente generar una respuesta. Las diversas formas de calcular la relevancia de una página Web será explicado en secciones posteriores.
-
-%FIGURA
 
 En un motor de búsqueda se pueden encontrar diversos servicios tales como (a) cálculo de las mejores páginas Web para una cierta consulta; (b) construcción de la página Web con los resultados de la consulta; (c) publicidad relacionada con las \textit{queries}; (e) sugerencia de \textit{queries}; entre muchos otros servicios.
 
