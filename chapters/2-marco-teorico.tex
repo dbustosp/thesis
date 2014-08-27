@@ -1,8 +1,6 @@
 \chapter{Marco te\'orico}
 \label{cap:marco}
-
-En este capítulo se exponen los conceptos teóricos del presente trabajo de tesis. <Rellenar al final>
-
+En este capítulo se exponen los conceptos teóricos del presente trabajo de tesis. Rellenar al final
 
 \section{Motores de búsqueda verticales}
 \label{marco:mbv}
@@ -25,7 +23,6 @@ Lo que se hace hoy en día es agrupar computadores para procesar una consulta y 
 
 La diferencia entre un motor de búsqueda vertical y uno general, es que el primero se centra solo en un contenido específico de la Web. El \textit{crawler} también debe extraer solo el contenido de aquellas páginas Web que están dentro del dominio permitido. Al ser un dominio acotado, las páginas Web a procesar serán menos y por tanto la lista de los términos del índice invertido serán eventualmente de menor tamaño. Sin embargo, en un motor de búsqueda vertical las actualizaciones al índice invertido ocurren con mayor frecuencia.
 
-
 \section{\'Indice invertido}
 \label{marco:ii}
 Es una estructura de datos que contiene todos los términos (palabras) encontrados. A cada uno de los términos, está asociado una lista de punteros a los documentos (páginas Web) que contienen dicho término. Además se almacena información que permita realizar el \textit{ranking} de las respuestas a las consultas (queries) que llegan al sistema, por ejemplo, el número de veces que aparece el término en el documento. Esta lista recibe el nombre de lista invertida.
@@ -40,3 +37,17 @@ Para construir un índice invertido se debe procesar cada palabra que existe en 
 \end{figure}
 
 El tamaño del índice invertido crece rápido y eventualmente la memoria RAM se agotará antes de procesar toda la colección de documentos. Cuando la memoria RAM se agota, se almacena en disco el índice parcial hasta aquel momento, se libera la memoria y se continúa con el proceso. Además, se debe hacer un \textit{merge} de los índices parciales uniéndo las listas invertidas de cada uno de los términos involucrados.
+
+\section{Estrategias de evaluaci\'on de queries}
+\label{marco:eeq}
+Existen dos principales estrategias para encontrar los documentos y calcular sus respectivos puntajes de una determinada \textit{query}. Estas son (a) \textit{term-at-a-time} (TAAT) y (b) \textit{document-at-a-time} (DAAT).
+
+\subsection{TAAT}
+Este tipo de estrategia procesa los términos de las \textit{queries} uno a uno y acumula el puntaje parcial de los documentos. Las listas invertidas asociadas a un término son procesadas secuencialmente, esto significa que los documentos presente en la lista invertida del término $t_{i}$, obtienen un puntaje parcial antes de comenzar el procesamiento del término $t_{i+1}$. La secuencialidad en este caso es con respecto a los términos contenidos en la \textit{query}.
+
+\subsection{DAAT}
+En este tipo de estrategias se valúa la contribución de todos los términos de la query con respecto a un documento antes de evaluar el siguiente documento. Las listas invertidas de cada término de la \textit{query} son procesadas en paralelo, de modo que el puntaje del documento $d_{j}$ se calcula considerando todos los términos de la query al mismo tiempo. Una vez que se obtiene el puntaje del documento $d_{j}$ para la \textit{query} completa, se procede al procesamiento del documento $d_{j+1}$.
+
+\subsection{Consideraciones}
+Las estrategias TAAT son mayormente usadas en sistemas de recuperación de información (IR), como son los motores de búsqueda. 
+Cuando se tiene un índice invertido pequeño, las estrategias TAAT rinden adecuadamente, sin embargo cuando los índices invertidos son de gran tamaño las estrategias TAAT poseen dos grandes ventajas: (a) Requieren menor cantidad de memoria para su ejecución, ya que el puntaje parcial por documento no necesita ser guardado y (b) Explotan el paralismo de entrada y salida (I/O) más eficientemente procesando las listas invertidas en diferentes discos simultáneamente.
