@@ -51,3 +51,20 @@ En este tipo de estrategias se valúa la contribución de todos los términos de
 \subsection{Consideraciones}
 Las estrategias TAAT son mayormente usadas en sistemas de recuperación de información (IR), como son los motores de búsqueda. 
 Cuando se tiene un índice invertido pequeño, las estrategias TAAT rinden adecuadamente, sin embargo cuando los índices invertidos son de gran tamaño las estrategias TAAT poseen dos grandes ventajas: (a) Requieren menor cantidad de memoria para su ejecución, ya que el puntaje parcial por documento no necesita ser guardado y (b) Explotan el paralismo de entrada y salida (I/O) más eficientemente procesando las listas invertidas en diferentes discos simultáneamente.
+
+
+\section{Operaciones sobre listas invertidas}
+\label{marco:osli}
+Cuando una \textit{query} llega al motor de búsqueda, cada término tiene asociado una lista con todos los documentos en los cuales aparece dicho término. El sistema debe decidir qué documentos se analizarán para obtener la respuesa con el conjunto de los K mejores. 
+A continuación se presentan las diferentes formas de operar los documentos pertenecientes a las listas invertidas de una \textit{query}.
+
+\subsection{OR}
+Este operador toma las listas invertidas de cada uno de los términos de la \textit{query} y ejecuta la disyunción entre ellas. El resultado de este operador es una lista invertida con todos los documentos que contengan al menos un término de la query. Finalmente, esta lista invertida se ocupará para obtener los mejores K documentos. Un ejemplo sencillo se muestra en la FIGURA \ref{fig:ORoperation}.
+
+\begin{figure}[tp]
+\centering
+\includegraphics[scale=.75]{images/ORoperation.png}
+\caption{Operaci\'on OR}
+\label{fig:ORoperation}
+\end{figure}
+
