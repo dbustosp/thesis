@@ -59,6 +59,7 @@ Cuando una \textit{query} llega al motor de búsqueda, cada término tiene asoci
 A continuación se presentan las diferentes formas de operar los documentos pertenecientes a las listas invertidas de una \textit{query}.
 
 \subsection{OR}
+\label{marco:or}
 Este operador toma las listas invertidas de cada uno de los términos de la \textit{query} y ejecuta la disyunción entre ellas. El resultado de este operador es una lista invertida con todos los documentos que contengan al menos un término de la query. Finalmente, esta lista invertida se ocupará para obtener los mejores K documentos. Un ejemplo sencillo se muestra en la FIGURA \ref{fig:ORoperation}.
 
 \begin{figure}[tp]
@@ -69,6 +70,7 @@ Este operador toma las listas invertidas de cada uno de los términos de la \tex
 \end{figure}
 
 \subsection{AND}
+\label{marco:and}
 Este operador ejecuta la conjunción entre las listas invertidas de los términos de una \textit{query}. Se obtiene una lista invertida con los documentos que contengan todos los términos de la \textit{query}. Se debe notar que aquí se obtiene una lista resultante de menor que la obtenida en el operador OR (Ver FIGURA \ref{fig:ANDoperation}).
 
 \begin{figure}[tp]
@@ -80,5 +82,9 @@ Este operador ejecuta la conjunción entre las listas invertidas de los término
 
 
 \subsection{WAND}
+\label{marco:wand}
+Método de evaluación de \textit{query} para obtener eficientemente el conjunto de los mejores \textit{top K} documentos que mejor satisfacen la \textit{query} dada. \textit{WAND} \citep{Broder:2003} (\textit{Weak AND}) es un proceso menos estricto que el método \textit{AND} y es basado en dos niveles. Dentro del proceso de evaluación de una \textit{query}, uno de los procesos más costoso en términos de tiempo es el proceso de \textit{scoring}. Este proceso corresponde a entregarle a cada uno de los documentos analizados, un puntaje que representa la relevancia del documento para una \textit{query} dada, esto se denomina evaluación completa o cálculo cálculo del puntaje exacto del documento.
 
+El objetivo de WAND es minimizar la cantidad de evaluaciones completas de los documentos ejecutando un proceso de dos niveles. En el primer nivel se intenta omitir rápidamente grandes porciones de las listas invertida, lo que se traduce en ignorar el cálculo del puntaje exacto de grandes cantidades de documentos, ya que éste cálculo en motores de búsqueda a gran escala es una tarea que requiere de mucho tiempo para llevarse a cabo y depende de factores como la cantidad de ocurrencia del término dentro del documento, el tamaño del documento, entre otros.  
 
+En el primer nivel se itera sobre los documentos del índice invertido de cada término y se identifica candidatos usando una evaluación aproximada. En el segundo nivel, aquellos documentos candidatos son completamente evaluados y su puntaje exacto es calculado. 
