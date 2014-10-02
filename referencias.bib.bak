@@ -1,0 +1,719 @@
+% This file was created with JabRef 2.7b.
+% Encoding: ISO8859_1
+
+@STRING{efmj = {Emir Mu{\~n}oz Jim{\'e}nez}}
+% INFORMACIÓN QUE PUEDE APARECER EN UNA REFERENCIA:*****************************
+%    acmid       = { 507360 },
+%    address     = { Siempre viva 2013, LA, USA },
+%    affiliation = { Victoria University of Wellington, New Zealand },
+%    articleno   = { 7 },
+%    author      = { Nombre Autor },
+%    bibsource   = { DBLP, http://dblp.uni-trier.de },
+%    booktitle   = { T{\'i}tulo Libro },
+%    chapter     = { 4 },
+%    crossref    = { DBLP:conf/webdb/2003 },
+%    day         = { 11 },
+%    doi         = { http://doi.acm.org/10.1145/507338.507360 },
+%    edition     = { 1ra },
+%    editor      = { Nombre Editor },
+%    ee          = { http://doi.acm.org/10.1145/1071610.1071614 },
+%    howpublished= { HOW PUBLISHED },
+%    institution = { USACH },
+%    isbn        = { 01234567890 },
+%    issn        = { 0163-5808 },
+%    issue       = { 1 },
+%    journal     = { JOURNAL },
+%    key         = { KEY },
+%    keywords    = { clustering, mst-knn, bioinformatic },
+%    keywords1   = { Schema },
+%    keywords2   = { Key constraint },
+%    keywords3   = { XPath },
+%    keywords4   = { Incremental validation },
+%    language    = { Espanish },
+%    location    = { Santa Barbara, California, United States },
+%    month       = { Abril },
+%    note        = { Nota },
+%    number      = { 12345 },
+%    numpages    = { 8 },
+%    organization= { SSS },
+%    pages       = { 25 },
+%    priority    = { 3 },
+%    publisher   = { Juanito Editoriales Co., Inc },
+%    school      = { SCHOOL },
+%    series      = { 2 },
+%    subjects    = { Clustering, Bioinformatics },
+%    title       = { {T{\'i}tulo} },
+%    type        = { TYPE },
+%    url         = { http://dpavez.cl/X },
+%    volume      = { 1 },
+%    year        = { 1987 }
+% REFERENCIAS SEGÚN REGLAMENTO *************************************************
+% LIBRO ------------------------------------------------------------------------
+%   Autor(es)       : Nombre en mayúsculas
+%   Año publicación : Entre paréntesis
+%   Título          : Del libro, en cursiva o negrita, tal como aparece en la fuente
+%   Edición         : N° ordinal
+%   Editorial       : Nombre
+%   Ciudad          : De edición
+%   País            : De edición
+%   Ejemplo         : TANENBAUM, A. (1992) Modern Operating Systems. Prentice Hall, Englewood Cliffs, NY, USA.
+% ARTÍCULO DE REVISTA ----------------------------------------------------------
+%   Autor(es)       : Nombre en mayúsculas.
+%   Año publicación : Entre paréntesis
+%   Título          : Del libro, en cursiva o negrita, tal como aparece en la fuente
+%   Revista         : Nombre
+%   Volumen         : De la revista
+%   Número          : De la revista
+%   Mes             : Publicación
+%   Páginas         : Donde se encuentra el artículo
+%   Ejemplo         : ANTILLANCA, H. & FULLER, D. (1999) Refining temporal criteria to classify collaborative systems. International Journal of Human-Computer Studies, Vol. 50, No. 1, January, 1-40.
+% ARTÍCULO DE CONFERENCIA, EVENTO O SIMILAR ------------------------------------
+%   Autor(es)       : Nombre en mayúsculas.
+%   Año publicación : Entre paréntesis
+%   Título          : Del libro, en cursiva y tal como aparece en la fuente
+%   Tipo            : De publicación, como acta, compendio, proceeding, etc.
+%   Evento          : Nombre del evento o conferencia
+%   Volumen         : Del evento o conferencia
+%   Número          : Del evento o conferencia
+%   Fecha           : Del evento o conferencia
+%   Lugar           : Del evento o conferencia
+%   Páginas         : Donde se encuentra el acta o artículo
+%   Ejemplo         : ANTILLANCA, H. & FULLER, D. (1995) Sistemas colaborativos sincrónicos  cara-a-cara: requisitos, problemas y resultados. Actas del III Encuentro Chileno de Computación. Oct. 30 - Noviembre 1, Arica, Chile, 12-22.
+% MEMORIAS Y TESIS DE GRADO ----------------------------------------------------
+%   Autor(es)       : Nombre en mayúsculas.
+%   Año publicación : Entre paréntesis
+%   Título          : De la memoria, en cursiva o negrita, tal como aparece en la fuente
+%   Tipo            : Tipo de grado o título obtenido con la memoria
+%   Universidad     : Universidad que otorga el grado o título
+%   País            : País de la Universidad que otorga el título o grado
+%   Ejemplo         : ALMENDRAS, M. (2003) Identificación de patrones de diseño para funciones de control de acceso en aplicaciones colaborativas. Tesis de grado de Magíster en Ingeniería Informática, Facultad de Ingeniería, Universidad de Santiago de Chile. Santiago, Chile.
+% PUBLICACIÓN ELECTRÓNICA ------------------------------------------------------
+%   Autor(es)       : Nombre en mayúsculas.
+%   Año publicación : Entre paréntesis
+%   Título          : De la referencia, en cursiva o negrita, tal como aparece en la fuente
+%   URL             : Donde puede encontrarse el documento
+%   Fecha           : Del documento, pudiendo omitirse el año
+%   Acceso          : Con el formato "Acceso: <fecha entre paréntesis>"
+%   Ejemplo         : BERNERS-LEE, T., MASINTER, L. Y MCCAHILL, M. (1994) [de.] Uniform Resource Locators (URL) Pedido de Comentarios 1738, Network Working Group <ftp://ftp.demon.co.uk/pub/doc/rfc/rfc1738.txt> Diciembre (Acceso: 3 de febrero de 1995).
+% ******************************************************************************
+% EJEMPLO DEL FORMATO DE UN LIBRO ---------------------------------------------- 
+%Si no tiene referencia cruzada, se muestra la serie. Sino, no. 'crossref    = { Articulo:2013 },'
+@BOOK{  Libro:2013,
+        author      = { Daniel Pavez, Tildes As{\'i} },
+        year        = { 1987 },
+        title       = { {T{\'i}tulo Libro} },
+        volume      = { 1 },
+        series      = { 2 },
+        address     = { Siempre viva 2013, LA, USA },
+        publisher   = { Juanito Editoriales Co., Inc },
+        edition     = { 1ra },
+        note        = { Ninguna nota },
+        url         = { http://dpavez.cl/libro }
+}
+% SE VISUALIZA COMO: 'author'. ('year'). 'title' , vol. 'volume' de 'series' . 'address': 'publisher', 'edition' ed. 'note'. 'url'
+% EJEMPLO DEL FORMATO DE UN LIBRO ----------------------------------------------
+%Si no tiene referencia cruzada, se muestra el 'journal', 'volume' ('number'). Sino, no. 'crossref    = { Articulo:2013 },'
+@ARTICLE{   Articulo:2013,
+            author      = { Ignacio Sandoval },
+            year        = { 1987 },
+            title       = { {Bioinform{\'a}tica} },
+            journal     = { Nombre Revista },
+            volume      = { 1 },
+            number      = { 12345 },            
+            pages       = { 25 },
+            note        = { Nota },
+            url         = { http://dpavez.cl/articulo }
+}
+% SE VISUALIZA COMO: 'author'. ('year'). 'title'. 'journal', 'volume' ('number'), 'pages'. 'note'. 'url'
+% EJEMPLO DEL FORMATO DE UN INPROCEEDINGS---------------------------------------
+%Si no tiene referencia cruzada, se muestra el 'journal', 'volume' ('number'). Sino, no. 'crossref    = { Articulo:2013 },'
+@INPROCEEDINGS{ Inproceedings:2013,
+                author      = { Juan P{\'e}rez },
+                year        = { 1987 },
+                title       = { {Clustering} },
+                editor      = { Daniel },  
+                booktitle   = { T{\'i}tulo Inproceedings },
+                volume      = { 1 },
+                series      = { 2 },
+                pages       = { 25 },
+                organization= { SSS },
+                address     = { Siempre viva 2013, LA, USA },
+                publisher   = { Juanito Editoriales Co., Inc },
+                note        = { Nota },
+                url         = { http://dpavez.cl/inproceedings }
+}
+% SE VISUALIZA COMO: 'author'. ('year'). 'title'. En 'editor' (Ed.) 'booktitle' , vol. 'volume' de 'series' , (p. 'pages'). 'organization', 'address': 'publisher'. 'note'. 'url'
+% EJEMPLO DEL FORMATO DE UN INCOLLECTION----------------------------------------
+@INCOLLECTION{  incollection:2013,
+                author      = { Mar{\'i}a Gonz{\'a}lez },
+                year        = { 1987 },
+                title       = { {T{\'i}tulo Incollection} },
+                editor      = { Daniel Pavez },
+                booktitle   = { T{\'i}tulo Libro },
+                volume      = { 1 },
+                series      = { 2 },
+                type        = { tipo },
+                chapter     = { 3 },                
+                pages       = { 25 },
+                address     = { Siempre viva 2013, LA, USA },
+                publisher   = { Juanito Editoriales Co., Inc },
+                edition     = { 1ra },
+                note        = { Nota },
+                url         = { http://dpavez.cl/incollection }
+}
+% SE VISUALIZA COMO: 'author'. ('year'). 'title'. En 'editor' (Ed.) 'booktitle', vol. 'volume' de 'serie' , 'type' 'chapter', (p. 'pages'). 'address': 'publisher', 'edition' ed. 'note'. 'url'
+% EJEMPLO DEL FORMATO DE UN MISC------------------------------------------------
+@MISC{  misc:2013,
+        author      = { Lu{\'i}s Gonz{\'a}lez },
+        year        = { 1987 },
+        title       = { {T{\'i}tulo Misc} },
+        howpublished= { Forma de Publicaci{\'o}n },
+        note        = { Nota },
+        url         = { http://dpavez.cl/misc },
+}
+% SE VISUALIZA COMO: 'author'. ('year'). 'title'. 'howpublished'. 'note'. 'url'
+% EJEMPLO DEL FORMATO DE UN PROCEEDINGS-----------------------------------------
+@PROCEEDINGS{   proceedings:2013,
+                editor      = { Nombre Editor },
+                year        = { 1987 },
+                title       = { {T{\'i}tulo del Proceeding} },
+                volume      = { 1 },
+                series      = { 2 },
+                organization= { SSS },
+                address     = { Siempre viva 2013, LA, USA },
+                publisher   = { Juanito Editoriales Co., Inc },
+                note        = { Nota },
+                url         = { http://dpavez.cl/proceedings }
+}
+% SE VISUALIZA COMO: 'editor'. (Ed.) ('year'). 'title', vol. 'volume' de 'series' . 'organization', 'address': 'publisher'. 'note'. 'url'
+% EJEMPLO DEL FORMATO DE UN PROCEEDINGS-----------------------------------------
+@TECHREPORT{techreport:2013,
+            author      = { Gabrielle Aplin },
+            year        = { 1987 },
+            title       = { {T{\'i}tulo del Tech Report} },
+            type        = { Tipo de reporte },
+            number      = { 12345 },
+            institution = { USACH },
+            address     = { Siempre viva 2013, LA, USA },
+            note        = { Nota },
+            url         = { http://dpavez.cl/techreport }
+}
+% SE VISUALIZA COMO: 'author'. ('year'). 'title'. 'type' 'number', 'institution'.' note'. 'url'
+% EJEMPLO DEL FORMATO DE UN PROCEEDINGS-----------------------------------------
+@PHDTHESIS{ tesis:2013,
+            author      = { Juan Gonz{\'a}lez },
+            year        = { 1987 },
+            title       = { {T{\'i}tulo Tesis} },
+            type        = { Tipo tesis },
+            school      = { Universidad },
+            address     = { Siempre viva 2013, LA, USA },
+            note        = { Nota },
+            url         = { http://dpavez.cl/Tesis }
+}
+% SE VISUALIZA COMO: 'author'. ('year'). 'title'. 'type', 'school', 'address'. 'note'. 'url'
+
+% **************************************************
+% ***************** BIBLIOGRAFÍA *******************
+% **************************************************
+
+
+@inproceedings{Resnick:1994,
+  added-at = {2012-08-27T00:00:00.000+0200},
+  author = {Resnick, Paul and Iacovou, Neophytos and Suchak, Mitesh and Bergstrom, Peter and Riedl, John},
+  biburl = {http://www.bibsonomy.org/bibtex/223d69b62a930bbadc80abab98c723ac2/dblp},
+  booktitle = {CSCW},
+  editor = {Smith, John B. and Smith, F. Donelson and Malone, Thomas W.},
+  ee = {http://doi.acm.org/10.1145/192844.192905},
+  interhash = {08b55b4b67a9141e04edd9e23749cf2b},
+  intrahash = {23d69b62a930bbadc80abab98c723ac2},
+  isbn = {0-89791-689-1},
+  keywords = {dblp},
+  pages = {175-186},
+  publisher = {ACM},
+  timestamp = {2012-08-27T00:00:00.000+0200},
+  title = {GroupLens: An Open Architecture for Collaborative Filtering of Netnews.},
+  url = {http://dblp.uni-trier.de/db/conf/cscw/cscw1994.html#ResnickISBR94},
+  year = 1994
+}
+
+@article{Adomavicius:2005,
+ author = {Adomavicius, Gediminas and Tuzhilin, Alexander},
+ title = {Toward the Next Generation of Recommender Systems: A Survey of the State-of-the-Art and Possible Extensions},
+ journal = {IEEE Trans. on Knowl. and Data Eng.},
+ issue_date = {June 2005},
+ volume = {17},
+ number = {6},
+ month = jun,
+ year = {2005},
+ issn = {1041-4347},
+ pages = {734--749},
+ numpages = {16},
+ url = {http://dx.doi.org/10.1109/TKDE.2005.99},
+ doi = {10.1109/TKDE.2005.99},
+ acmid = {1070751},
+ publisher = {IEEE Educational Activities Department},
+ address = {Piscataway, NJ, USA},
+ keywords = {Index Terms- Recommender systems, Recommender systems, collaborative filtering, rating estimation methods, extensions to recommender systems., collaborative filtering, extensions to recommender systems., rating estimation methods},
+} 
+
+@inproceedings{Ekstrand:2011,
+  added-at = {2011-10-25T00:00:00.000+0200},
+  author = {Ekstrand, Michael D. and Ludwig, Michael and Konstan, Joseph A. and Riedl, John},
+  biburl = {http://www.bibsonomy.org/bibtex/2a7a6a37d67df18e20862f4ed33c19bda/dblp},
+  booktitle = {RecSys},
+  editor = {Mobasher, Bamshad and Burke, Robin D. and Jannach, Dietmar and Adomavicius, Gediminas},
+  ee = {http://doi.acm.org/10.1145/2043932.2043958},
+  interhash = {1fb2815426cb03796cdab0cc7e54efef},
+  intrahash = {a7a6a37d67df18e20862f4ed33c19bda},
+  isbn = {978-1-4503-0683-6},
+  keywords = {dblp},
+  pages = {133-140},
+  publisher = {ACM},
+  timestamp = {2011-10-25T00:00:00.000+0200},
+  title = {Rethinking the recommender research ecosystem: reproducibility, openness, and LensKit.},
+  url = {http://dblp.uni-trier.de/db/conf/recsys/recsys2011.html#EkstrandLKR11},
+  year = 2011
+}
+@inproceedings{Padula:2009,
+ author = {Padula, Marco and Reggiori, Amanda and Capetti, Giovanna},
+ title = {Managing Collective Knowledge in the Web 3.0},
+ booktitle = {Proceedings of the 2009 First International Conference on Evolving Internet},
+ series = {INTERNET '09},
+ year = {2009},
+ isbn = {978-0-7695-3748-1},
+ pages = {33--38},
+ numpages = {6},
+ url = {http://dx.doi.org/10.1109/INTERNET.2009.12},
+ doi = {10.1109/INTERNET.2009.12},
+ acmid = {1636950},
+ publisher = {IEEE Computer Society},
+ address = {Washington, DC, USA},
+ keywords = {Web 3.0, information, knowledge, ontology, social networking},
+} 
+@article{Murugesan:2007,
+ author = {Murugesan, San},
+ title = {Understanding Web 2.0},
+ journal = {IT Professional},
+ issue_date = {July 2007},
+ volume = {9},
+ number = {4},
+ month = jul,
+ year = {2007},
+ issn = {1520-9202},
+ pages = {34--41},
+ numpages = {8},
+ url = {http://dx.doi.org/10.1109/MITP.2007.78},
+ doi = {10.1109/MITP.2007.78},
+ acmid = {1304564},
+ publisher = {IEEE Educational Activities Department},
+ address = {Piscataway, NJ, USA},
+ keywords = {Web 2.0, Web 2.0 applications, Web 2.0 development tools, Web 2.0, blog, Web mashup, wiki, tagging, social bookmarking, social computing, Web 2.0 development tools, Web 2.0 applications, social networking, Web mashup, blog, social bookmarking, social computing, social networking, tagging, wiki},
+} 
+@incollection{Dijkman:2011,
+year={2011},
+isbn={978-3-642-25159-7},
+booktitle={Business Process Model and Notation},
+volume={95},
+series={Lecture Notes in Business Information Processing},
+editor={Dijkman, Remco and Hofstetter, Jörg and Koehler, Jana},
+doi={10.1007/978-3-642-25160-3_7},
+title={A Notation for Supporting Social Business Process Modeling},
+url={http://dx.doi.org/10.1007/978-3-642-25160-3_7},
+publisher={Springer Berlin Heidelberg},
+keywords={BPM; BPMN; Social Software; Social Network; Enterprise 2.0; Code Generation},
+author={Brambilla, Marco and Fraternali, Piero and Vaca, Carmen},
+pages={88-102}
+}
+
+@inproceedings{Herlocker:1999,
+ author = {Herlocker, Jonathan L. and Konstan, Joseph A. and Borchers, Al and Riedl, John},
+ title = {An Algorithmic Framework for Performing Collaborative Filtering},
+ booktitle = {Proceedings of the 22Nd Annual International ACM SIGIR Conference on Research and Development in Information Retrieval},
+ series = {SIGIR '99},
+ year = {1999},
+ isbn = {1-58113-096-1},
+ location = {Berkeley, California, USA},
+ pages = {230--237},
+ numpages = {8},
+ url = {http://doi.acm.org/10.1145/312624.312682},
+ doi = {10.1145/312624.312682},
+ acmid = {312682},
+ publisher = {ACM},
+ address = {New York, NY, USA},
+} 
+@incollection{Adomavicius:2011,
+year={2011},
+isbn={978-0-387-85819-7},
+booktitle={Recommender Systems Handbook},
+editor={Ricci, Francesco and Rokach, Lior and Shapira, Bracha and Kantor, Paul B.},
+doi={10.1007/978-0-387-85820-3_7},
+title={Context-Aware Recommender Systems},
+url={http://dx.doi.org/10.1007/978-0-387-85820-3_7},
+publisher={Springer US},
+author={Adomavicius, Gediminas and Tuzhilin, Alexander},
+pages={217-253},
+language={English}
+}
+
+@misc{Panagiotis:2011,
+   author = {Panagiotis, Symeonidis and Alexis, Papadimitriou and Yannis, Manolopoulos and Pinar, Senkul and Ismail, Toroslu},
+   title = {Geo-social recommendations based on incremental tensor reduction and local path traversal},
+   publisher = {ACM},
+   note = {2063228
+89-96},
+   DOI = {10.1145/2063212.2063228},
+   year = {2011},
+   type = {Conference Paper}
+}
+
+@inbook{Victor:2011,
+   author = {Victor, Patricia and Cock, Martine and Cornelis, Chris},
+   title = {Trust and Recommendations},
+   booktitle = {Recommender Systems Handbook},
+
+   publisher = {Springer US},
+   chapter = {20},
+   pages = {645-675},
+   ISBN = {978-0-387-85819-7},
+   DOI = {10.1007/978-0-387-85820-3_20},
+   url = {http://dx.doi.org/10.1007/978-0-387-85820-3_20},
+   year = {2011},
+   type = {Book Section}
+}
+@inproceedings{Babar:2010,
+   author = {Tareen, Babar and Lee, Jae-won and Lee, Sang-goo },
+   year = {2010},
+   publisher = {ACM},
+   title = {Synergy: A Workbench for Collaborative Filtering Algorithms on User Interaction Data},
+   booktitle = {International Workshop on User Data Interoperability in the Social Web},
+   DOI = {citeulike-article-id:7201484},
+   type = {Conference Proceedings}
+}
+ @phdthesis{Palomino:2012,
+
+author = {Michael Palomino},
+title = {Un framework para presentar y experimentar con sistemas de recomendación en la Web 2.0},
+university = {Universidad de Santiago de Chile},
+year = {2012},
+school = {Departamento de Ingeniería Informática },
+type = {Thesis}
+}
+@book{Sampieri:2005,
+   author = {Sampieri, R. H. and Collado, C. F. and Lucio, P. B.},
+   title = {Fundamentos de metodología de la investigación: bachillerato},
+   publisher = {McHraw-Hill},
+   ISBN = {9789701055403},
+   url = {http://books.google.cl/books?id=zk4GAQAACAAJ},
+   year = {2005},
+   type = {Book}
+}
+
+
+@ARTICLE{Konstan:1997,
+author = {Joseph A. Konstan and Bradley N. Miller and David Maltz and Jonathan L. Herlocker and Lee R. Gordon and John Riedl and High Volume},
+title = {Grouplens: Applying collaborative filtering to usenet news},
+journal = {Communications of the ACM},
+year = {1997},
+volume = {40},
+pages = {77--87}
+}
+
+@article{Burke:2002,
+author = {Burke, Robin},
+title = {Hybrid Recommender Systems: Survey and Experiments},
+journal = {User Modeling and User-Adapted Interaction},
+issue_date = {November 2002},
+volume = {12},
+number = {4},
+month = nov,
+year = {2002},
+issn = {0924-1868},
+pages = {331--370},
+numpages = {40},
+url = {http://dx.doi.org/10.1023/A:1021240730564},
+doi = {10.1023/A:1021240730564},
+acmid = {586352},
+publisher = {Kluwer Academic Publishers},
+address = {Hingham, MA, USA},
+keywords = {case-based reasoning, collaborative filtering, recommender systems}
+}
+
+ @phdthesis{Alonso:2012,
+	author = {Alonso González},
+	title = {Comparando la funcionalidad y la usabilidad de dos aplicaciones basado en un proceso de negocios de generación de noticias},
+	university = {Universidad de Santiago de Chile},
+	year = {2012},
+	school = {Departamento de Ingeniería Informática},
+	type = {Trabajo de Titulación de Ingeniería Civil Informática},
+	place = {Santiago, Chile}
+}
+
+@article{Zanker:2009,
+year={2009},
+issn={0924-1868},
+journal={User Modeling and User-Adapted Interaction},
+volume={19},
+number={1-2},
+doi={10.1007/s11257-008-9048-y},
+title={Case-studies on exploiting explicit customer requirements in recommender systems},
+url={http://dx.doi.org/10.1007/s11257-008-9048-y},
+publisher={Springer Netherlands},
+keywords={Hybrid recommender systems; Comparative evaluation; Electronic commerce; Cold-start recommendation problem},
+author={Zanker, Markus and Jessenitschnig, Markus},
+pages={133-166},
+language={English}
+}
+
+@article{Gao:2010,
+	year={2010},
+	issn={1387-3326},
+	journal={Information Systems Frontiers},
+	volume={12},
+	number={5},
+	doi={10.1007/s10796-009-9199-3},
+	title={Personalisation in web computing and informatics: Theories, techniques, applications, and future research},
+	url={http://dx.doi.org/10.1007/s10796-009-9199-3},
+	publisher={Springer US},
+	keywords={Personalisation; Recommendation; User profile; Information filtering},
+	author={Gao, Min and Liu, Kecheng and Wu, Zhongfu},
+	pages={607-629},
+	language={English}
+}
+@article{Bobadilla:2013,
+title = "Recommender systems survey ",
+journal = "Knowledge-Based Systems ",
+volume = "46",
+number = "0",
+pages = "109 - 132",
+year = "2013",
+note = "",
+issn = "0950-7051",
+doi = "http://dx.doi.org/10.1016/j.knosys.2013.03.012",
+url = "http://www.sciencedirect.com/science/article/pii/S0950705113001044",
+author = "J. Bobadilla and F. Ortega and A. Hernando and A. Gutiérrez",
+}
+
+@article{Su:2009,
+ author = {Su, Xiaoyuan and Khoshgoftaar, Taghi M.},
+ title = {A Survey of Collaborative Filtering Techniques},
+ journal = {Adv. in Artif. Intell.},
+ issue_date = {January 2009},
+ volume = {2009},
+ month = jan,
+ year = {2009},
+ issn = {1687-7470},
+ pages = {4:2--4:2},
+ articleno = {4},
+ numpages = {1},
+ url = {http://dx.doi.org/10.1155/2009/421425},
+ doi = {10.1155/2009/421425},
+ acmid = {1722966},
+ publisher = {Hindawi Publishing Corp.},
+ address = {New York, NY, United States},
+}
+
+@article{Adomavicius:2005:2,
+author = {Adomavicius, Gediminas and Sankaranarayanan, Ramesh and Sen, Shahana and Tuzhilin, Alexander},
+title = {Incorporating Contextual Information in Recommender Systems Using a Multidimensional Approach},
+journal = {ACM Trans. Inf. Syst.},
+issue_date = {January 2005},
+volume = {23},
+number = {1},
+month = jan,
+year = {2005},
+issn = {1046-8188},
+pages = {103--145},
+numpages = {43},
+url = {http://doi.acm.org/10.1145/1055709.1055714},
+doi = {10.1145/1055709.1055714},
+acmid = {1055714},
+publisher = {ACM},
+address = {New York, NY, USA},
+keywords = {Recommender systems, collaborative filtering, context-aware recommender systems, multidimensional data models, multidimensional recommender systems, personalization, rating estimation},
+}
+
+@INPROCEEDINGS{Zhang:2010,
+author={Zhang Yujie and Wang Licai},
+booktitle={Computer Science and Education (ICCSE), 2010 5th International Conference on},
+title={Some challenges for context-aware recommender systems},
+year={2010},
+pages={362-365},
+keywords={recommender systems;ubiquitous computing;context-aware recommender systems;contextual user preference elicitation;valid contexts discovery;viewing process;Classification algorithms;Collaboration;Context;Context modeling;Mobile communication;Recommender systems;challenges;context-aware recommender systems;personalization},
+doi={10.1109/ICCSE.2010.5593612},}
+
+
+@article{Song:2011,
+author = {Song, Yang and Zhang, Lu and Giles, C. Lee},
+title = {Automatic Tag Recommendation Algorithms for Social Recommender Systems},
+journal = {ACM Trans. Web},
+issue_date = {February 2011},
+volume = {5},
+number = {1},
+month = feb,
+year = {2011},
+issn = {1559-1131},
+pages = {4:1--4:31},
+articleno = {4},
+numpages = {31},
+url = {http://doi.acm.org/10.1145/1921591.1921595},
+doi = {10.1145/1921591.1921595},
+acmid = {1921595},
+publisher = {ACM},
+address = {New York, NY, USA},
+keywords = {Gaussian processes, Tagging system, graph partitioning, mixture model, multi-label classification, prototype selection},
+}
+
+@incollection{Leiva:2002,
+year={2002},
+isbn={978-3-540-44112-0},
+booktitle={Groupware: Design, Implementation, and Use},
+volume={2440},
+series={Lecture Notes in Computer Science},
+editor={Haake, JörgM. and Pino, JoséA.},
+doi={10.1007/3-540-46124-8_13},
+title={The 3-Ontology: A Framework to Place Cooperative Awareness},
+url={http://dx.doi.org/10.1007/3-540-46124-8_13},
+publisher={Springer Berlin Heidelberg},
+author={Leiva-Lobos, EdmundoP. and Covarrubias, Eliana},
+pages={189-199},
+language={English}
+}
+
+@article{Monfil:2013,
+title = "RESYGEN: A Recommendation System Generator using domain-based heuristics ",
+journal = "Expert Systems with Applications ",
+volume = "40",
+number = "1",
+pages = "242 - 256",
+year = "2013",
+note = "",
+issn = "0957-4174",
+doi = "http://dx.doi.org/10.1016/j.eswa.2012.07.016",
+url = "http://www.sciencedirect.com/science/article/pii/S0957417412008718",
+author = "Erick Ulisses Monfil-Contreras and Giner Alor-Hernández and Guillermo Cortes-Robles and Alejandro Rodriguez-Gonzalez and Israel Gonzalez-Carrasco",
+keywords = "Collaborative filtering",
+keywords = "Generator system",
+keywords = "Recommendation system "
+}
+
+@phdthesis{Cullache:2011,
+	author = {Andy Cullache},
+	title = {Software como laboratorio para probar y
+	evaluar algoritmos de recomendación},
+	university = {Universidad de Santiago de Chile},
+	year = {2011},
+	school = {Departamento de Ingeniería Informática},
+	type = {Trabajo de Titulación de Ingeniería en ejecución Informática},
+	place = {Santiago, Chile}
+}
+
+@incollection{Adomavicius:2001,
+year={2001},
+isbn={978-3-540-42878-7},
+booktitle={Electronic Commerce},
+volume={2232},
+series={Lecture Notes in Computer Science},
+editor={Fiege, Ludger and Mühl, Gero and Wilhelm, Uwe},
+doi={10.1007/3-540-45598-1_17},
+title={Multidimensional Recommender Systems: A Data Warehousing Approach},
+url={http://dx.doi.org/10.1007/3-540-45598-1_17},
+publisher={Springer Berlin Heidelberg},
+author={Adomavicius, Gediminas and Tuzhilin, Alexander},
+pages={180-192},
+language={English}
+}
+
+@book{Suchman:1987,
+  title={Plans and Situated Actions: The Problem of Human-machine Communication},
+  author={Suchman, L.A.},
+  isbn={9780521337397},
+  lccn={87008013},
+  series={Learning in doing : social, cognitive, and computational perspectives},
+  url={http://books.google.cl/books?id=AJ\_eBJtHxmsC},
+  year={1987},
+  publisher={Cambridge University Press}
+}
+@phdthesis{Molins:2012,
+	author = { Fabián Molins},
+	title = {Generación de datasets con esquema estándar para entrenar algoritmos de recomendación para redes sociales},
+	university = {Universidad de Santiago de Chile},
+	year = {2012},
+	school = {Departamento de Ingeniería Informática},
+	type = {Trabajo de Titulación de Ingeniería Civil en Informática},
+	place = {Santiago, Chile}
+}
+
+@phdthesis{Cortes:2013,
+	author = {Salvador Cortés},
+	title = {Un ambiente configurable para definir y experimentar con algoritmos de recomendación y métricas de evaluación.},
+	university = {Universidad de Santiago de Chile},
+	year = {2013},
+	school = {Departamento de Ingeniería Informática},
+	type = {Trabajo de Titulación de Ingeniería Civil en Informática},
+	place = {Santiago, Chile}
+}
+
+@phdthesis{Rivera:2012,
+	author = {Carlos Rivera},
+	title = {Diseño de una arquitectura para prestar servicios de recomendación dentro de una red social de generación de noticias.},
+	university = {Universidad de Santiago de Chile},
+	year = {2012},
+	school = {Departamento de Ingeniería Informática},
+	type = {Trabajo de Titulación de Ingeniería Civil en Informática},
+	place = {Santiago, Chile}
+}
+
+@phdthesis{Mendez:2013,
+	author = {\'Alvaro Méndez},
+	title = {Descripción arquitectural de un sistema generador de servicios de recomendación para observatorios de la Web},
+	university = {Universidad de Santiago de Chile},
+	year = {2013},
+	school = {Departamento de Ingeniería Informática},
+	type = {Trabajo de Titulación de Ingeniería Civil en Informática},
+	place = {Santiago, Chile}
+}
+
+@phdthesis{Hernandez:2014,
+	author = {Francisco Hernández},
+	title = {Selección e implementación de algoritmos de
+	recomendación basados en tags en una red social generadora de noticias},
+	university = {Universidad de Santiago de Chile},
+	year = {2014},
+	school = {Departamento de Ingeniería Informática},
+	type = {Trabajo de Titulación de Ingeniería Civil en Informática},
+	place = {Santiago, Chile}
+}
+
+@phdthesis{Ochoa:2013,
+	author = {Daniel Ochoa},
+	title = {Definición de un \textit{framework} para generar sistemas de recomendación sobre comunidades, considerando la inteligencia colectiva },
+	university = {Universidad de Santiago de Chile},
+	year = {2013},
+	school = {Departamento de Ingeniería Informática},
+	type = {Propuesta de tema de tesis para el grado de Magíster en Ingeniería Informática},
+	place = {Santiago, Chile}
+}
+
+
+
+@INPROCEEDINGS{Begelman:2006,
+    author = {Grigory Begelman},
+    title = {Automated Tag Clustering: Improving search and exploration in the tag space},
+    booktitle = {In Proc. of the Collaborative Web Tagging Workshop at WWW’06},
+    year = {2006}
+}
+
+@Article{Macropol:2009,
+	AUTHOR = {Macropol, Kathy and Can, Tolga and Singh, Ambuj},
+	TITLE = {RRW: repeated random walks on genome-scale protein networks for local cluster discovery},
+	JOURNAL = {BMC Bioinformatics},
+	VOLUME = {10},
+	YEAR = {2009},
+	NUMBER = {1},
+	PAGES = {283},
+	URL = {http://www.biomedcentral.com/1471-2105/10/283},
+	DOI = {10.1186/1471-2105-10-283},
+	PubMedID = {19740439},
+	ISSN = {1471-2105},
+	ABSTRACT = {BACKGROUND:We propose an efficient and biologically sensitive algorithm based on repeated random walks (RRW) for discovering functional modules, e.g., complexes and pathways, within large-scale protein networks. Compared to existing cluster identification techniques, RRW implicitly makes use of network topology, edge weights, and long range interactions between proteins.RESULTS:We apply the proposed technique on a functional network of yeast genes and accurately identify statistically significant clusters of proteins. We validate the biological significance of the results using known complexes in the MIPS complex catalogue database and well-characterized biological processes. We find that 90% of the created clusters have the majority of their catalogued proteins belonging to the same MIPS complex, and about 80% have the majority of their proteins involved in the same biological process. We compare our method to various other clustering techniques, such as the Markov Clustering Algorithm (MCL), and find a significant improvement in the RRW clusters' precision and accuracy values.CONCLUSION:RRW, which is a technique that exploits the topology of the network, is more precise and robust in finding local clusters. In addition, it has the added flexibility of being able to find multi-functional proteins by allowing overlapping clusters.},
+}
