@@ -53,7 +53,7 @@ Las estrategias TAAT son mayormente usadas en sistemas de recuperación de infor
 Cuando se tiene un índice invertido pequeño, las estrategias TAAT rinden adecuadamente, sin embargo cuando los índices invertidos son de gran tamaño las estrategias TAAT poseen dos grandes ventajas: (a) Requieren menor cantidad de memoria para su ejecución, ya que el puntaje parcial por documento no necesita ser guardado y (b) Explotan el paralismo de entrada y salida (I/O) más eficientemente procesando las listas invertidas en diferentes discos simultáneamente.
 
 
-\section{Operaciones sobre listas invertidas}
+\section{Operaciones sobre listas invertidas | Ranking}
 \label{marco:osli}
 Cuando una \textit{query} llega al motor de búsqueda, cada término tiene asociado una lista con todos los documentos en los cuales aparece dicho término. El sistema debe decidir qué documentos se analizarán para obtener la respuesa con el conjunto de los K mejores. 
 A continuación se presentan las diferentes formas de operar los documentos pertenecientes a las listas invertidas de una \textit{query}.
@@ -88,3 +88,9 @@ Método de evaluación de \textit{queries} para obtener eficientemente el conjun
 El objetivo de WAND es minimizar la cantidad de evaluaciones completas de los documentos ejecutando un proceso de dos niveles. En el primer nivel se intenta omitir rápidamente grandes porciones de las listas invertida, lo que se traduce en ignorar el cálculo del puntaje exacto de grandes cantidades de documentos, ya que éste cálculo en motores de búsqueda a gran escala es una tarea que requiere de mucho tiempo para llevarse a cabo y depende de factores como la cantidad de ocurrencia del término dentro del documento, el tamaño del documento, entre otros.  
 
 En el primer nivel se itera sobre los documentos del índice invertido de cada término y se identifica candidatos usando una evaluación aproximada. En el segundo nivel, aquellos documentos candidatos son completamente evaluados y su puntaje exacto es calculado. De esta forma se obtiene el conjunto final de documentos.
+
+
+
+\section{Scoring}
+\label{marco:scoring}
+
