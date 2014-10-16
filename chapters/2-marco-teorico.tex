@@ -114,11 +114,11 @@ $$tf(t,d) = \dfrac{f(t,d) }{ max{f(w,d) : w \in d}}$$
 
 $$idf(t,D) = log \frac{ |D| }{1 + |{d \in D : t \in d}|} $$
 
-Por lo que el estadístico \textit{TF-IDF} queda de la forma $$ tfidf(t,d,D) = tf(t,d) * idf(t,D) $$ y éste incrementa proporcionalmente al número de veces que la palabra aparece en el documento, sin embargo es compensado por la frecuencia de la palabra en la colección completa de documentos o corpus. Notar que la compensación ayuda a controlar el hecho de que algunas palabras son generalmente más comunes que otras.
+$$ tfidf(t,d,D) = tf(t,d) * idf(t,D) $$
 
-
-
+Por lo que el estadístico \textit{TF-IDF} incrementa proporcionalmente al número de veces que la palabra aparece en el documento, sin embargo es compensado por la frecuencia de la palabra en la colección completa de documentos o corpus. Notar que la compensación ayuda a controlar el hecho de que algunas palabras son generalmente más comunes que otras.
 
 
 \subsection{BM25}
 \label{marco:bm25}
+
