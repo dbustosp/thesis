@@ -1,17 +1,20 @@
 thesis
 ======
 
+Trabajo con el que se espera poder aspirar al grado de Magíster en Ingeniería Informática.
+
 Título de la tesis de magíster: Desarrollo de estrategias de planificación para motores de búsqueda verticales.
 
-Esta tesis aborda conceptos de Information Retrieval como: 
+I. Se aborda importantes conceptos de Information Retrieval.  
 
-1. Índice Invertido.
-2. Estrategias de evaluación de queries como Term at a time (TAAT) y Document at a time (DAAT)
-3. Operaciones sobre listas invertidas al momento de resolver una query: OR, AND y WAND. 
-4. También se explica el método WAND que tiene como objetivo recuperar eficientemente el conjunto de los top K documentos que mejor satisfacen una consulta. Paralelización de este método es parte del trabajo de tesis.
+- Estrategias de evaluación de queries como Term at a time (TAAT) y Document at a time (DAAT)
+- Se explica el concepto de ranking y se muestran algunas funciones de scoring utilizadas frecuentemente en el área de information retrieval como por ejemplo: TF-IDF y Okapi BM25.
+- Operaciones sobre listas invertidas al momento de resolver una query: OR, AND y WAND. 
+- También se explica el método WAND que tiene como objetivo recuperar eficientemente el conjunto de los top K documentos que mejor satisfacen una query que llega al motor de búsqueda. La paralelización de esta estrategia es parte del trabajo previo de esta tesis.
 
-Se desarrolla un método de predicción de tiempo de respuesta para queries que llegan a motores de búsqueda. 
+II. Se crea un predictor de tiempo de respuesta de las queries, basado en una regresión múltiple. El predictor es creado con el objetivo de hacer más eficiente la planificación de las queries que llegan al sistema de Recuperación de Información.
 
-Se desarrolla estrategias de planificación de queries que llegan al motor de búsqueda con el predictor y además con un predictor perfecto. Se hace una comparación de los modelos creados con un modelo baseline. 
+III. Se crean estrategias de scheduling de queries que llegan al motor de búsqueda. Se desarrolla también una estrategia base, la cual sirve de comparación.
 
+IV. Se desarrolla un nuevo modelo de planificación basado en Unidades de Trabajo.
 
