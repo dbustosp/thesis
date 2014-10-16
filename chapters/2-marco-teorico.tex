@@ -90,7 +90,35 @@ El objetivo de WAND es minimizar la cantidad de evaluaciones completas de los do
 En el primer nivel se itera sobre los documentos del índice invertido de cada término y se identifica candidatos usando una evaluación aproximada. En el segundo nivel, aquellos documentos candidatos son completamente evaluados y su puntaje exacto es calculado. De esta forma se obtiene el conjunto final de documentos.
 
 
+\section{Ranking}
+\label{marco:ranking}
+Los sistemas de recuperación de información como los motores de búsqueda deben ejecutar un proceso el cual asigna un puntaje a documentos con respecto a una determinada \textit{query}, este proceso se denomina \textit{ranking}. Como se puede ver en la Figura \ref{fig:ranking_process}, este proceso toma como entrada las representaciones de \textit{queries} y documentos, y asigna un número real (puntaje) a un documento $d_{j}$ dada una query $q_{i}$.
 
-\section{Scoring}
-\label{marco:scoring}
+Un motor de búsqueda guarda billones de documentos que están formados por términos o palabras, los cuales no todos poseen la misma utilidad para describir el contenido del documento. Determinar la importancia de un término en un documento no es tarea sencilla. Para ello se asocia un peso positivo $w_{i,j}$ a cada término $k_{i}$ del documento $d_{j}$. De esta forma, para un término $k_{i}$ que no aparezca en el documento $d_{j}$ se tendrá $w_{i,j} = 0$. La asignación de pesos a los términos permite generar un \textit{ranking} numérico para cada documento en la colección.
 
+
+\begin{figure}[tp]
+\centering
+\includegraphics[scale=.75]{images/ranking_process.png}
+\caption{Operaci\'on AND}
+\label{fig:ranking_process}
+\end{figure}
+
+
+\subsection{TF-IDF}
+\label{marco:tfidf}
+El tf-idf (term frequency - inverse document frequency) es un estadístico que tiene por objetivo reflejar cuán importante es una palabra para un documento en una colleción o corpus. Este estadístico se divide en dos términos, el primero corresponde a la frecuencia del término en un documento (tf) y que en su versión más sencilla se utiliza la frecuencia bruta del término t en el documento d: f(t,d). El segundo término corresponde a la frecuencia inversa de documento (idf) y se utiliza para observar si es que el término es común en el corpus. El idf obtiene calculando el logaritmo entre el número total de documentos del corpus y el número de documentos que contienen el término.
+De esta forma se tiene:
+
+$$tf(t,d) = \dfrac{f(t,d) }{ max{f(w,d) : w \in d}}$$
+
+$$idf(t,D) = log \frac{ |D| }{1 + |{d \in D : t \in d}|} $$
+
+Por lo que el estadístico \textit{TF-IDF} queda de la forma $$ tfidf(t,d,D) = tf(t,d) * idf(t,D) $$ y éste incrementa proporcionalmente al número de veces que la palabra aparece en el documento, sin embargo es compensado por la frecuencia de la palabra en la colección completa de documentos o corpus. Notar que la compensación ayuda a controlar el hecho de que algunas palabras son generalmente más comunes que otras.
+
+
+
+
+
+\subsection{BM25}
+\label{marco:bm25}
