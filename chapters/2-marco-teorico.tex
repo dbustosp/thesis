@@ -1,12 +1,12 @@
 \chapter{Marco te\'orico}
 \label{cap:marco}
-En este capítulo se exponen los conceptos teóricos del presente trabajo de tesis. Rellenar al final
+En este capítulo se exponen los conceptos teóricos del presente trabajo de tesis. Primero se explica qué es un motor de búsqueda vertical. Luego se definen las estrategias de evaluación de \textit{queries}. Posteriormente se describen las diferentes operaciones sobre listas invertidas. Finalmente, se explica el concepto de \textit{ranking}. 
 
 \section{Motores de búsqueda verticales}
 \label{marco:mbv}
-A medida que pasa el tiempo y la Web sigue creciendo, los motores de búsqueda se convierten en una herramienta cada vez más importante para los usuarios. Estas máquinas ayudan a los usuarios a buscar contenido dentro de la Web, puesto que conocen en qué páginas de la Web aparecen qué palabras. Sin un buscador los usuarios estarían obligados a conocer los localizadores de recursos uniformes (URL) de cada uno de los sitios a visitar. Además, los motores de búsquedas en cierto modo conectan la Web, ya que existe un gran número de páginas Web que no tienen referencia desde otras páginas, siendo el único modo de acceder a ellas a través de un motor de búsqueda.
+A medida que pasa el tiempo y la Web sigue creciendo, los motores de búsqueda se convierten en una herramienta cada vez más importante para los usuarios. Estas máquinas ayudan a los usuarios a buscar contenido dentro de la Web, puesto que conocen en cuales documentos de la Web aparecen qué palabras. Si estas máquinas no existieran, los usuarios estarían obligados a conocer los localizadores de recursos uniformes (URL) de cada uno de los sitios a visitar. Además, los motores de búsquedas en cierto modo conectan la Web, ya que existe un gran número de páginas Web que no tienen referencia desde otras páginas, siendo el único modo de acceder a ellas a través de un motor de búsqueda.
 
-Un motor de búsqueda está construído por diversos componentes, y su arquitectura típica la podemos ver en la Figura \ref{fig:searchenginearchitecture}. Existe un proceso denominado \textit{crawling}, éste posee una tabla con las páginas Web iniciales en las que se extrae el contenido de cada una de ellas. A medida que el \textit{crawler} comienza a encontrar enlaces a otras páginas Web, la tabla de páginas a visitar crece. El contenido que se extrae en el procedimiento de \textit{crawling} es enviado al proceso de indexamiento, este se encarga de crear un índice de las páginas visitadas por el \textit{crawler}. 
+Un motor de búsqueda está construído por diversos componentes. Su arquitectura típica se puede ver en la Figura \ref{fig:searchenginearchitecture}. Existe un proceso denominado \textit{crawling}, éste posee una tabla con los documentos Web iniciales en los que se extrae el contenido de cada uno de ellos. A medida que el \textit{crawler} comienza a encontrar enlaces a otros documentos Web, la tabla de documentos a visitar crece. El contenido que se extrae en el procedimiento de \textit{crawling} es enviado al proceso de indexamiento, este se encarga de crear un índice de los documentos ya visitados por el \textit{crawler}. 
 
 \begin{figure}[tp]
 \centering
@@ -15,19 +15,19 @@ Un motor de búsqueda está construído por diversos componentes, y su arquitect
 \label{fig:searchenginearchitecture}
 \end{figure}
 
-Dado el volúmen de datos involucrado en el procesamiento, se debe tener una estructura de datos que permita encontrar cuáles páginas contienen las palabras presentes en la búsqueda, todo esto dentro de un período de tiempo aceptable. El índice invertido es una estructura de datos que contiene una lista con todas las palabras que el proceso de \textit{crawling} ha visto, y asociada a cada palabra se tiene una lista de todas las páginas Web donde ésta palabra aparece mencionada. El motor de búsqueda construye esta estructura con el objetivo de acelerar el proceso de las búsquedas que llegan al sistema. El proceso de búsqueda es el encargado de recibir la consulta (query), generar un \textit{ranking} de las páginas Web que contienen las palabras de la consulta y finalmente generar una respuesta. Las diversas formas de calcular la relevancia de una página Web será explicado en secciones posteriores.
+Dado el volúmen de datos involucrado en el procesamiento, se debe tener una estructura de datos que permita encontrar cuáles documentos contienen las palabras presentes en la búsqueda que llega al sistema. Todo esto dentro de un período de tiempo aceptable. El índice invertido \citep{Zobel:2006} es una estructura de datos que contiene una lista con todas las palabras que el proceso de \textit{crawling} ha visto. Asociado a cada palabra se tiene una lista de todas los documentos Web donde ésta palabra aparece mencionada. El motor de búsqueda construye esta estructura con el objetivo de acelerar el proceso de las búsquedas que llegan al sistema. El proceso de búsqueda es el encargado de recibir la consulta (\textit{query}), generar un \textit{ranking} de los documentos Web que contienen las palabras de la \textit{query} y finalmente generar una respuesta. Las diversas formas de calcular la relevancia de un documento será explicado en secciones posteriores.
 
-En un motor de búsqueda se pueden encontrar diversos servicios tales como (a) cálculo de las mejores páginas Web para una cierta consulta; (b) construcción de la página Web con los resultados de la consulta; (c) publicidad relacionada con las \textit{queries}; (e) sugerencia de \textit{queries}; entre muchos otros servicios.
+En un motor de búsqueda se pueden encontrar diversos servicios tales como (a) cálculo de los mejores documentos Web para una cierta \textit{query}; (b) construcción de la página Web en la que se mostrará al usuario los resultados de la \textit{query}; (c) publicidad relacionada con las \textit{queries}; (e) sugerencia de \textit{queries}; entre muchos otros servicios.
 
-Lo que se hace hoy en día es agrupar computadores para procesar una consulta y producir la respuesta de ésta. Este conjunto de computadores recibe el nombre de \textit{cluster}.
+En los sistemas de recuperación de la información modernos como los motores dee búsqueda, lo que se hace hoy en día es agrupar computadores para procesar una \textit{query} y obtener la respuesta para ésta. Este conjunto de computadores recibe el nombre de \textit{cluster}.
 
-La diferencia entre un motor de búsqueda vertical y uno general, es que el primero se centra solo en un contenido específico de la Web. El \textit{crawler} también debe extraer solo el contenido de aquellas páginas Web que están dentro del dominio permitido. Al ser un dominio acotado, las páginas Web a procesar serán menos y por tanto la lista de los términos del índice invertido serán eventualmente de menor tamaño. Sin embargo, en un motor de búsqueda vertical las actualizaciones al índice invertido ocurren con mayor frecuencia.
+La diferencia entre un motor de búsqueda vertical y uno general, es que el primero se centra solo en un contenido específico de la Web. El \textit{crawler} debe extraer contenido solo de aquellas páginas Web que están dentro del dominio permitido. Al ser un dominio acotado, los documentos Web a procesar serán menos y por lo tanto, la lista de los términos del índice invertido serán eventualmente de menor tamaño. Sin embargo, en un motor de búsqueda vertical las actualizaciones al índice invertido ocurren con mayor frecuencia.
 
 \section{\'Indice invertido}
 \label{marco:ii}
-Es una estructura de datos que contiene todos los términos (palabras) encontrados. A cada uno de los términos, está asociado una lista de punteros a los documentos (páginas Web) que contienen dicho término. Además se almacena información que permita realizar el \textit{ranking} de las respuestas a las consultas (queries) que llegan al sistema, por ejemplo, el número de veces que aparece el término en el documento. Esta lista recibe el nombre de lista invertida.
+Es una estructura de datos que contiene todos los términos (palabras) encontrados por el \textit{crawler}. A cada uno de los términos, está asociado una lista de documentos (páginas Web) que contienen dicho término. Adicionalmente, se almacena información que permita realizar el \textit{ranking} de documentos para generar la respuesta a las \textit{queries} que llegan al sistema, por ejemplo, el número de veces que aparece el término en el documento. Esta lista recibe el nombre de lista invertida.
 
-Para construir un índice invertido se debe procesar cada palabra que existe en un documento, registrando su posición y la cantidad de veces que éste se repite. Cuando se procesa el término con la información asociada correspondiente, se almacena en el índice invertido (ver Figura \ref{fig:invertedindex}).
+Para construir un índice invertido se debe procesar cada palabra que existe en un documento Web, registrando su posición y la cantidad de veces que éste se repite. Cuando se procesa el término con la información asociada correspondiente, se almacena en el índice invertido (ver Figura \ref{fig:invertedindex}).
 
 \begin{figure}[tp]
 \centering
@@ -38,7 +38,7 @@ Para construir un índice invertido se debe procesar cada palabra que existe en 
 
 El tamaño del índice invertido crece rápido y eventualmente la memoria RAM se agotará antes de procesar toda la colección de documentos. Cuando la memoria RAM se agota, se almacena en disco el índice parcial hasta aquel momento, se libera la memoria y se continúa con el proceso. Además, se debe hacer un \textit{merge} de los índices parciales uniéndo las listas invertidas de cada uno de los términos involucrados.
 
-\section{Estrategias de evaluaci\'on de queries}
+\section{Estrategias de evaluaci\'on de \textit{queries}}
 \label{marco:eeq}
 Existen dos principales estrategias para encontrar los documentos y calcular sus respectivos puntajes de una determinada \textit{query}. Estas son (a) \textit{term-at-a-time} (TAAT) y (b) \textit{document-at-a-time} (DAAT).
 
@@ -46,21 +46,20 @@ Existen dos principales estrategias para encontrar los documentos y calcular sus
 Este tipo de estrategia procesa los términos de las \textit{queries} uno a uno y acumula el puntaje parcial de los documentos. Las listas invertidas asociadas a un término son procesadas secuencialmente, esto significa que los documentos presente en la lista invertida del término $t_{i}$, obtienen un puntaje parcial antes de comenzar el procesamiento del término $t_{i+1}$. La secuencialidad en este caso es con respecto a los términos contenidos en la \textit{query}.
 
 \subsection{DAAT}
-En este tipo de estrategias se valúa la contribución de todos los términos de la query con respecto a un documento antes de evaluar el siguiente documento. Las listas invertidas de cada término de la \textit{query} son procesadas en paralelo, de modo que el puntaje del documento $d_{j}$ se calcula considerando todos los términos de la query al mismo tiempo. Una vez que se obtiene el puntaje del documento $d_{j}$ para la \textit{query} completa, se procede al procesamiento del documento $d_{j+1}$.
+En este tipo de estrategias se evalúa la contribución de todos los términos de la \textit{query} con respecto a un documento antes de evaluar el siguiente documento. Las listas invertidas de cada término de la \textit{query} son procesadas en paralelo, de modo que el puntaje del documento $d_{j}$ se calcula considerando todos los términos de la \textit{query} al mismo tiempo. Una vez que se obtiene el puntaje del documento $d_{j}$ para la \textit{query} completa, se procede al procesamiento del documento $d_{j+1}$.
 
 \subsection{Consideraciones}
-Las estrategias TAAT son mayormente usadas en sistemas de recuperación de información (IR), como son los motores de búsqueda. 
-Cuando se tiene un índice invertido pequeño, las estrategias TAAT rinden adecuadamente, sin embargo cuando los índices invertidos son de gran tamaño las estrategias TAAT poseen dos grandes ventajas: (a) Requieren menor cantidad de memoria para su ejecución, ya que el puntaje parcial por documento no necesita ser guardado y (b) Explotan el paralismo de entrada y salida (I/O) más eficientemente procesando las listas invertidas en diferentes discos simultáneamente.
+Cuando se tiene un índice invertido pequeño, las estrategias TAAT rinden adecuadamente, sin embargo cuando los índices invertidos son de gran tamaño las estrategias DAAT poseen dos grandes ventajas: (a) Requieren menor cantidad de memoria para su ejecución, ya que el puntaje parcial por documento no necesita ser guardado y (b) Explotan el paralismo de entrada y salida (I/O) más eficientemente procesando las listas invertidas en diferentes discos simultáneamente. Además existen técnicas para optimizar el proceso de las estrategias recientemente descritas \citep{Turtle:1995}.
 
 
-\section{Operaciones sobre listas invertidas | Ranking}
+\section{Operaciones sobre listas invertidas}
 \label{marco:osli}
-Cuando una \textit{query} llega al motor de búsqueda, cada término tiene asociado una lista con todos los documentos en los cuales aparece dicho término. El sistema debe decidir qué documentos se analizarán para obtener la respuesa con el conjunto de los K mejores. 
-A continuación se presentan las diferentes formas de operar los documentos pertenecientes a las listas invertidas de una \textit{query}.
+Cuando una \textit{query} llega al motor de búsqueda, cada término tiene asociado una lista con todos los documentos en los cuales aparece. El sistema debe decidir qué documentos se analizarán para obtener la respuesa con el conjunto de los K mejores.
+A continuación se presentan las diferentes formas de operar las listas invertidas de una \textit{query}.
 
-\subsection{OR}
+\subsection{\textit{OR}}
 \label{marco:or}
-Este operador toma las listas invertidas de cada uno de los términos de la \textit{query} y ejecuta la disyunción entre ellas. El resultado de este operador es una lista invertida con todos los documentos que contengan al menos un término de la query. Finalmente, esta lista invertida se ocupará para obtener los mejores K documentos. Un ejemplo sencillo se muestra en la FIGURA \ref{fig:ORoperation}.
+Este operador toma las listas invertidas de cada uno de los términos de la \textit{query} y ejecuta la disyunción entre ellas. El resultado de este operador es una lista invertida con todos los documentos que contengan al menos un término de la \textit{query}. Finalmente, esta lista invertida se ocupará para obtener los mejores K documentos. Un simple ejemplo se muestra en la FIGURA \ref{fig:ORoperation}.
 
 \begin{figure}[tp]
 \centering
@@ -71,7 +70,7 @@ Este operador toma las listas invertidas de cada uno de los términos de la \tex
 
 \subsection{AND}
 \label{marco:and}
-Este operador ejecuta la conjunción entre las listas invertidas de los términos de una \textit{query}. Se obtiene una lista invertida con los documentos que contengan todos los términos de la \textit{query}. Se debe notar que aquí se obtiene una lista resultante de menor que la obtenida en el operador OR (Ver FIGURA \ref{fig:ANDoperation}).
+Este operador ejecuta la conjunción entre las listas invertidas de los términos de una \textit{query}. Se obtiene una lista invertida con los documentos que contengan todos los términos de la \textit{query}. Se debe notar que aquí se obtiene una lista resultante de menor tamaño que la obtenida en el operador OR (Ver FIGURA \ref{fig:ANDoperation}).
 
 \begin{figure}[tp]
 \centering
@@ -83,18 +82,18 @@ Este operador ejecuta la conjunción entre las listas invertidas de los término
 
 \subsection{WAND}
 \label{marco:wand}
-Método de evaluación de \textit{queries} para obtener eficientemente el conjunto de los mejores \textit{top K} documentos que mejor satisfacen una \textit{query} dada. \textit{WAND} \citep{Broder:2003} (\textit{Weak AND}) es un proceso menos estricto que el método \textit{AND} y es basado en dos niveles. Dentro del proceso de evaluación de una \textit{query}, uno de los procesos más costoso en términos de tiempo es el proceso de \textit{scoring}. Este proceso corresponde a entregarle a cada uno de los documentos analizados, un puntaje que representa la relevancia del documento para una \textit{query} dada, esto se denomina evaluación completa o cálculo cálculo del puntaje exacto del documento.
+Método de evaluación de \textit{queries} para obtener eficientemente el conjunto de K documentos que mejor satisfacen una \textit{query} dada. \textit{WAND} \citep{Broder:2003} (\textit{Weak AND}) es un proceso menos estricto que el método \textit{AND} y es basado en dos niveles. Dentro del proceso de evaluación de una \textit{query}, uno de los procesos más costoso en términos de tiempo es el proceso de \textit{scoring}. Este proceso corresponde a entregarle a cada uno de los documentos analizados, un puntaje que representa la relevancia del documento para una \textit{query} dada, esto se denomina evaluación completa o cálculo del puntaje exacto del documento.
 
-El objetivo de WAND es minimizar la cantidad de evaluaciones completas de los documentos ejecutando un proceso de dos niveles. En el primer nivel se intenta omitir rápidamente grandes porciones de las listas invertida, lo que se traduce en ignorar el cálculo del puntaje exacto de grandes cantidades de documentos, ya que éste cálculo en motores de búsqueda a gran escala es una tarea que requiere de mucho tiempo para llevarse a cabo y depende de factores como la cantidad de ocurrencia del término dentro del documento, el tamaño del documento, entre otros.  
+El objetivo de WAND es minimizar la cantidad de evaluaciones completas de los documentos ejecutando un proceso de dos niveles. En el primer nivel se intenta omitir rápidamente grandes porciones de las listas invertida, lo que se traduce en ignorar el cálculo del puntaje exacto de grandes cantidades de documentos. El intento de omitir el cálculo completo de un documento es debido a que en motores de búsqueda a gran escala, este es un proceso que requiere de mucho tiempo para llevarse a cabo y depende de factores como la cantidad de ocurrencia del término dentro del documento, el tamaño del documento, entre otros.  
 
 En el primer nivel se itera sobre los documentos del índice invertido de cada término y se identifica candidatos usando una evaluación aproximada. En el segundo nivel, aquellos documentos candidatos son completamente evaluados y su puntaje exacto es calculado. De esta forma se obtiene el conjunto final de documentos.
 
 
-\section{Ranking}
+\section{\textit{Ranking}}
 \label{marco:ranking}
-Los sistemas de recuperación de información como los motores de búsqueda deben ejecutar un proceso el cual asigna un puntaje a documentos con respecto a una determinada \textit{query}, este proceso se denomina \textit{ranking}. Como se puede ver en la Figura \ref{fig:ranking_process}, este proceso toma como entrada las representaciones de \textit{queries} y documentos, y asigna un número real (puntaje) a un documento $d_{j}$ dada una query $q_{i}$.
+Los sistemas de recuperación de información como los motores de búsqueda deben ejecutar un proceso el cual asigna un puntaje a documentos con respecto a una determinada \textit{query}, este proceso se denomina \textit{ranking} \citep{Baeza-Yates:2011}. Como se puede ver en la Figura \ref{fig:ranking_process}, este proceso toma como entrada la representación de las \textit{queries} y documentos, y asigna un puntaje (\textit{score}) a un documento $d_{j}$ dada una \textit{query} $q_{i}$.
 
-Un motor de búsqueda guarda billones de documentos que están formados por términos o palabras, los cuales no todos poseen la misma utilidad para describir el contenido del documento. Determinar la importancia de un término en un documento no es tarea sencilla. Para ello se asocia un peso positivo $w_{i,j}$ a cada término $k_{i}$ del documento $d_{j}$. De esta forma, para un término $k_{i}$ que no aparezca en el documento $d_{j}$ se tendrá $w_{i,j} = 0$. La asignación de pesos a los términos permite generar un \textit{ranking} numérico para cada documento en la colección.
+Un motor de búsqueda guarda billones de documentos que están formados por términos o palabras, estos términos no todos poseen la misma utilidad para describir el contenido del documento. Determinar la importancia de una palabra en un documento no es tarea sencilla, para ello se asocia un peso positivo $w_{i,j}$ a cada término $t_{i}$ del documento $d_{j}$. De esta forma, para un término $t_{i}$ que no aparezca en el documento $d_{j}$ se tendrá $w_{i,j} = 0$. La asignación de pesos a los términos permite generar un \textit{ranking} numérico para cada documento en la colección.
 
 
 \begin{figure}[tp]
@@ -107,7 +106,7 @@ Un motor de búsqueda guarda billones de documentos que están formados por tér
 
 \subsection{TF-IDF}
 \label{marco:tfidf}
-El tf-idf (term frequency - inverse document frequency) es un estadístico que tiene por objetivo reflejar cuán importante es una palabra para un documento en una colleción o corpus. Este estadístico se divide en dos términos, el primero corresponde a la frecuencia del término en un documento (tf) y que en su versión más sencilla se utiliza la frecuencia bruta del término t en el documento d: f(t,d). El segundo término corresponde a la frecuencia inversa de documento (idf) y se utiliza para observar si es que el término es común en el corpus. El idf obtiene calculando el logaritmo entre el número total de documentos del corpus y el número de documentos que contienen el término.
+El tf-idf (\textit{term frequency - inverse document frequency}) es un estadístico que tiene por objetivo reflejar cuán importante es una palabra para un documento en una colleción o corpus. Este estadístico se divide en dos partes, el primero corresponde a la frecuencia de la palabra o término en un documento (tf) y que en su versión más sencilla se utiliza la frecuencia bruta del término t en el documento d (f(t,d)). El segundo término corresponde a la frecuencia inversa de documento (idf) y se utiliza para observar si es que el término es común en el corpus. El idf obtiene calculando el logaritmo de la división entre el número total de documentos del corpus y el número de documentos que contienen el término.
 De esta forma se tiene:
 
 $$tf(t,d) = \dfrac{f(t,d) }{ max{f(w,d) : w \in d}}$$
@@ -121,10 +120,10 @@ Por lo que el estadístico \textit{TF-IDF} incrementa proporcionalmente al núme
 
 \subsection{BM25}
 \label{marco:bm25}
-Es una función de \textit{ranking} de documentos basada en los términos que aparecen en la \textit{query} que llega al motor de búsqueda. \textit{BM25} pertenece a una amplia gama de funciones de puntuación y está basada en los modelos probabilísticos de Recuperación de Información [Book Baeza]. A continuación se define la función.
+Es una función de \textit{ranking} de documentos basada en los términos que aparecen en la \textit{query} que llega al motor de búsqueda. \textit{BM25} pertenece a una amplia gama de funciones de puntuación y está basada en los modelos probabilísticos de recuperación de la información \citep{Baeza-Yates:2011}.
 
 Dada una \textit{query} $Q$ que contiene los términos $q_{1},...,q_{n}$, el \textit{ranking BM25} del documento D se calcula como: 
 
 $$ score(D,Q) =  \displaystyle\sum_{i=1}^n IDF(q_{i}) * \frac{f(q_{i},D)*(k+1)}{f(q_{i},D)+k * (1 - b + b * \frac{|D|}{prom(docs)})} $$
 
-donde $f(q_{i}, D)$ es la frecuencia en que aparece el término $q_{i}$ en el documento D; $|D|$ es el número de palabras o términos en el documento D; $prom(docs)$ es la media de número de palabras de los documentos en el corpus; k y b son constantes que depende de las características del corpus en el que se está haciendo la búsqueda, por lo general se asignan valores de $k = 2$ o $k = 1.2$ y $b = 0.75$; finalmente, $IDF(q_{i})$ es la frecuencia inversa de documento para el término $q_{i}$.
+donde $f(q_{i}, D)$ es la frecuencia en que aparece el término $q_{i}$ en el documento D; $|D|$ es el número de palabras o términos en el documento D; $prom(docs)$ es la media de número de palabras de los documentos en el corpus; k y b son constantes que depende de las características del corpus en el que se está haciendo la búsqueda, por lo general se asignan los valores de $k = 2$ o $k = 1.2$ y $b = 0.75$; finalmente, $IDF(q_{i})$ es la frecuencia inversa de documento para el término $q_{i}$.

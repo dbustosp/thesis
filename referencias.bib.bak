@@ -18,6 +18,17 @@
   Url                      = { http://dpavez.cl/techreport }
 }
 
+@InProceedings{Baeza-Yates:2011,
+  Title                    = {Modern Information Retrieval - the concepts and technology behind search, Second edition},
+  Author                   = {Ricardo A. Baeza-Yates and 
+ Berthier A. Ribeiro-Neto},
+  Year                     = {2011},
+
+  Ee                       = {http://www.mir2ed.org/},
+  Owner                    = {danilobustos},
+  Timestamp                = {2014.10.23}
+}
+
 @InProceedings{Broder:2003,
   Title                    = {Efficient Query Evaluation Using a Two-level Retrieval Process},
   Author                   = {Broder, Andrei Z. and Carmel, David and Herscovici, Michael and Soffer, Aya and Zien, Jason},
@@ -128,6 +139,52 @@
   Volume                   = { 1 },
 
   Url                      = { http://dpavez.cl/articulo }
+}
+
+@Article{Turtle:1995,
+  Title                    = {Query Evaluation: Strategies and Optimizations},
+  Author                   = {Turtle, Howard and Flood, James},
+  Journal                  = {Inf. Process. Manage.},
+  Year                     = {1995},
+
+  Month                    = nov,
+  Number                   = {6},
+  Pages                    = {831--850},
+  Volume                   = {31},
+
+  Acmid                    = {220057},
+  Address                  = {Tarrytown, NY, USA},
+  Doi                      = {10.1016/0306-4573(95)00020-H},
+  ISSN                     = {0306-4573},
+  Issue_date               = {Nov. 1995},
+  Numpages                 = {20},
+  Owner                    = {danilobustos},
+  Publisher                = {Pergamon Press, Inc.},
+  Timestamp                = {2014.10.23},
+  Url                      = {http://dx.doi.org/10.1016/0306-4573(95)00020-H}
+}
+
+@Article{Zobel:2006,
+  Title                    = {Inverted Files for Text Search Engines},
+  Author                   = {Zobel, Justin and Moffat, Alistair},
+  Journal                  = {ACM Comput. Surv.},
+  Year                     = {2006},
+
+  Month                    = jul,
+  Number                   = {2},
+  Volume                   = {38},
+
+  Acmid                    = {1132959},
+  Address                  = {New York, NY, USA},
+  Articleno                = {6},
+  Doi                      = {10.1145/1132956.1132959},
+  ISSN                     = {0360-0300},
+  Issue_date               = {2006},
+  Keywords                 = {Inverted file indexing, Web search engine, document database, information retrieval, text retrieval},
+  Owner                    = {danilobustos},
+  Publisher                = {ACM},
+  Timestamp                = {2014.10.23},
+  Url                      = {http://doi.acm.org/10.1145/1132956.1132959}
 }
 
 @Proceedings{proceedings:2013,
