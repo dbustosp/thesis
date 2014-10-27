@@ -4,6 +4,24 @@
 
 @String { efmj = {Emir Mu{\~n}oz Jim{\'e}nez} }
 
+@Article{Albers:2003,
+  Title                    = {Online algorithms: a survey},
+  Author                   = {Albers, Susanne},
+  Journal                  = {Mathematical Programming},
+  Year                     = {2003},
+  Number                   = {1-2},
+  Pages                    = {3-26},
+  Volume                   = {97},
+
+  Doi                      = {10.1007/s10107-003-0436-0},
+  ISSN                     = {0025-5610},
+  Language                 = {English},
+  Owner                    = {danilobustos},
+  Publisher                = {Springer-Verlag},
+  Timestamp                = {2014.10.24},
+  Url                      = {http://dx.doi.org/10.1007/s10107-003-0436-0}
+}
+
 @TechReport{techreport:2013,
   Title                    = { {T{\'i}tulo del Tech Report} },
   Author                   = { Gabrielle Aplin },
@@ -27,6 +45,19 @@
   Ee                       = {http://www.mir2ed.org/},
   Owner                    = {danilobustos},
   Timestamp                = {2014.10.23}
+}
+
+@Book{Borodin:1998,
+  Title                    = {Online Computation and Competitive Analysis},
+  Author                   = {Borodin, Allan and El-Yaniv, Ran},
+  Publisher                = {Cambridge University Press},
+  Year                     = {1998},
+
+  Address                  = {New York, NY, USA},
+
+  ISBN                     = {0-521-56392-5},
+  Owner                    = {danilobustos},
+  Timestamp                = {2014.10.24}
 }
 
 @InProceedings{Broder:2003,
@@ -64,6 +95,24 @@
   Volume                   = { 1 },
 
   Url                      = { http://dpavez.cl/libro }
+}
+
+@Article{Feldmann:1998,
+  Title                    = {Optimal On-Line Scheduling of Parallel Jobs with Dependencies},
+  Author                   = {Feldmann, Anja and Kao, Ming-Yang and Sgall, Jiri and Teng, Shang-Hua},
+  Journal                  = {Journal of Combinatorial Optimization},
+  Year                     = {1998},
+  Number                   = {4},
+  Pages                    = {393-411},
+  Volume                   = {1},
+
+  Doi                      = {10.1023/A:1009794729459},
+  ISSN                     = {1382-6905},
+  Language                 = {English},
+  Owner                    = {danilobustos},
+  Publisher                = {Kluwer Academic Publishers},
+  Timestamp                = {2014.10.24},
+  Url                      = {http://dx.doi.org/10.1023/A%3A1009794729459}
 }
 
 @PhdThesis{tesis:2013,
