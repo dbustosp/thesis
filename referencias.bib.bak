@@ -36,15 +36,28 @@
   Url                      = { http://dpavez.cl/techreport }
 }
 
-@InProceedings{Baeza-Yates:2011,
-  Title                    = {Modern Information Retrieval - the concepts and technology behind search, Second edition},
-  Author                   = {Ricardo A. Baeza-Yates and 
- Berthier A. Ribeiro-Neto},
+@Book{Buttcher:2010,
+  Title                    = {Information Retrieval: Implementing and Evaluating Search Engines},
+  Author                   = {B\"{u}ttcher, Stefan and Clarke, Charles and Cormack, Gordon V.},
+  Publisher                = {The MIT Press},
+  Year                     = {2010},
+
+  ISBN                     = {0262026511, 9780262026512},
+  Owner                    = {danilobustos},
+  Timestamp                = {2014.10.27}
+}
+
+@Book{Baeza-Yates:2011,
+  Title                    = {Modern Information Retrieval},
+  Author                   = {Baeza-Yates, Ricardo A. and Ribeiro-Neto, Berthier},
+  Publisher                = {Addison-Wesley Longman Publishing Co., Inc.},
   Year                     = {2011},
 
-  Ee                       = {http://www.mir2ed.org/},
+  Address                  = {Boston, MA, USA},
+
+  ISBN                     = {020139829X},
   Owner                    = {danilobustos},
-  Timestamp                = {2014.10.23}
+  Timestamp                = {2014.10.27}
 }
 
 @Book{Borodin:1998,
@@ -58,6 +71,26 @@
   ISBN                     = {0-521-56392-5},
   Owner                    = {danilobustos},
   Timestamp                = {2014.10.24}
+}
+
+@InCollection{Broccolo:2013,
+  Title                    = {Query Processing in Highly-Loaded Search Engines},
+  Author                   = {Broccolo, Daniele and Macdonald, Craig and Orlando, Salvatore and Ounis, Iadh and Perego, Raffaele and Silvestri, Fabrizio and Tonellotto, Nicola},
+  Booktitle                = {String Processing and Information Retrieval},
+  Publisher                = {Springer International Publishing},
+  Year                     = {2013},
+  Editor                   = {Kurland, Oren and Lewenstein, Moshe and Porat, Ely},
+  Pages                    = {49-55},
+  Series                   = {Lecture Notes in Computer Science},
+  Volume                   = {8214},
+
+  Doi                      = {10.1007/978-3-319-02432-5_9},
+  ISBN                     = {978-3-319-02431-8},
+  Keywords                 = {Distributed Search Engines; Efficiency; Effectiveness; Throughput},
+  Language                 = {English},
+  Owner                    = {danilobustos},
+  Timestamp                = {2014.10.27},
+  Url                      = {http://dx.doi.org/10.1007/978-3-319-02432-5_9}
 }
 
 @InProceedings{Broder:2003,
@@ -83,10 +116,10 @@
 }
 
 @Book{Libro:2013,
-  Title                    = { {T{\'i}tulo Libro} },
+  Title                    = {{T{\'i}tulo Libro}},
   Author                   = { Daniel Pavez, Tildes As{\'i} },
   Publisher                = { Juanito Editoriales Co., Inc },
-  Year                     = { 1987 },
+  Year                     = {1987},
 
   Address                  = { Siempre viva 2013, LA, USA },
   Edition                  = { 1ra },
@@ -95,6 +128,28 @@
   Volume                   = { 1 },
 
   Url                      = { http://dpavez.cl/libro }
+}
+
+@InProceedings{Dean:2009,
+  Title                    = {Challenges in Building Large-scale Information Retrieval Systems: Invited Talk},
+  Author                   = {Dean, Jeffrey},
+  Booktitle                = {Proceedings of the Second ACM International Conference on Web Search and Data Mining},
+  Year                     = {2009},
+
+  Address                  = {New York, NY, USA},
+  Pages                    = {1--1},
+  Publisher                = {ACM},
+  Series                   = {WSDM '09},
+
+  Acmid                    = {1498761},
+  Doi                      = {10.1145/1498759.1498761},
+  ISBN                     = {978-1-60558-390-7},
+  Keywords                 = {scalability, search engines},
+  Location                 = {Barcelona, Spain},
+  Numpages                 = {1},
+  Owner                    = {danilobustos},
+  Timestamp                = {2014.10.30},
+  Url                      = {http://doi.acm.org/10.1145/1498759.1498761}
 }
 
 @Article{Feldmann:1998,
@@ -113,6 +168,50 @@
   Publisher                = {Kluwer Academic Publishers},
   Timestamp                = {2014.10.24},
   Url                      = {http://dx.doi.org/10.1023/A%3A1009794729459}
+}
+
+@InProceedings{Freire:2013,
+  Title                    = {Hybrid Query Scheduling for a Replicated Search Engine},
+  Author                   = {Freire, Ana and Macdonald, Craig and Tonellotto, Nicola and Ounis, Iadh and Cacheda, Fidel},
+  Booktitle                = {Proceedings of the 35th European Conference on Advances in Information Retrieval},
+  Year                     = {2013},
+
+  Address                  = {Berlin, Heidelberg},
+  Pages                    = {435--446},
+  Publisher                = {Springer-Verlag},
+  Series                   = {ECIR'13},
+
+  Acmid                    = {2458229},
+  Doi                      = {10.1007/978-3-642-36973-5_37},
+  ISBN                     = {978-3-642-36972-8},
+  Keywords                 = {distributed search engines, query efficiency prediction, query scheduling},
+  Location                 = {Moscow, Russia},
+  Numpages                 = {12},
+  Owner                    = {danilobustos},
+  Timestamp                = {2014.10.30},
+  Url                      = {http://dx.doi.org/10.1007/978-3-642-36973-5_37}
+}
+
+@InProceedings{Freire:2012,
+  Title                    = {Scheduling Queries Across Replicas},
+  Author                   = {Freire, Ana and Macdonald, Craig and Tonellotto, Nicola and Ounis, Iadh and Cacheda, Fidel},
+  Booktitle                = {Proceedings of the 35th International ACM SIGIR Conference on Research and Development in Information Retrieval},
+  Year                     = {2012},
+
+  Address                  = {New York, NY, USA},
+  Pages                    = {1139--1140},
+  Publisher                = {ACM},
+  Series                   = {SIGIR '12},
+
+  Acmid                    = {2348508},
+  Doi                      = {10.1145/2348283.2348508},
+  ISBN                     = {978-1-4503-1472-5},
+  Keywords                 = {query scheduling, simulation},
+  Location                 = {Portland, Oregon, USA},
+  Numpages                 = {2},
+  Owner                    = {danilobustos},
+  Timestamp                = {2014.11.01},
+  Url                      = {http://doi.acm.org/10.1145/2348283.2348508}
 }
 
 @PhdThesis{tesis:2013,
@@ -159,10 +258,55 @@
   Url                      = { http://dpavez.cl/incollection }
 }
 
+@InProceedings{Macdonald:2012,
+  Title                    = {Learning to Predict Response Times for Online Query Scheduling},
+  Author                   = {Macdonald, Craig and Tonellotto, Nicola and Ounis, Iadh},
+  Booktitle                = {Proceedings of the 35th International ACM SIGIR Conference on Research and Development in Information Retrieval},
+  Year                     = {2012},
+
+  Address                  = {New York, NY, USA},
+  Pages                    = {621--630},
+  Publisher                = {ACM},
+  Series                   = {SIGIR '12},
+
+  Acmid                    = {2348367},
+  Doi                      = {10.1145/2348283.2348367},
+  ISBN                     = {978-1-4503-1472-5},
+  Keywords                 = {dynamic pruning, query efficiency prediction},
+  Location                 = {Portland, Oregon, USA},
+  Numpages                 = {10},
+  Owner                    = {danilobustos},
+  Timestamp                = {2014.10.30},
+  Url                      = {http://doi.acm.org/10.1145/2348283.2348367}
+}
+
+@Article{Moffat:1996,
+  Title                    = {Self-indexing Inverted Files for Fast Text Retrieval},
+  Author                   = {Moffat, Alistair and Zobel, Justin},
+  Journal                  = {ACM Trans. Inf. Syst.},
+  Year                     = {1996},
+
+  Month                    = oct,
+  Number                   = {4},
+  Pages                    = {349--379},
+  Volume                   = {14},
+
+  Acmid                    = {237497},
+  Address                  = {New York, NY, USA},
+  Doi                      = {10.1145/237496.237497},
+  ISSN                     = {1046-8188},
+  Issue_date               = {Oct. 1996},
+  Numpages                 = {31},
+  Owner                    = {danilobustos},
+  Publisher                = {ACM},
+  Timestamp                = {2014.11.01},
+  Url                      = {http://doi.acm.org/10.1145/237496.237497}
+}
+
 @InProceedings{Inproceedings:2013,
   Title                    = { {Clustering} },
   Author                   = { Juan P{\'e}rez },
-  Booktitle                = { T{\'i}tulo Inproceedings },
+  Booktitle                = {T{\'i}tulo Inproceedings},
   Year                     = { 1987 },
 
   Address                  = { Siempre viva 2013, LA, USA },
@@ -179,9 +323,9 @@
 
 @Article{Articulo:2013,
   Title                    = { {Bioinform{\'a}tica} },
-  Author                   = { Ignacio Sandoval },
+  Author                   = {Ignacio Sandoval},
   Journal                  = { Nombre Revista },
-  Year                     = { 1987 },
+  Year                     = {1987},
   Note                     = { Nota },
   Number                   = { 12345 },
   Pages                    = { 25 },
