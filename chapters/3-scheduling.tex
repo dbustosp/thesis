@@ -27,8 +27,41 @@ El estudio \citep{Broccolo:2013} analiza métodos de \textit{dropping} y \textit
 
 En \citep{Freire:2012} se estudia el impacto que tiene la técnica de predicción de tiempos de respuestas para \textit{queries}, \citep{Tonellotto:2011} en sistemas de recuperación de la información con réplicas. En este estudio, se llega a la conclusión que usando una buena predicción, se puede reducir el tiempo que la \textit{query} tiene que esperar para ser procesada ($t_{w}$), y también se puede reducir el tiempo total requerido para procesar el conjunto (\textit{log}) completo de \textit{queries} (\textit{completion time}). En \citep{Freire:2013}, se propone un modelo híbrido de \textit{scheduling} de \textit{queries} a través de réplicas, en el que cuando el sistema se encuentre bajo altas cargas de trabajo, se utilice política de \textit{scheduling} basada en la predicción de tiempo de respuesta de las \textit{queries} \citep{Macdonald:2012} y cuando el sistema se encuentre con una baja carga de trabajo, se utilice una politica de \textit{scheduling} sencilla y de menor costo como \textit{Round Robin}.
 
+
 \section{Predicción del tiempo de respuesta a \textit{queries} en un motor de búsqueda}
 \label{scheduling:ptrq}
+Conocer de antemano la eficiencia de una \textit{query} es una ventaja importante para usar técnicas efectivas de \textit{scheduling} de \textit{queries} en motores de búsqueda. Existen estudios en los cuales la eficiencia es inferida usando \textit{clarity score} \citep{Cronen-Townsend:2002}, que es una forma para evaluar la pérdida de ambigüedad de una query con respecto a la colección. En \citep{He:2004} se propone un conjunto de predictores para la eficiencia de cada \textit{query}. Técnicas de aprendizaje de máquina también han sido estudiadas para predecir la eficiencia de \textit{queries} \citep{Si:2002}. Todos los estudios mencionados anteriormente se han centrado en la efectividad para ser predicciones. La eficiencia también ha sido utilizada para predecir el tiempo de respuesta de una query, identificando las razones por las que ésta puede ser resuelta ineficientemente y evaluando estos factores para predecir el comportamiento de futuras queries \citep{Tonellotto:2011}.
+
+En el predictor propuesto en \citep{Macdonald:2012} está basado en estadísticos  disponibles de los términos de la query. 
+
+\begin{tabular}{|l|}
+\hline 
+Estadístico del término s(t) \\ 
+\hline 
+1. Media aritmética del score \\ 
+\hline 
+2. Media geométrica del score \\ 
+\hline 
+3. Media armonica del score \\ 
+\hline 
+4. Puntaje máximo \\ 
+\hline 
+5. Varianza de puntaje \\ 
+\hline 
+6.  \\ 
+\hline 
+Agregadores \\ 
+\hline 
+Máximo \\ 
+\hline 
+Varianza \\ 
+\hline 
+Suma \\ 
+\hline 
+\end{tabular} 
+
+
+Este predictor está evaluado comparado con 10.000 queries == individual and combinated
 
 
 \section{Wand \textit{multi-threading}}
