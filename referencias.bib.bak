@@ -334,6 +334,28 @@
   Url                      = { http://dpavez.cl/articulo }
 }
 
+@InProceedings{Tonellotto:2011,
+  Title                    = {Query Efficiency Prediction for Dynamic Pruning},
+  Author                   = {Tonellotto, Nicola and Macdonald, Craig and Ounis, Iadh},
+  Booktitle                = {Proceedings of the 9th Workshop on Large-scale and Distributed Informational Retrieval},
+  Year                     = {2011},
+
+  Address                  = {New York, NY, USA},
+  Pages                    = {3--8},
+  Publisher                = {ACM},
+  Series                   = {LSDS-IR '11},
+
+  Acmid                    = {2064734},
+  Doi                      = {10.1145/2064730.2064734},
+  ISBN                     = {978-1-4503-0959-2},
+  Keywords                 = {dynamic pruning, efficiency, predictors},
+  Location                 = {Glasgow, Scotland, UK},
+  Numpages                 = {6},
+  Owner                    = {danilobustos},
+  Timestamp                = {2014.11.01},
+  Url                      = {http://doi.acm.org/10.1145/2064730.2064734}
+}
+
 @Article{Turtle:1995,
   Title                    = {Query Evaluation: Strategies and Optimizations},
   Author                   = {Turtle, Howard and Flood, James},
