@@ -84,64 +84,65 @@
 \RequirePackage{thesis_em}
 %--------Listing de código
 \RequirePackage{listings}
-%\lstset{ 
-%    %language=[Visual]C++,
-%    language=java,
-%    frame=Ltb,
-%    framerule=0pt,
-%    aboveskip=0.2cm,%0.5cm
-%    framextopmargin=1pt, %3pt
-%    framexbottommargin=1pt, %4pt
-%    framexleftmargin=0cm,
-%    framesep=0pt,
-%    rulesep=.4pt,
-%    backgroundcolor=\color{gray97},
-%    rulesepcolor=\color{black},
-%    %
-%    stringstyle=\ttfamily,
-%    showstringspaces=false,
-%    basicstyle=\scriptsize\ttfamily, %\small \scriptsize
-%    commentstyle=\color{gray45},
-%    keywordstyle=\bfseries,
-%    %
-%    numbers=left,
-%    numbersep=4pt,%15pt
-%    numberstyle=\tiny,
-%    numberfirstline=false,
-%    breaklines=true,
-%    %
-%    tabsize=4,
-%    upquote=true,
-%    extendedchars=true,
-%    morecomment=[s]{/**\<}{*/},
-%    morecomment=[s]{/*}{*/},
-%%    morekeywords={¿,?},
-%}
-% % MODIFICADO PARA COLOCAR CÓDIOGO JAVA
+\lstset{ 
+     language=[Visual]C++,
+     language=java,
+    frame=Ltb,
+    framerule=0pt,
+    aboveskip=0.2cm,%0.5cm
+    framextopmargin=1pt, %3pt
+    framexbottommargin=1pt, %4pt
+    framexleftmargin=0cm,
+    framesep=0pt,
+    rulesep=.4pt,
+    backgroundcolor=\color{gray97},
+    rulesepcolor=\color{black},
+    %
+    stringstyle=\ttfamily,
+    showstringspaces=false,
+    basicstyle=\scriptsize\ttfamily, %\small \scriptsize
+    commentstyle=\color{gray45},
+    keywordstyle=\bfseries,
+    %
+    numbers=left,
+    numbersep=4pt,%15pt
+    numberstyle=\tiny,
+    numberfirstline=false,
+    breaklines=true,
+    %
+    tabsize=4,
+    upquote=true,
+    extendedchars=true,
+    morecomment=[s]{/**\<}{*/},
+    morecomment=[s]{/*}{*/},
+%    morekeywords={¿,?},
+}
+% MODIFICADO PARA COLOCAR CÓDIOGO JAVA
 \usepackage{listings}
 \usepackage{color}
 
 \definecolor{dkgreen}{rgb}{0,0.6,0}
 \definecolor{gray}{rgb}{0.5,0.5,0.5}
 \definecolor{mauve}{rgb}{0.58,0,0.82}
-\lstset{frame=single,
-  captionpos=b, 
-  language=Java,
-  numbers=left,
-  aboveskip=3mm,
-  belowskip=3mm,
-  showstringspaces=false,
-  columns=flexible,
-  basicstyle={\small\ttfamily},
+
+%\lstset{frame=single,
+%  captionpos=b, 
+%  language=Java,
+%  numbers=left,
+%  aboveskip=3mm,
+%  belowskip=3mm,
+%  showstringspaces=false,
+%  columns=flexible,
+%  basicstyle={\small\ttfamily},
   %numbers=none,
-  numberstyle=\tiny\color{gray},
-  keywordstyle=\color{blue},
-  commentstyle=\color{dkgreen},
-  stringstyle=\color{mauve},
-  breaklines=true,
-  breakatwhitespace=true,
-  tabsize=3
-}
+%  numberstyle=\tiny\color{gray},
+%  keywordstyle=\color{blue},
+%  commentstyle=\color{dkgreen},
+%  stringstyle=\color{mauve},
+%  breaklines=true,
+%  breakatwhitespace=true,
+%  tabsize=3
+%}
 
 \usepackage{color}
 \definecolor{gray97}{gray}{.97}
