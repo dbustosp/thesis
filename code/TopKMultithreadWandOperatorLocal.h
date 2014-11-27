@@ -1,37 +1,10 @@
-#ifndef _TOPK_MULTITHREAD_WAND_OPERATOR_LOCAL_H
-#define _TOPK_MULTITHREAD_WAND_OPERATOR_LOCAL_H
-
-#include <iostream>
-#include <stdio.h>
-#include <stdlib.h>
-#include <vector>
-#include <algorithm>
-#include <pthread.h>
-
-#include "TopKWandOperator.h"
-
-#include "Wand.h"
-#include "WandFrecs.h"
-#include "WandTfidf.h"
-#include "WandBM25.h"
-
-#include "MultiListOperator.h"
-#include "PartitionedInvertedIndex.h"
-#include "PayloadList.h"
-#include "InvertedList.h"
-#include "BufferedList.h"
-
-#include "NanoTimer.h"
-
-using namespace std;
-
-class TopKMultithreadWandOperatorLocal : public MultiListOperator{
+class TopKMultithreadWandOperatorLocal {
 	private:
-		unsigned int max_terms;		
-		unsigned int k;
-		unsigned int max_particiones;
-		PartitionedInvertedIndex *indice;
-		
+		unsigned int k; // Variable que controla el tamaño del heap
+		unsigned int max_particiones; // Máximo de particiones del índice invertido (se usa 16)
+		PartitionedInvertedIndex *indice; // Indice invertido particionado
+	
+	// Clase anidada que se utiliza para ordenar los documentos dentro del heap
 	class Comparador : public std::binary_function<const ResultObject*, const ResultObject*, bool> {
 		public:
 			Comparador(){ }
@@ -43,54 +16,39 @@ class TopKMultithreadWandOperatorLocal : public MultiListOperator{
 			}
 	};
 	
-	Comparador *comp;
+	Comparador *comp; // Objeto Comparador
 	
 	//parts x terms > 256
+	// Variables que se utilizan como buffer de las listas invertidas
 	const static unsigned int n_buffers = 1024;
 	const static unsigned int buffer_size = 256;
 	unsigned int **buffers;
 
 	public:
+		double milis_init; //tiempo preparacion de threads antes de procesar la query
+		double milis_threads; //tiempo de los threads en procesar la query (desde create hasta join)
+		double milis_merge; //tiempo que se demora en el merge de documento
+		double milis_inner; //tiempo interno del thread mas largo (en el proceso de paralelización)
+		
+		unsigned int inserts; // Variable que se utiliza para contar las inserciones de documentos al heap
+		double initial_threshold; // Valor del threshold inicial
 	
-		//tiempo preparacion de threads
-		double milis_init;
-		//tiempo threads (desde create hasta join)
-		double milis_threads;
-		//tiempo merge
-		double milis_merge;
-		//tiempo interno del thread mas largo
-		double milis_inner;
+		static double *milis_each_thread; // Variable que se utiliza para guardar los tiempos de cuánto se demoró cada thread
 		
-		unsigned int inserts;
-		double initial_threshold;
+		pthread_t t[max_threads]; // Arreglo de pthread_t para los hilos de ejecución
+		int pids[max_threads]; // Arreglo donde se guardarán los identificadores de los arreglos
+		unsigned int *indices; 
 		
-		//Esto es estatico para los arreglos, pero el numero real de threads esta limitado por max_particiones
-		static const unsigned int max_threads = 128;
-	
-		static double *milis_each_thread;
+		static TopKWandOperator **arr_ops; // Arreglo de operadores. Cada uno de los threads tendrá un operador (1thread)
+		static vector<ResultObject*> **arr_results; // vectores de resultados, por thread
+		static map<unsigned int, float> **mapas_ubs; // Variable que mapea cada término a su upper_bound
+		static QueryObject ***query_terms; //Este es un arreglo de punteros a cada query 
 		
-		pthread_t t[max_threads];
-		int pids[max_threads];
-		unsigned int *indices;
-		
-		//arreglo de operadores y vectores de resultados, por thread
-		static TopKWandOperator **arr_ops;
-		static vector<ResultObject*> **arr_results;
-		
-		static map<unsigned int, float> **mapas_ubs;
-		
-		//Este es un arreglo de punteros a cada query 
-		//query_terms[thread][parte] es el puntero a ese QueryObject
-		static QueryObject ***query_terms;
-		
-		static unsigned int partes;
+		static unsigned int partes; // Partes en la que se dividirá cada query
 		
 		TopKMultithreadWandOperatorLocal(PartitionedInvertedIndex *_indice, map<unsigned int, unsigned int> *_mapa_docs, map<unsigned int, float> **_mapas_ubs, unsigned int _k = 10, unsigned int _max_terms = 128);
 		~TopKMultithreadWandOperatorLocal();
-		virtual void execute(QueryObject *query, vector<ResultObject*> &resul);
-		
-		void setInitialThreshold(double _initial_threshold){ initial_threshold = _initial_threshold;}
-		unsigned int getInserts(){ return inserts;}
-};
 
-#endif
+		// Método que se encargará de resolver la query. Los resultados quedarán en la variable result
+		virtual void execute(QueryObject *query, vector<ResultObject*> &result); 
+};
