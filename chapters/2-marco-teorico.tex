@@ -25,7 +25,7 @@ La diferencia entre un motor de búsqueda vertical y uno general, es que el prim
 
 \section{\'Indice invertido}
 \label{marco:ii}
-Es una estructura de datos que contiene todos los términos (palabras) encontrados por el \textit{crawler}. A cada uno de los términos, está asociado una lista de documentos (páginas Web) que contienen dicho término. Adicionalmente, se almacena información que permita realizar el \textit{ranking} de documentos para generar la respuesta a las \textit{queries} que llegan al sistema, por ejemplo, el número de veces que aparece el término en el documento. Esta lista recibe el nombre de lista invertida.
+Es una estructura de datos que contiene todos los términos (palabras) encontrados por el \textit{crawler}. A cada uno de los términos está asociado una lista de documentos (páginas Web) que contienen dicho término. Adicionalmente, se almacena información que permita realizar el \textit{ranking} de documentos para generar la respuesta a las \textit{queries} que llegan al sistema, por ejemplo, el número de veces que aparece el término en el documento. Esta lista recibe el nombre de lista invertida.
 
 Para construir un índice invertido se debe procesar cada palabra que existe en un documento Web, registrando su posición y la cantidad de veces que éste se repite. Cuando se procesa el término con la información asociada correspondiente, se almacena en el índice invertido (ver Figura \ref{fig:invertedindex}).
 
@@ -51,48 +51,7 @@ En este tipo de estrategias se evalúa la contribución de todos los términos d
 \subsection{Consideraciones}
 Cuando se tiene un índice invertido pequeño, las estrategias TAAT rinden adecuadamente, sin embargo cuando los índices invertidos son de gran tamaño las estrategias DAAT poseen dos grandes ventajas: (a) Requieren menor cantidad de memoria para su ejecución, ya que el puntaje parcial por documento no necesita ser guardado y (b) Explotan el paralismo de entrada y salida (I/O) más eficientemente procesando las listas invertidas en diferentes discos simultáneamente. Además existen técnicas para optimizar el proceso de las estrategias recientemente descritas \citep{Turtle:1995}.
 
-
-\section{Operaciones sobre listas invertidas}
-\label{marco:osli}
-Cuando una \textit{query} llega al motor de búsqueda, cada término tiene asociado una lista con todos los documentos en los cuales aparece. El sistema debe decidir qué documentos se analizarán para obtener la respuesa con el conjunto de los K mejores.
-A continuación se presentan las diferentes formas de operar las listas invertidas de una \textit{query}.
-
-\subsection{\textit{OR}}
-\label{marco:or}
-Este operador toma las listas invertidas de cada uno de los términos de la \textit{query} y ejecuta la disyunción entre ellas. El resultado de este operador es una lista invertida con todos los documentos que contengan al menos un término de la \textit{query}. Finalmente, esta lista invertida se ocupará para obtener los mejores K documentos. Un simple ejemplo se muestra en la FIGURA \ref{fig:ORoperation}.
-
-\begin{figure}[tp]
-\centering
-\includegraphics[scale=.75]{images/ORoperation.png}
-\caption{Operaci\'on OR}
-\label{fig:ORoperation}
-\end{figure}
-
-\subsection{AND}
-\label{marco:and}
-Este operador ejecuta la conjunción entre las listas invertidas de los términos de una \textit{query}. Se obtiene una lista invertida con los documentos que contengan todos los términos de la \textit{query}. Se debe notar que aquí se obtiene una lista resultante de menor tamaño que la obtenida en el operador OR (Ver FIGURA \ref{fig:ANDoperation}).
-
-\begin{figure}[tp]
-\centering
-\includegraphics[scale=.75]{images/ANDoperation.png}
-\caption{Operaci\'on AND}
-\label{fig:ANDoperation}
-\end{figure}
-
-
-\subsection{WAND}
-\label{marco:wand}
-Método de evaluación de \textit{queries} para obtener eficientemente el conjunto de K documentos que mejor satisfacen una \textit{query} dada. \textit{WAND} \citep{Broder:2003} (\textit{Weak AND}) es un proceso menos estricto que el método \textit{AND} y es basado en dos niveles. Dentro del proceso de evaluación de una \textit{query}, uno de los procesos más costoso en términos de tiempo es el proceso de \textit{scoring}. Este proceso corresponde a entregarle a cada uno de los documentos analizados, un puntaje que representa la relevancia del documento para una \textit{query} dada, esto se denomina evaluación completa o cálculo del puntaje exacto del documento.
-
-El objetivo de WAND es minimizar la cantidad de evaluaciones completas de los documentos ejecutando un proceso de dos niveles. En el primer nivel se intenta omitir rápidamente grandes porciones de las listas invertida, lo que se traduce en ignorar el cálculo del puntaje exacto de grandes cantidades de documentos. El intento de omitir el cálculo completo de un documento es debido a que en motores de búsqueda a gran escala, este es un proceso que requiere de mucho tiempo para llevarse a cabo y depende de factores como la cantidad de ocurrencia del término dentro del documento, el tamaño del documento, entre otros.  
-
-En el primer nivel se itera sobre los documentos del índice invertido de cada término y se identifica candidatos usando una evaluación aproximada. En el segundo nivel, aquellos documentos candidatos son completamente evaluados y su puntaje exacto es calculado. De esta forma se obtiene el conjunto final de documentos.
-
-<Se Debe explicar de mejor forma el tema de cómo funciona WAND, con dibujo de un Heap y de listas invertidas>
-
-
-
-\section{\textit{Ranking}}
+\section{Funciones de \textit{Ranking}}
 \label{marco:ranking}
 Los sistemas de recuperación de información como los motores de búsqueda deben ejecutar un proceso el cual asigna un puntaje a documentos con respecto a una determinada \textit{query}, este proceso se denomina \textit{ranking} \citep{Baeza-Yates:2011}. Como se puede ver en la Figura \ref{fig:ranking_process}, este proceso toma como entrada la representación de las \textit{queries} y documentos, y asigna un puntaje (\textit{score}) a un documento $d_{j}$ dada una \textit{query} $q_{i}$.
 
@@ -130,6 +89,53 @@ Dada una \textit{query} $Q$ que contiene los términos $q_{1},...,q_{n}$, el \te
 $$ score(D,Q) =  \displaystyle\sum_{i=1}^n IDF(q_{i}) * \frac{f(q_{i},D)*(k+1)}{f(q_{i},D)+k * (1 - b + b * \frac{|D|}{prom(docs)})} $$
 
 donde $f(q_{i}, D)$ es la frecuencia en que aparece el término $q_{i}$ en el documento D; $|D|$ es el número de palabras o términos en el documento D; $prom(docs)$ es la media de número de palabras de los documentos en el corpus; k y b son constantes que depende de las características del corpus en el que se está haciendo la búsqueda, por lo general se asignan los valores de $k = 2$ o $k = 1.2$ y $b = 0.75$; finalmente, $IDF(q_{i})$ es la frecuencia inversa de documento para el término $q_{i}$.
+
+
+\section{Operaciones sobre listas invertidas}
+\label{marco:osli}
+Cuando una \textit{query} llega al motor de búsqueda, cada término tiene asociado una lista con todos los documentos en los cuales aparece. El sistema debe decidir qué documentos se analizarán para obtener la respuesa con el conjunto de los K mejores.
+A continuación se presentan las diferentes formas de operar las listas invertidas de una \textit{query}.
+
+\subsection{\textit{OR}}
+\label{marco:or}
+Este operador toma las listas invertidas de cada uno de los términos de la \textit{query} y ejecuta la disyunción entre ellas. El resultado de este operador es una lista invertida con todos los documentos que contengan al menos un término de la \textit{query}. Finalmente, esta lista invertida se ocupará para obtener los mejores K documentos. Un simple ejemplo se muestra en la FIGURA \ref{fig:ORoperation}.
+
+\begin{figure}[tp]
+\centering
+\includegraphics[scale=.75]{images/ORoperation.png}
+\caption{Operaci\'on OR}
+\label{fig:ORoperation}
+\end{figure}
+
+\subsection{AND}
+\label{marco:and}
+Este operador ejecuta la conjunción entre las listas invertidas de los términos de una \textit{query}. Se obtiene una lista invertida con los documentos que contengan todos los términos de la \textit{query}. Se debe notar que aquí se obtiene una lista resultante de menor tamaño que la obtenida en el operador OR (Ver FIGURA \ref{fig:ANDoperation}).
+
+\begin{figure}[tp]
+\centering
+\includegraphics[scale=.75]{images/ANDoperation.png}
+\caption{Operaci\'on AND}
+\label{fig:ANDoperation}
+\end{figure}
+
+
+\subsection{WAND}
+\label{marco:wand}
+Algoritmo de evaluación de transacciones de lectura para obtener eficientemente el conjunto de K documentos que mejor satisfacen una \textit{query} dada. \textit{WAND} \citep{Broder:2003} es un proceso menos estricto que el método \textit{AND} y está basado en dos niveles. Dentro del proceso de evaluación de una transacción de lectura, uno de los procesos más costoso en términos de tiempo es el de \textit{scoring}, que consiste en entregarle a cada uno de los documentos analizados un puntaje que representa la relevancia del documento para una \textit{query} dada, esto se denomina evaluación completa o cálculo del puntaje exacto del documento. El objetivo de WAND es minimizar la cantidad de evaluaciones completas de los documentos ejecutando un proceso de dos niveles. En el primer nivel se intenta omitir rápidamente grandes porciones de las listas invertida, lo que se traduce en ignorar el cálculo del puntaje exacto de grandes cantidades de documentos, esto porque en motores de búsqueda a gran escala, este un proceso que requiere de mucho tiempo para llevarse a cabo y depende de factores como la cantidad de ocurrencia del término dentro del documento, el tamaño del documento, entre otros.  
+
+Para llevar a cabo el algoritmo WAND y así reducir el número de documentos completamente evaluados durante el proceso de \textit{ranking} de documentos, se necesita calcular los valores estáticos de límite superior (\textit{upper-bounds}), en donde para cada uno de los términos del índice invertido, se toma la lista invertida correspondiente y se extrae el puntaje máximo de contribución de algún documento con respecto al término. El cálculo de los \textit{upper bounds} se lleva a cabo cuando se construye el índice invertido y en donde a cada término del índice se asocia el puntaje máximo que existe en la lista invertida. 
+
+WAND usa un índice invertido ordenado por los identificadores de documentos. En el primer nivel se itera sobre los documentos del índice invertido de cada término y se identifica los potenciales candidatos usando una evaluación aproximada. En el segundo nivel, aquellos documentos candidatos son completamente evaluados y su puntaje exacto es calculado. De esta forma se obtiene el conjunto final de documentos. Se utiliza un heap como estructura de datos para almacenar el conjunto de los mejores K documentos, en donde el elemento superior corresponde al documento con menor puntaje y es el que se utilizará como umbral (\textit{threshold}) para decidir si los siguientes documentos deben ser completamente evaluados o no. 
+
+En la Figura \ref{fig:proceso_wand} se puede ver un ejemplo sencillo de cómo el algoritmo Wand trabaja en la resolución de una transacción de lectura de tres términos: 'casa', 'perro' y 'gato'. Como la \textit{query} está compuesta por tres términos, existen tres punteros que recorren cada una de las listas invertidas (notar que cada puntero recorre una lista invertida diferente). Lo primero que se hace es ordenar las listas invertidas de acuerdo a los identificadores de documentos que se están apuntando, razón por la cual en la Figura \ref{fig:proceso_wand} la lista invertida de 'casa' (puntero referenciando al documento con identificador 125), aparece primero que la lista invertida de 'perro' (puntero haciendo referencia al documento con identificador 503). Luego se suma los \textit{uppers bounds} de los términos en orden hasta que se obtiene un valor mayor o igual al \textit{threshold}. De esta manera el término 'perro' es escogido como término pivote ($2.0 + 4.4 >= 5.7$) y el actual documento al cual se está apuntando es escogido como documento pivote (documento con identificador 503). Si las dos primeras listas invertidas no contienen el documento 503 entonces se procede a seleccionar el siguiente pivote, en otro caso se calcula el puntaje completo del documento. Finalmente, si el puntaje es mayor o igual al threshold, se actualiza el heap eliminando el elemento superior y se añade el nuevo documento. 
+Este algoritmo es repetido hasta que no hayan más documentos a procesar o hasta que no exista un documento que supere el actual threshold. De esta manera se evita procesar las listas completas \citep{Blanco:2010}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=.75]{images/proceso_wand.png}
+\caption{Ejemplo de ejecución de algoritmo  \textit{Wand}}
+\label{fig:proceso_wand}
+\end{figure}
 
 
 \section{Scheduling en motores de búsqueda}
