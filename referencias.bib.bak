@@ -47,6 +47,17 @@
   Timestamp                = {2014.10.27}
 }
 
+@Book{Baeza-Yates:2008,
+  Title                    = {Cómo funciona la Web},
+  Author                   = {Baeza-Yates, R. A. and Arenas, Marcelo and Gutiérrez, Claudio and Hurtado, Carlos and Marín Mauricio and Navarro, Gonzalo and Piquer, José and Rodríguez, Andrea and Ruiz-del-Solar, Javier and Velasco, Javier},
+  Editor                   = {Claudio Gutiérrez Gallardo},
+  Publisher                = {Centro de Investigación de la Web},
+  Year                     = {2008},
+
+  Owner                    = {danilobustos},
+  Timestamp                = {2014.11.30}
+}
+
 @Book{Baeza-Yates:2011,
   Title                    = {Modern Information Retrieval},
   Author                   = {Baeza-Yates, Ricardo A. and Ribeiro-Neto, Berthier},
@@ -58,6 +69,54 @@
   ISBN                     = {020139829X},
   Owner                    = {danilobustos},
   Timestamp                = {2014.10.27}
+}
+
+@Article{Barroso:2003,
+  Title                    = {Web Search for a Planet: The Google Cluster Architecture},
+  Author                   = {Barroso, Luiz Andr{\'e} and Dean, Jeffrey and H\"{o}lzle, Urs},
+  Journal                  = {IEEE Micro},
+  Year                     = {2003},
+
+  Month                    = mar,
+  Number                   = {2},
+  Pages                    = {22--28},
+  Volume                   = {23},
+
+  Acmid                    = {776716},
+  Address                  = {Los Alamitos, CA, USA},
+  Doi                      = {10.1109/MM.2003.1196112},
+  ISSN                     = {0272-1732},
+  Issue_date               = {March 2003},
+  Numpages                 = {7},
+  Owner                    = {danilobustos},
+  Publisher                = {IEEE Computer Society Press},
+  Timestamp                = {2014.11.30},
+  Url                      = {http://dx.doi.org/10.1109/MM.2003.1196112}
+}
+
+@Article{Blanco:2010,
+  Title                    = {Probabilistic Static Pruning of Inverted Files},
+  Author                   = {Blanco, Roi and Barreiro, Alvaro},
+  Journal                  = {ACM Trans. Inf. Syst.},
+  Year                     = {2010},
+
+  Month                    = jan,
+  Number                   = {1},
+  Pages                    = {1:1--1:33},
+  Volume                   = {28},
+
+  Acmid                    = {1658378},
+  Address                  = {New York, NY, USA},
+  Articleno                = {1},
+  Doi                      = {10.1145/1658377.1658378},
+  ISSN                     = {1046-8188},
+  Issue_date               = {January 2010},
+  Keywords                 = {Pruning, compression, efficiency, inverted files, probabilistic models},
+  Numpages                 = {33},
+  Owner                    = {danilobustos},
+  Publisher                = {ACM},
+  Timestamp                = {2014.11.28},
+  Url                      = {http://doi.acm.org/10.1145/1658377.1658378}
 }
 
 @Book{Borodin:1998,
@@ -360,6 +419,25 @@
   Volume                   = { 1 },
 
   Url                      = { http://dpavez.cl/inproceedings }
+}
+
+@InCollection{Rojas:2013,
+  Title                    = {Efficient Parallel Block-Max WAND Algorithm},
+  Author                   = {Rojas, Oscar and Gil-Costa, Veronica and Marin, Mauricio},
+  Booktitle                = {Euro-Par 2013 Parallel Processing},
+  Publisher                = {Springer Berlin Heidelberg},
+  Year                     = {2013},
+  Editor                   = {Wolf, Felix and Mohr, Bernd and an Mey, Dieter},
+  Pages                    = {394-405},
+  Series                   = {Lecture Notes in Computer Science},
+  Volume                   = {8097},
+
+  Doi                      = {10.1007/978-3-642-40047-6_41},
+  ISBN                     = {978-3-642-40046-9},
+  Language                 = {English},
+  Owner                    = {danilobustos},
+  Timestamp                = {2014.11.24},
+  Url                      = {http://dx.doi.org/10.1007/978-3-642-40047-6_41}
 }
 
 @Article{Articulo:2013,
