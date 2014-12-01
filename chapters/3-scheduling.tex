@@ -1,12 +1,18 @@
 \chapter{Estrategias de planificación de queries}
 \label{cap:epq}
 
+Decir por lotes
 
-\section{Predicción del tiempo de respuesta a \textit{queries} en un motor de búsqueda}
-\label{scheduling:ptrq}
-Conocer de antemano la eficiencia de una \textit{query} es una ventaja importante para usar técnicas efectivas de \textit{scheduling} de \textit{queries} en motores de búsqueda. Existen estudios en los cuales la eficiencia es inferida usando \textit{clarity score} \citep{Cronen-Townsend:2002}, que es una forma para evaluar la pérdida de ambigüedad de una query con respecto a la colección. En \citep{He:2004} se propone un conjunto de predictores para la eficiencia de cada \textit{query}. Técnicas de aprendizaje de máquina también han sido estudiadas para predecir la eficiencia de \textit{queries} \citep{Si:2002}. Todos los estudios mencionados anteriormente se han centrado en la efectividad para ser predicciones. La eficiencia también ha sido utilizada para predecir el tiempo de respuesta de una query, identificando las razones por las que ésta puede ser resuelta ineficientemente y evaluando estos factores para predecir el comportamiento de futuras queries \citep{Tonellotto:2011}.
+\section{Predicción de rendimiendo de transacciones de lectura}
+\label{scheduling:prtl}
+El rendimiento (\textit{performance}) de una consulta puede medirse de dos formas: Efectividad y eficiencia. La efectividad tiene relación con la calidad de los documentos extraídos para una cierta consulta y la eficiencia corresponde al tiempo que conlleva procesarla. Conocer de antemano el rendimiento es una ventaja importante para poder usar técnicas efectivas de planificación en motores de búsqueda. Por ejemplo, en el contexto de procesamiento paralelo de \textit{queries} por lotes (\textit{batches}) se pueden crear grupos de consultas que posean rendimientos parecidos, así se tiende a disminuir tanto el desbalance de carga entre los procesadores como el tiempo en procesar el \textit{batch}.
 
-En el predictor propuesto en \citep{Macdonald:2012} está basado en estadísticos  disponibles de los términos de la query. 
+Existen estudios en los cuales el rendimiento es inferido usando \textit{clarity score} \citep{Cronen-Townsend:2002}, que es una forma para evaluar la pérdida de ambigüedad de una transacción con respecto a la colección. En \citep{He:2004} se propone un conjunto de predictores para el rendimiento de cada consulta. Técnicas de aprendizaje de máquina también han sido estudiadas para predecir el rendimiento de transacciones de lectura \citep{Si:2002}. Todos los estudios mencionados anteriormente se han centrado en la efectividad para ser predicciones de rendimento de \textit{queries}. La eficiencia también ha sido utilizada para predecir el rendimiento de una consulta, identificando las principales razones que tienen impacto sobre el tiempo de respuesta y evaluando estos factores para predecir el comportamiento de futuras consultas \citep{Tonellotto:2011}.
+
+En \citep{Macdonald:2012} se propone un método de predicción de tiempo de respuesta de una transacción de lectura basado en datos estadísticos disponibles en las respectivas listas invertidas de los términos.
+
+// Los estadísticos son: describir los estadísticos
+  
 
 \begin{tabular}{|l|}
 \hline 
