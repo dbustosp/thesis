@@ -9,7 +9,7 @@ El rendimiento (\textit{performance}) de una consulta puede medirse de dos forma
 
 Existen estudios en los cuales el rendimiento es inferido usando \textit{clarity score} \citep{Cronen-Townsend:2002}, que es una forma para evaluar la pérdida de ambigüedad de una transacción con respecto a la colección. En \citep{He:2004} se propone un conjunto de predictores para el rendimiento de cada consulta. Técnicas de aprendizaje de máquina también han sido estudiadas para predecir el rendimiento de transacciones de lectura \citep{Si:2002}. Todos los estudios mencionados anteriormente se han centrado en la efectividad para ser predicciones de rendimento de \textit{queries}. La eficiencia también ha sido utilizada para predecir el rendimiento de una consulta, identificando las principales razones que tienen impacto sobre el tiempo de respuesta y evaluando estos factores para predecir el comportamiento de futuras consultas \citep{Tonellotto:2011}.
 
-En \citep{Macdonald:2012} se propone un método de predicción de tiempo de respuesta de una transacción de lectura basado en datos estadísticos disponibles en las respectivas listas invertidas de los términos. Cuando una consulta llega al sistema, para cada uno de los términos de esta \textit{query} y desde su propia lista invertida se calcula los siguientes estadísticos $s(t)$:
+En \citep{Macdonald:2012} se propone un método de predicción de tiempo de respuesta para transacciones de lectura basado en datos estadísticos disponibles en las respectivas listas invertidas de los términos. La idea del método es que para cada consulta que llega al sistema, se tomen los términos y para cada uno de ellos calcular desde su propia lista invertida los siguientes estadísticos $s(t)$:
 
 \begin{list}{}{}
 	\item \textbf{Puntaje medio aritmético}. Se calcula la media aritmética del puntaje de los documentos. 
@@ -36,38 +36,11 @@ En \citep{Macdonald:2012} se propone un método de predicción de tiempo de resp
 	
 	\item \textbf{Frecuencia inversa de documento del término}. Se calcula el \textit{idf} del término $t$.
 	
-	
+	\item \textbf{Ultimo estadístico}. Pregúntarselo a Victor.
 \end{list}
 
+Cada uno de los 14 estadísticos mencionados anteriormente está relacionados linealmente con el tiempo que se demora un motor de búsqueda en resolver una transacción de lectura y son la base para la implementación predictor que está basado en un modelo de regresión lineal \citep{Chambers:1991}. En el siguiente capítulo se muestra el detalle sobre la implementación del modelo predictor y los resultados obtenidos. 
 
-\begin{tabular}{|l|}
-\hline 
-Estadístico del término s(t) \\ 
-\hline 
-1. Media aritmética del score \\ 
-\hline 
-2. Media geométrica del score \\ 
-\hline 
-3. Media armonica del score \\ 
-\hline 
-4. Puntaje máximo \\ 
-\hline 
-5. Varianza de puntaje \\ 
-\hline 
-6.  \\ 
-\hline 
-Agregadores \\ 
-\hline 
-Máximo \\ 
-\hline 
-Varianza \\ 
-\hline 
-Suma \\ 
-\hline 
-\end{tabular} 
-
-
-Este predictor está evaluado comparado con 10.000 queries == individual and combinated
 
 
 \section{Wand \textit{multi-threaded}}

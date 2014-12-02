@@ -195,6 +195,19 @@
   Url                      = {http://doi.acm.org/10.1145/956863.956944}
 }
 
+@Book{Chambers:1991,
+  Title                    = {Statistical Models in S},
+  Author                   = {Chambers, John M.},
+  Publisher                = {CRC Press, Inc.},
+  Year                     = {1991},
+
+  Address                  = {Boca Raton, FL, USA},
+
+  ISBN                     = {0412052911},
+  Owner                    = {danilobustos},
+  Timestamp                = {2014.12.02}
+}
+
 @Book{Croft:2009,
   Title                    = {Search Engines: Information Retrieval in Practice},
   Author                   = {Croft, Bruce and Metzler, Donald and Strohman, Trevor},
