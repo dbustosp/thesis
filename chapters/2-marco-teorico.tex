@@ -38,18 +38,20 @@ Para construir un índice invertido \citep{Baeza-Yates:2011, Salton:2003} se deb
 
 El tamaño del índice invertido crece rápido y eventualmente la memoria RAM se agotará antes de procesar toda la colección de documentos. Cuando la memoria RAM se agota, se almacena en disco el índice parcial hasta aquel momento, se libera la memoria y se continúa con el proceso. Además, se debe hacer un \textit{merge} de los índices parciales uniéndo las listas invertidas de cada uno de los términos involucrados. Es por esto que se han desarrollado algunas técnicas de compresión con el objetivo de guardar de una manera más eficiente el índice invertido \citep{Arroyuelo:2013, Baeza-Yates:2011, Yan:2009}.
 
-\section{Estrategias de evaluaci\'on de \textit{queries}}
+\section{Estrategias de evaluaci\'on de transacciones de lectura}
 \label{marco:eeq}
-Existen dos principales estrategias para encontrar los documentos y calcular sus respectivos puntajes de una determinada \textit{query}. Estas son (a) \textit{term-at-a-time} (TAAT) y (b) \textit{document-at-a-time} (DAAT).
+Una de las tareas que un motor de búsqueda debe hacer para resolver una consulta es calcular el puntaje o \textit{score} para aquellos documentos relevantes en la consulta y así poder extraer los mejores $k$ documentos. Existen dos principales estrategias para recorrer las listas invertidas y calcular el puntaje de los documentos para una determinada consulta. Estas son (a) \textit{term-at-a-time} \citep{Buckley:1985, Turtle:1995} y (b) \textit{document-at-a-time} \citep{Broder:2003, Turtle:1995}.
 
-\subsection{TAAT}
-Este tipo de estrategia procesa los términos de las \textit{queries} uno a uno y acumula el puntaje parcial de los documentos. Las listas invertidas asociadas a un término son procesadas secuencialmente, esto significa que los documentos presente en la lista invertida del término $t_{i}$, obtienen un puntaje parcial antes de comenzar el procesamiento del término $t_{i+1}$. La secuencialidad en este caso es con respecto a los términos contenidos en la \textit{query}.
+\subsection{Term at a time}
+Abreviada TAAT, este tipo de estrategia procesa los términos de las consultas una a una y acumula el puntaje parcial de los documentos. Las listas invertidas asociadas a un término son procesadas secuencialmente, esto significa que todos los documentos presentes en la lista invertida del término $t_{i}$ obtienen un puntaje parcial antes de comenzar el procesamiento del término $t_{i+1}$. La secuencialidad en este caso es con respecto a los términos contenidos en la transacción de lectura.
 
-\subsection{DAAT}
-En este tipo de estrategias se evalúa la contribución de todos los términos de la \textit{query} con respecto a un documento antes de evaluar el siguiente documento. Las listas invertidas de cada término de la \textit{query} son procesadas en paralelo, de modo que el puntaje del documento $d_{j}$ se calcula considerando todos los términos de la \textit{query} al mismo tiempo. Una vez que se obtiene el puntaje del documento $d_{j}$ para la \textit{query} completa, se procede al procesamiento del documento $d_{j+1}$.
+\subsection{Document at a time}
+Abreviada DAAT, en este tipo de estrategias se evalúa la contribución de todos los términos de la \textit{query} con respecto a un documento antes de evaluar el siguiente documento. Las listas invertidas de cada término de la consulta son procesadas en paralelo, de modo que el puntaje del documento $d_{j}$ se calcula considerando todos los términos de la transacción de lectura al mismo tiempo. Una vez que se obtiene el puntaje del documento $d_{j}$ para la \textit{query} completa, se procede al procesamiento del documento $d_{j+1}$.
 
 \subsection{Consideraciones}
 Cuando se tiene un índice invertido pequeño, las estrategias TAAT rinden adecuadamente, sin embargo cuando los índices invertidos son de gran tamaño las estrategias DAAT poseen dos grandes ventajas: (a) Requieren menor cantidad de memoria para su ejecución, ya que el puntaje parcial por documento no necesita ser guardado y (b) Explotan el paralismo de entrada y salida (I/O) más eficientemente procesando las listas invertidas en diferentes discos simultáneamente. Además existen técnicas para optimizar el proceso de las estrategias recientemente descritas \citep{Turtle:1995}.
+
+
 
 \section{Funciones de \textit{Ranking}}
 \label{marco:ranking}

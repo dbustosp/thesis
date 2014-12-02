@@ -195,6 +195,27 @@
   Url                      = {http://doi.acm.org/10.1145/956863.956944}
 }
 
+@InProceedings{Buckley:1985,
+  Title                    = {Optimization of Inverted Vector Searches},
+  Author                   = {Buckley, Chris and Lewit, Alan F.},
+  Booktitle                = {Proceedings of the 8th Annual International ACM SIGIR Conference on Research and Development in Information Retrieval},
+  Year                     = {1985},
+
+  Address                  = {New York, NY, USA},
+  Pages                    = {97--110},
+  Publisher                = {ACM},
+  Series                   = {SIGIR '85},
+
+  Acmid                    = {253515},
+  Doi                      = {10.1145/253495.253515},
+  ISBN                     = {0-89791-159-8},
+  Location                 = {Montreal, Quebec, Canada},
+  Numpages                 = {14},
+  Owner                    = {danilobustos},
+  Timestamp                = {2014.12.02},
+  Url                      = {http://doi.acm.org/10.1145/253495.253515}
+}
+
 @Book{Chambers:1991,
   Title                    = {Statistical Models in S},
   Author                   = {Chambers, John M.},
