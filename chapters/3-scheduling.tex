@@ -9,10 +9,36 @@ El rendimiento (\textit{performance}) de una consulta puede medirse de dos forma
 
 Existen estudios en los cuales el rendimiento es inferido usando \textit{clarity score} \citep{Cronen-Townsend:2002}, que es una forma para evaluar la pérdida de ambigüedad de una transacción con respecto a la colección. En \citep{He:2004} se propone un conjunto de predictores para el rendimiento de cada consulta. Técnicas de aprendizaje de máquina también han sido estudiadas para predecir el rendimiento de transacciones de lectura \citep{Si:2002}. Todos los estudios mencionados anteriormente se han centrado en la efectividad para ser predicciones de rendimento de \textit{queries}. La eficiencia también ha sido utilizada para predecir el rendimiento de una consulta, identificando las principales razones que tienen impacto sobre el tiempo de respuesta y evaluando estos factores para predecir el comportamiento de futuras consultas \citep{Tonellotto:2011}.
 
-En \citep{Macdonald:2012} se propone un método de predicción de tiempo de respuesta de una transacción de lectura basado en datos estadísticos disponibles en las respectivas listas invertidas de los términos.
+En \citep{Macdonald:2012} se propone un método de predicción de tiempo de respuesta de una transacción de lectura basado en datos estadísticos disponibles en las respectivas listas invertidas de los términos. Cuando una consulta llega al sistema, para cada uno de los términos de esta \textit{query} y desde su propia lista invertida se calcula los siguientes estadísticos $s(t)$:
 
-// Los estadísticos son: describir los estadísticos
-  
+\begin{list}{}{}
+	\item \textbf{Puntaje medio aritmético}. Se calcula la media aritmética del puntaje de los documentos. 
+	
+	\item \textbf{Puntaje medio geométrico}. Se calcula la media geométrica del puntaje de los documentos.
+
+	\item \textbf{Puntaje medio harmónico}.  Se calcula la media harmónica del puntaje de los documentos..
+
+	\item \textbf{Máximo puntaje}. Se obtiene el puntaje máximo perteneciente a algún documento dentro de la lista invertida. En otras palabras, se obtiene el \textit{upper bound} $UB_t$ de la lista. 
+
+	\item \textbf{Varianza del puntaje}. Se extrae la varianza de puntaje de los documentos desde la lista invertida del término $t$. 
+	
+	\item \textbf{Número de documentos}. Se calcula el largo de la lista invertida. 
+
+	\item \textbf{Número de documentos con puntaje máximo}. Se calcula el número de documentos que tienen el puntaje máximo dentro en la lista invertida del término $t$. 
+	
+	\item \textbf{Número de documentos mayor a la media}. Se extrae el número de documentos que sobrepasa en puntaje al puntaje promedio. 
+	
+	\item \textbf{Número de documentos dentro del 5\% más alto}. Se obtiene el número de documentos cuyos puntajes están dentro del 5\% superior dentrl de la lista invertida. 
+	
+	\item \textbf{Número de documentos dentro del 5\% del umbral (\textit{threshold})}. Se calcula el número de documentos cuyos puntaje están dentro del 5\% superior o inferior al umbral. Recordar que el \textit{threshold} es el puntaje de documento más bajo dentro del conjunto de los \textit{top-K}.
+	
+	\item \textbf{Número de inserciones en el conjunto de los mejores K documentos}. Para obtener este estadístico se asume que el término $t$ es una consulta con un solo término, se resuelve esta \textit{query} con el método \textit{Wand}  y se calcula el número de inserciones de documentos que se hizo al \textit{heap}. Recordar que las inserciones al \textit{heap} ocurren cuando el puntaje aproximado del documento supera el puntaje más bajo que en el \textit{heap} en ese momento (umbral o \textit{threshold}).
+	
+	\item \textbf{Frecuencia inversa de documento del término}. Se calcula el \textit{idf} del término $t$.
+	
+	
+\end{list}
+
 
 \begin{tabular}{|l|}
 \hline 
