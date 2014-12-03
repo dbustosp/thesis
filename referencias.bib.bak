@@ -490,6 +490,26 @@
   Url                      = { http://dpavez.cl/inproceedings }
 }
 
+@InProceedings{Persin:1994,
+  Title                    = {Document Filtering for Fast Ranking},
+  Author                   = {Persin, Michael},
+  Booktitle                = {Proceedings of the 17th Annual International ACM SIGIR Conference on Research and Development in Information Retrieval},
+  Year                     = {1994},
+
+  Address                  = {New York, NY, USA},
+  Pages                    = {339--348},
+  Publisher                = {Springer-Verlag New York, Inc.},
+  Series                   = {SIGIR '94},
+
+  Acmid                    = {188597},
+  ISBN                     = {0-387-19889-X},
+  Location                 = {Dublin, Ireland},
+  Numpages                 = {10},
+  Owner                    = {danilobustos},
+  Timestamp                = {2014.12.03},
+  Url                      = {http://dl.acm.org/citation.cfm?id=188490.188597}
+}
+
 @InCollection{Rojas:2013,
   Title                    = {Efficient Parallel Block-Max WAND Algorithm},
   Author                   = {Rojas, Oscar and Gil-Costa, Veronica and Marin, Mauricio},
