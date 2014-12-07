@@ -427,6 +427,28 @@
   Url                      = {http://dx.doi.org/10.1007/978-3-540-30213-1_5}
 }
 
+@InProceedings{Jeon:2014,
+  Title                    = {Predictive Parallelization: Taming Tail Latencies in Web Search},
+  Author                   = {Jeon, Myeongjae and Kim, Saehoon and Hwang, Seung-won and He, Yuxiong and Elnikety, Sameh and Cox, Alan L. and Rixner, Scott},
+  Booktitle                = {Proceedings of the 37th International ACM SIGIR Conference on Research \&\#38; Development in Information Retrieval},
+  Year                     = {2014},
+
+  Address                  = {New York, NY, USA},
+  Pages                    = {253--262},
+  Publisher                = {ACM},
+  Series                   = {SIGIR '14},
+
+  Acmid                    = {2609572},
+  Doi                      = {10.1145/2600428.2609572},
+  ISBN                     = {978-1-4503-2257-7},
+  Keywords                 = {parallelism, query execution time prediction, tail latency},
+  Location                 = {Gold Coast, Queensland, Australia},
+  Numpages                 = {10},
+  Owner                    = {danilobustos},
+  Timestamp                = {2014.12.07},
+  Url                      = {http://doi.acm.org/10.1145/2600428.2609572}
+}
+
 @InProceedings{Macdonald:2012,
   Title                    = {Learning to Predict Response Times for Online Query Scheduling},
   Author                   = {Macdonald, Craig and Tonellotto, Nicola and Ounis, Iadh},
