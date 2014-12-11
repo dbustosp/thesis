@@ -5,18 +5,19 @@ Decir por lotes
 
 \section{Predicción de rendimiendo de transacciones de lectura}
 \label{scheduling:prtl}
-Conocer de antemano el rendimiento es una ventaja importante para poder usar técnicas efectivas de planificación en motores de búsqueda. Por ejemplo, en el contexto de procesamiento paralelo de \textit{queries} por lotes (\textit{batches}) se pueden crear grupos de consultas que posean rendimientos parecidos, así se tiende a disminuir tanto el desbalance de carga entre los procesadores como el tiempo en procesar el \textit{batch}.
+Conocer de antemano la eficiencia de una consulta es una ventaja importante para poder usar técnicas efectivas de planificación en motores de búsqueda. Por ejemplo, en el contexto de procesamiento paralelo de \textit{queries} por lotes (\textit{batches}) se pueden crear grupos de consultas que posean tiempos de respuesta parecidos, así se tiende a disminuir tanto el desbalance de carga entre los procesadores como el tiempo en procesar el \textit{batch} completo.
+A continuación se presentan los métodos predictores implementados en el siguiente trabajo de tesis. 
 
-Existen estudios en los cuales el rendimiento es inferido usando \textit{clarity score} \citep{Cronen-Townsend:2002}, que es una forma para evaluar la pérdida de ambigüedad de una transacción con respecto a la colección. En \citep{He:2004} se propone un conjunto de predictores para el rendimiento de cada consulta. Técnicas de aprendizaje de máquina también han sido estudiadas para predecir el rendimiento de transacciones de lectura \citep{Si:2002}. Todos los estudios mencionados anteriormente se han centrado en la efectividad para ser predicciones de rendimento de \textit{queries}. La eficiencia también ha sido utilizada para predecir el rendimiento de una consulta, identificando las principales razones que tienen impacto sobre el tiempo de respuesta y evaluando estos factores para predecir el comportamiento de futuras consultas \citep{Tonellotto:2011}.
-
-En \citep{Macdonald:2012} se propone un método de predicción de tiempo de respuesta para transacciones de lectura basado en datos estadísticos disponibles en las respectivas listas invertidas de los términos. La idea del método es que para cada consulta que llega al sistema, se tomen los términos y para cada uno de ellos calcular desde su propia lista invertida los siguientes estadísticos $s(t)$:
+\subsection{Método de predicción Glasgow}
+\label{scheduling:glasgow}
+El presente método \citep{Macdonald:2012} se basa en estadísticos obtenidos previamente calculados desde el índice invertido. Los puntajes de los documentos son obtenidos mediante el método BM25. Para cada consulta que llega al sistema, se toman los términos y para cada uno de ellos desde su propia lista invertida se obtiene los siguientes estadísticos $s(t)$:
 
 \begin{list}{}{}
-	\item \textbf{Puntaje medio aritmético}. Se calcula la media aritmética del puntaje de los documentos. 
-	
-	\item \textbf{Puntaje medio geométrico}. Se calcula la media geométrica del puntaje de los documentos.
+	\item \textbf{Media aritmética}. Se calcula la media aritmética del puntaje de los documentos.
 
-	\item \textbf{Puntaje medio harmónico}.  Se calcula la media harmónica del puntaje de los documentos..
+	\item \textbf{Media geométrica}. Se calcula la media geométrica del puntaje de los documentos.
+
+	\item \textbf{Media harmónica}.  Se calcula la media harmónica del puntaje de los documentos. 
 
 	\item \textbf{Máximo puntaje}. Se obtiene el puntaje máximo perteneciente a algún documento dentro de la lista invertida. En otras palabras, se obtiene el \textit{upper bound} $UB_t$ de la lista. 
 
@@ -24,9 +25,11 @@ En \citep{Macdonald:2012} se propone un método de predicción de tiempo de resp
 	
 	\item \textbf{Número de documentos}. Se calcula el largo de la lista invertida. 
 
-	\item \textbf{Número de documentos con puntaje máximo}. Se calcula el número de documentos que tienen el puntaje máximo dentro en la lista invertida del término $t$. 
-	
+	\item \textbf{Número de maximos}. Se obtiene el número de veces en que aparece un puntaje máximo, es decir, el número de veces en que se actualiza el puntaje máximo. 
+
 	\item \textbf{Número de documentos mayor a la media}. Se extrae el número de documentos que sobrepasa en puntaje al puntaje promedio. 
+	
+	\item \textbf{Número de documentos con puntaje máximo}. Se calcula el número de documentos que tienen el puntaje máximo dentro en la lista invertida del término $t$. 
 	
 	\item \textbf{Número de documentos dentro del 5\% más alto}. Se obtiene el número de documentos cuyos puntajes están dentro del 5\% superior dentrl de la lista invertida. 
 	
@@ -36,10 +39,36 @@ En \citep{Macdonald:2012} se propone un método de predicción de tiempo de resp
 	
 	\item \textbf{Frecuencia inversa de documento del término}. Se calcula el \textit{idf} del término $t$.
 	
-	\item \textbf{Ultimo estadístico}. Pregúntarselo a Victor.
+	\item \textbf{Tiempo en ser procesado el término}. Se obtiene el tiempo que toma ser procesado el término como una \textit{query} de un solo término.
+
 \end{list}
 
-Cada uno de los 14 estadísticos mencionados anteriormente está relacionados linealmente con el tiempo que se demora un motor de búsqueda en resolver una transacción de lectura y son la base para la implementación predictor que está basado en un modelo de regresión lineal \citep{Chambers:1991}. En el siguiente capítulo se muestra el detalle sobre la implementación del modelo predictor y los resultados obtenidos. 
+
+Cada uno de los 14 estadísticos mencionados anteriormente están relacionados linealmente con la eficiencia de una transacción de lectura y son la base para la implementación del predictor, que está basado en un modelo de regresión lineal múltiple \citep{Chambers:1991}. A continuacion se muestra un resumen de estos estadísitcos en la Tabla \ref{tabla:estadisticosGlasgow}. 
+
+\begin{table}[H]
+\caption{Resumen de los estadísticos que se deben extraer desde el índice invertido}
+\label{tabla:estadisticosGlasgow}
+\begin{center}
+	\begin{tabular}{|>{\centering\arraybackslash}p{10cm}|}
+	\hline	Estadísticos del término $s(t)$ \\	
+	\hline 1. Media aritmética	 \\
+	\hline 2. Media geométrica	 \\
+	\hline 3. Media harmónica	 \\
+	\hline 4. Máximo puntaje	 \\
+	\hline 5. Varianza del puntaje	 \\
+	\hline 6. Número de documentos	 \\
+	\hline 7. Número de máximos	 \\ 
+	\hline 8. Número docs > media	 \\ 
+	\hline 9. Número docs = máximo puntaje	 \\ 
+	\hline 10. Número docs dentro del 5\% más alto	 \\ 
+	\hline 11. Número docs dentro del 5\% del umbral	 \\ 
+	\hline 12. Número de incerciones al conjunto top-K	 \\ 
+	\hline 13. IDF	 \\ 
+	\hline 14. Tiempo en resolver $t$ como \textit{query}	 \\ 
+	\end{tabular} 
+\end{center}
+\end{table}
 
 
 
