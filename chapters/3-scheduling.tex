@@ -47,27 +47,27 @@ El presente método \citep{Macdonald:2012} se basa en estadísticos obtenidos pr
 Cada uno de los 14 estadísticos mencionados anteriormente están relacionados linealmente con la eficiencia de una transacción de lectura y son la base para la implementación del predictor, que está basado en un modelo de regresión lineal múltiple \citep{Chambers:1991}. A continuacion se muestra un resumen de estos estadísitcos en la Tabla \ref{tabla:estadisticosGlasgow}. 
 
 \begin{table}[H]
+\centering
 \caption{Resumen de los estadísticos que se deben extraer desde el índice invertido}
 \label{tabla:estadisticosGlasgow}
-\begin{center}
-	\begin{tabular}{|>{\centering\arraybackslash}p{10cm}|}
-	\hline	Estadísticos del término $s(t)$ \\	
-	\hline 1. Media aritmética	 \\
-	\hline 2. Media geométrica	 \\
-	\hline 3. Media harmónica	 \\
-	\hline 4. Máximo puntaje	 \\
-	\hline 5. Varianza del puntaje	 \\
-	\hline 6. Número de documentos	 \\
-	\hline 7. Número de máximos	 \\ 
-	\hline 8. Número docs > media	 \\ 
-	\hline 9. Número docs = máximo puntaje	 \\ 
-	\hline 10. Número docs dentro del 5\% más alto	 \\ 
-	\hline 11. Número docs dentro del 5\% del umbral	 \\ 
-	\hline 12. Número de incerciones al conjunto top-K	 \\ 
-	\hline 13. IDF	 \\ 
-	\hline 14. Tiempo en resolver $t$ como \textit{query}	 \\ 
-	\end{tabular} 
-\end{center}
+\begin{tabular}{|l|}
+	\hline
+	\textbf{Estadísticos del término s(t)} \\	
+	1. Media aritmética	 \\ \hline
+	2. Media geométrica	 \\ \hline
+	3. Media harmónica	 \\ \hline
+	4. Máximo puntaje	 \\ \hline
+	5. Varianza del puntaje	 \\ \hline
+	6. Número de documentos	 \\ \hline
+	7. Número de máximos	 \\ \hline
+	8. Número docs > media	 \\ \hline
+	9. Número docs = máximo puntaje	 \\ \hline
+	10. Número docs dentro del 5\% más alto	 \\ \hline
+	11. Número docs dentro del 5\% del umbral	 \\ \hline
+	12. Número de incerciones al conjunto top-K	 \\ \hline
+	13. IDF	 \\ \hline
+	14. Tiempo en resolver $t$ como \textit{query}	\\ \hline  
+\end{tabular}
 \end{table}
 
 
@@ -84,13 +84,12 @@ Existen dos formas de implementar WAND \textit{multithreaded}. Una de ellas es u
 
 
 \subsection{Wand con heaps locales}
-\label{scheduling:whl}
-En el esquema LH, cada thread procesa una porción del índice invertido mientras mantiene un heap local con los mejores K documentos que el específico thread ha encontrado hasta ahora. Al final del proceso, el resultado de cada thread debe ser reunido en un solo conjunto final global. Los resultados en \citep{Rojas:2013} muestran que el esquema LH es más eficientes para aquellas transacciones que toman poco tiempo en ser resueltas. En la Figura \ref{fig:wand-heap-local} se muestra el esquema de ejecución para heaps locales explicado anteriormente. 
+En el esquema LH, cada \textit{thread} procesa una porción del índice invertido mientras mantiene un \textit{heap} local con los mejores $K$ documentos que el específico hilo de ejecución ha encontrado hasta ahora. Al final del proceso, los resultados deben ser reunido en un solo conjunto final global. Los resultados en \citep{Rojas:2013} muestran que el esquema LH es más eficientes para aquellas transacciones que toman poco tiempo en ser resueltas. En la Figura \ref{fig:wand-heap-local} se muestra el esquema de ejecución para \textit{heaps} locales explicado anteriormente. 
 
-\begin{figure}[H]
+\begin{figure}[!ht]
 \centering
-\includegraphics[scale=.75]{images/wand-heap-local.png}
-\caption{Esquema de ejecución de algoritmo WAND con heaps locales}
+\includegraphics[scale=.75]{images/wand_heaps_locales.eps}
+\caption{Esquema de ejecución de algoritmo WAND con heaps localese}
 \label{fig:wand-heap-local}
 \end{figure}
 
@@ -112,24 +111,23 @@ El diseño aplicado para implementar el esquema LH se puede ver en la Figura \re
 \end{list}
 
 
-\begin{figure}[H]
-\centering
-\includegraphics[scale=.75]{images/TopKMultiThreadWandOperatorLocal.png}
-\caption{Diagrama de clases para el esquema LH}
-\label{fig:TopKMultiThreadWandOperatorLocal}
-\end{figure}
-
+%\begin{figure}[H]
+%\centering
+%\includegraphics[scale=.75]{images/TopKMultiThreadWandOperatorLocal.png}
+%\caption{Diagrama de clases para el esquema LH}
+%\label{fig:TopKMultiThreadWandOperatorLocal}
+%\end{figure}
 
 \subsection{Wand con heap compartido}
 \label{scheduling:whc}
 En el esquema SH cada thread procesa una porción del índice. Sin embargo, ahora un solo heap es creado y accedido por todos los threads. En este caso no se requiere de mezclar los resultados y el proceso de descarte tiende a ser más eficiente porque los documentos con mayor puntaje tienden a estar en el heap. Acceder al heap debe ser controlado por un lock o algún método similar que garantice el acceso exclusivo de los threads al heap. Este esquema es más eficiente que el LH en queries que toman mayor tiempo en ser resueltas.
 
-\begin{figure}[H]
-\centering
-\includegraphics[scale=.75]{images/wand-heap-compartido.png}
-\caption{Esquema de ejecución de algoritmo WAND con heap compartido}
-\label{fig:wand-heap-compartido}
-\end{figure}
+%\begin{figure}[H]
+%\centering
+%\includegraphics[scale=.75]{images/wand-heap-compartido.png}
+%\caption{Esquema de ejecución de algoritmo WAND con heap compartido}
+%\label{fig:wand-heap-compartido}
+%\end{figure}
 
 El diseño implementado para este esquema posee como clase principal a TopKMultiThreadWandOperatorLocks y difiere del modelo implementado para el esquema LH en el sentido que ahora se debe controlar el acceso concurrente a los datos compartidos como el heap y el threshold. A continuación se presenta el diccionario de datos del esquema SH mostrado en la Figura \ref{fig:TopKMultiThreadWandOperatorLocks}.
 
@@ -144,12 +142,12 @@ El diseño implementado para este esquema posee como clase principal a TopKMulti
 
 \end{list}
 
-\begin{figure}[H]
-\centering
-\includegraphics[scale=.75]{images/TopKMultiThreadWandOperatorLocks.png}
-\caption{Diagrama de clases para el esquema SH}
-\label{fig:TopKMultiThreadWandOperatorLocks}
-\end{figure}
+%\begin{figure}[H]
+%\centering
+%\includegraphics[scale=.75]{images/TopKMultiThreadWandOperatorLocks.png}
+%\caption{Diagrama de clases para el esquema SH}
+%\label{fig:TopKMultiThreadWandOperatorLocks}
+%\end{figure}
 
 
 \section{Estrategia \textit{baseline}}
