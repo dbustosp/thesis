@@ -149,7 +149,7 @@ Este algoritmo es repetido hasta que no hayan más documentos a procesar o hasta
 \end{figure}
 
 \subsection{Block Max Wand}
-\label{bmw}
+\label{marco:bmw}
 Como se explicó en la sección anterior, la diferencia entre un método exhaustivo de evaluación de documentos y el método Wand, es que este múltimo es una técnica DAAT de poda dinámica \citep{Moffat:1996} en la que se intenta omitir la mayor cantidad de evaluaciones de documentos haciendo uso de una estrategia de movimientos de punteros pivotes.
 Bajo la premisa que Wand tradicional es limitado por el hecho que usa los máximos puntajes de las listas invertidas (\textit{Upper bounds}) para podar, puesto que estos pueden ser mucho más grandes que el promedio de puntaje en ellas, se propone un método llamado \textit{Block-Max-Wand} (BMW) \citep{Ding:2011}. Este método utiliza una estructura de datos llamada índice \textit{Block-Max}, en donde el índice invertido estará particionado en bloques y para cada bloque se almacena la máxima contribución de algún documento dentro del bloque. En otras palabras, se tendrán tantos \textit{upper bounds} locales como bloques existan en la lista invertida.
 
