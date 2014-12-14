@@ -9,7 +9,7 @@ Lograr bajos tiempos de respuestas es uno de los objetivos principales en el dis
 
 Conocer de antemano la eficiencia de una \textit{query} es una ventaja muy importante, puesto que aquellas consultas que tomaran una mayor cantidad de tiempo en ser resueltas se les puede asignar un mayor número de \textit{threads} para procesarla, de esta manera se reduce el tiempo de procesamiento de las consultas y se cumple con la cota superior de tiempo prometida al usuario. Adicionalmente, que un sistema de recuperación de la información como un motor de búsqueda conozca anticipadamente cuánto tardará una consulta en ser procesada, permite implementar técnicas efectivas de planificación de transacciones de lecturas, por ejemplo, en el contexto de procesamiento paralelo de \textit{queries} por lotes (\textit{batches}) se pueden crear grupos de consultas que posean tiempos de respuesta parecidos, así se tiende a disminuir tanto el desbalance de carga entre los procesadores como el tiempo en procesar el \textit{batch} completo.
 
-A continuación se presenta la implementación de métodos de predicción de eficiencia de queries que llegan a un motor de búsqueda. 
+Existen trabajos en donde es estudia la correlación de algunos estadísticos presentes en las listas del índice invertido con el tiempo de respuesta de una transacción de lectura (citar trabajos que estudian los estadísticos). El más intuitivo es el número de documentos que hay en una lista invertida, mientras más larga es una lista invertida mayor es el tiempo que toma en ser resuelta. A continuación se presenta la implementación de métodos de predicción de eficiencia de queries basado en en los estudios (glasgow, sigir, oscar).  
 
 \subsection{Método de predicción Glasgow}
 \label{scheduling:glasgow}
@@ -59,7 +59,7 @@ Cada uno de los 14 estadísticos mencionados anteriormente están relacionados l
 	1. Media aritmética	 \\ \hline
 	2. Media geométrica	 \\ \hline
 	3. Media harmónica	 \\ \hline
-	4. Máximo puntaje	 \\ \hline
+	4. Puntaje máximo	 \\ \hline
 	5. Varianza del puntaje	 \\ \hline
 	6. Número de documentos	 \\ \hline
 	7. Número de máximos	 \\ \hline
@@ -67,7 +67,7 @@ Cada uno de los 14 estadísticos mencionados anteriormente están relacionados l
 	9. Número docs = máximo puntaje	 \\ \hline
 	10. Número docs dentro del 5\% más alto	 \\ \hline
 	11. Número docs dentro del 5\% del umbral	 \\ \hline
-	12. Número de incerciones al conjunto top-K	 \\ \hline
+	12. Número de inserciones al conjunto top-K	 \\ \hline
 	13. IDF	 \\ \hline
 	14. Tiempo en resolver $t$ como \textit{query}	\\ \hline  
 \end{tabular}
@@ -76,7 +76,41 @@ Cada uno de los 14 estadísticos mencionados anteriormente están relacionados l
 
 \subsection{Método de predicción SIGIR}
 \label{scheduling:sigir}
-En el contexto de un motor de búsqueda una consulta se puede clasificar como larga y como corta. Una query larga es aquella que toma un tiempo considerable en ser procesada y una query corta es aquella que se puede resolver rápidamente. Cuando un sistema está con una baja carga de trabajo paralelizar todas las consultas no tiene un impacto en el rendimiento, sin embargo, cuando un sistema está sometido a una moderada o alta carga de trabajo paralelizar todas las queries entrantes es ineficiente  \citep{Jeon:2014}, debido a que el costo de paralelizar queries cortas es alto. %
+En el contexto de un motor de búsqueda una consulta puede ser clasificada según el tiempo en que tome procesarla. En \citep{Jeon:2014} clasifican a una query como breve (0 - 30 ms), intermedia (30 - 80 ms) y prolongada ($ > 80 ms$). 
+
+
+Al igual que el método anterior presentado en \ref{scheduling:glasgow}, se utilizan características de las listas invertidas de los términos de la consulta, es decir, toda la información necesaria estaba guardada en el índice invertido. En el presente método además se agregan características propias de las consultas que llegan al motor de búsqueda. 
+
+
+
+\begin{table}[!th]
+\centering
+\caption{Resumen de los estadísticos del presente método SIGIR}
+\label{tabla:estadisticosSigir}
+
+\begin{tabular}{| l | l | l |}
+  \hline
+  \textbf{Categoría} & \textbf{Característica} & \textbf{Descripción}  \\
+  \hline
+  \pbox{3cm}{ Característica \\ del \\ término} & 
+  \pbox{30cm}{ mediaA \\ mediaG \\ mediaH \\ MaxPuntaje \\ VarPuntaje \\ Ndocs \\ Nmaxima \\ NdocsMedia \\ NdocsMaximo \\ Ndocs5 \\ NdocsThreshold \\ NdocsK \\ IDF \\ timeTerm} & 
+  \pbox{20cm}{ Media aritmética del puntaje \\ Media geométrica del puntaje \\ Media harmónica del puntaje \\ Puntaje máximo \\ Varianza de puntaje \\ Número de documentos \\ Número de máximos \\ Número de documentos con puntaje mayor al puntaje medio \\ Número de documentos con puntaje máximo \\ Número de documentos dentro del 5\% más alto \\ Número de documentos dentro del 5\% del umbra \\ Número de inserciones al conjunto top-K \\ IDF \\ Tiempo en resolver el término como una query }  \\ 
+  \hline  
+  \pbox{3cm}{ Característica \\ de \\ la \\ consulta} & 
+  \pbox{30cm}{ Inglés \\ NumAigTerm} & 
+  \pbox{20cm}{ Describe si la consulta está en inglés o no \\ augmented requirements}  \\  
+  \hline
+  
+
+  
+\end{tabular}
+
+
+\end{table}
+
+ 
+
+%Cuando un sistema está con una baja carga de trabajo paralelizar todas las consultas no tiene un impacto en el rendimiento, sin embargo, cuando un sistema está sometido a una moderada o %alta carga de trabajo paralelizar todas las queries entrantes es ineficiente, debido a que el costo de paralelizar queries cortas es alto.
 
 
 
