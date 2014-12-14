@@ -493,18 +493,6 @@
   Url                      = {http://doi.acm.org/10.1145/2600428.2609572}
 }
 
-@Article{Jones:1972,
-  Title                    = {A statistical interpretation of term specificity and its application in retrieval},
-  Author                   = {Karen Spärck Jones},
-  Journal                  = {Journal of Documentation},
-  Year                     = {1972},
-  Pages                    = {11--21},
-  Volume                   = {28},
-
-  Owner                    = {danilobustos},
-  Timestamp                = {2014.12.14}
-}
-
 @InProceedings{Macdonald:2012,
   Title                    = {Learning to Predict Response Times for Online Query Scheduling},
   Author                   = {Macdonald, Craig and Tonellotto, Nicola and Ounis, Iadh},
@@ -655,7 +643,7 @@
   Url                      = {http://doi.acm.org/10.1145/564376.564382}
 }
 
-@InProceedings{Tatikonda:2011,
+@InProceedings{Tatikonda:2011:PLI:2009916.2010045,
   Title                    = {Posting List Intersection on Multicore Architectures},
   Author                   = {Tatikonda, Shirish and Cambazoglu, B. Barla and Junqueira, Flavio P.},
   Booktitle                = {Proceedings of the 34th International ACM SIGIR Conference on Research and Development in Information Retrieval},

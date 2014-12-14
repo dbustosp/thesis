@@ -5,8 +5,11 @@ Decir por lotes
 
 \section{Predicción de rendimiendo de transacciones de lectura}
 \label{scheduling:prtl}
-Conocer de antemano la eficiencia de una consulta es una ventaja importante para poder usar técnicas efectivas de planificación en motores de búsqueda. Por ejemplo, en el contexto de procesamiento paralelo de \textit{queries} por lotes (\textit{batches}) se pueden crear grupos de consultas que posean tiempos de respuesta parecidos, así se tiende a disminuir tanto el desbalance de carga entre los procesadores como el tiempo en procesar el \textit{batch} completo.
-A continuación se presentan los métodos predictores implementados en el siguiente trabajo de tesis. 
+Lograr bajos tiempos de respuestas es uno de los objetivos principales en el diseño de un motor de búsqueda, ya que de esta forma se le puede entregar una respuesta oportunda al usuario. Además estos poseen acuerdos de nivel de servicio (SLA), por ejemplo, que el 99\% de las consultas sean respondidas en $100 ms$. Por lo tanto, las transacciones de lectura que requieren una gran cantidad de tiempo para ser resueltas degradan considerablemente la satisfacción del usuario, y es por esto que las máquinas de búsqueda están optimizadas para reducir el percentil más alto de los tiempos de respuesta (también llamado $tail latency$). Paralelizar el procesamiento de cada consulta es una solución promitente para reducir el tiempo de ejecución \citep{Jeon:2013, Tatikonda:2011}. Esto es posible con los modernos servidores que existen hoy en día que poseen múltiples núcleos, en donde se puede resolver una consulta paralelizando múltiples hilos de ejecución, reduciendo el tiempo de ejecución de esta.
+
+Conocer de antemano la eficiencia de una \textit{query} es una ventaja muy importante, puesto que aquellas consultas que tomaran una mayor cantidad de tiempo en ser resueltas se les puede asignar un mayor número de \textit{threads} para procesarla, de esta manera se reduce el tiempo de procesamiento de las consultas y se cumple con la cota superior de tiempo prometida al usuario. Adicionalmente, que un sistema de recuperación de la información como un motor de búsqueda conozca anticipadamente cuánto tardará una consulta en ser procesada, permite implementar técnicas efectivas de planificación de transacciones de lecturas, por ejemplo, en el contexto de procesamiento paralelo de \textit{queries} por lotes (\textit{batches}) se pueden crear grupos de consultas que posean tiempos de respuesta parecidos, así se tiende a disminuir tanto el desbalance de carga entre los procesadores como el tiempo en procesar el \textit{batch} completo.
+
+A continuación se presenta la implementación de métodos de predicción de eficiencia de queries que llegan a un motor de búsqueda. 
 
 \subsection{Método de predicción Glasgow}
 \label{scheduling:glasgow}
@@ -73,19 +76,8 @@ Cada uno de los 14 estadísticos mencionados anteriormente están relacionados l
 
 \subsection{Método de predicción SIGIR}
 \label{scheduling:sigir}
+En el contexto de un motor de búsqueda una consulta se puede clasificar como larga y como corta. Una query larga es aquella que toma un tiempo considerable en ser procesada y una query corta es aquella que se puede resolver rápidamente. Cuando un sistema está con una baja carga de trabajo paralelizar todas las consultas no tiene un impacto en el rendimiento, sin embargo, cuando un sistema está sometido a una moderada o alta carga de trabajo paralelizar todas las queries entrantes es ineficiente  \citep{Jeon:2014}, debido a que el costo de paralelizar queries cortas es alto. %
 
-Lograr bajos tiempos de respuestas es un objetivo principal en el diseño de un motor de búsqueda. 
-
-Consultas que requieren gran cantidad de tiempo para ser resueltas degradan considerablemente la satisfacción del usuario (que desea respuestas rápidas). 
-
-
-Para proveer una respuesta oportuna al usuario, los motores de búsqueda poseen acuerdos de nivel de servicio, por ejemplo, que el 99% de las consultas sean respondidas en 100 ms. 
-
-Los motores de búsqueda están optimizados para reducir el percentil más alto de los tiempos de respuesta (también llamado tail latency).
-
-Paralelizar el procesamiento de cada consulta es una solución promitente para reducir el tiempo de ejecución \citep{Jeon:2013, Tatikonda:2011}. Esto es posible con los servidores que existen hoy en día que poseen múltiples núcleos, en donde paralelizando múltiples threads se puede resolver una query para reducir el tiempo de ejecución de esta. 
-
-En el contexto de un motor de búsqueda una consulta se puede clasificar como larga y como corta. Una query larga es aquella que toma un tiempo considerable en ser procesada y una query corta es aquella que se puede resolver rápidamente. Cuando un sistema está con una baja carga de trabajo paralelizar todas las consultas no tiene un impacto en el rendimiento, sin embargo, cuando un sistema está sometido a una moderada o alta carga de trabajo paralelizar todas las queries entrantes es ineficiente  \citep{Jeon:2014}, debido a que el costo de paralelizar queries cortas es alto. 
 
 
 
