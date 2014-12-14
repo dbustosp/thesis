@@ -449,6 +449,28 @@
   Url                      = {http://dx.doi.org/10.1007/978-3-540-30213-1_5}
 }
 
+@InProceedings{Jeon:2013,
+  Title                    = {Adaptive Parallelism for Web Search},
+  Author                   = {Jeon, Myeongjae and He, Yuxiong and Elnikety, Sameh and Cox, Alan L. and Rixner, Scott},
+  Booktitle                = {Proceedings of the 8th ACM European Conference on Computer Systems},
+  Year                     = {2013},
+
+  Address                  = {New York, NY, USA},
+  Pages                    = {155--168},
+  Publisher                = {ACM},
+  Series                   = {EuroSys '13},
+
+  Acmid                    = {2465367},
+  Doi                      = {10.1145/2465351.2465367},
+  ISBN                     = {978-1-4503-1994-2},
+  Keywords                 = {parallelism, response time, web search},
+  Location                 = {Prague, Czech Republic},
+  Numpages                 = {14},
+  Owner                    = {danilobustos},
+  Timestamp                = {2014.12.14},
+  Url                      = {http://doi.acm.org/10.1145/2465351.2465367}
+}
+
 @InProceedings{Jeon:2014,
   Title                    = {Predictive Parallelization: Taming Tail Latencies in Web Search},
   Author                   = {Jeon, Myeongjae and Kim, Saehoon and Hwang, Seung-won and He, Yuxiong and Elnikety, Sameh and Cox, Alan L. and Rixner, Scott},
@@ -469,6 +491,18 @@
   Owner                    = {danilobustos},
   Timestamp                = {2014.12.07},
   Url                      = {http://doi.acm.org/10.1145/2600428.2609572}
+}
+
+@Article{Jones:1972,
+  Title                    = {A statistical interpretation of term specificity and its application in retrieval},
+  Author                   = {Karen Spärck Jones},
+  Journal                  = {Journal of Documentation},
+  Year                     = {1972},
+  Pages                    = {11--21},
+  Volume                   = {28},
+
+  Owner                    = {danilobustos},
+  Timestamp                = {2014.12.14}
 }
 
 @InProceedings{Macdonald:2012,
@@ -619,6 +653,28 @@
   Owner                    = {danilobustos},
   Timestamp                = {2014.11.03},
   Url                      = {http://doi.acm.org/10.1145/564376.564382}
+}
+
+@InProceedings{Tatikonda:2011,
+  Title                    = {Posting List Intersection on Multicore Architectures},
+  Author                   = {Tatikonda, Shirish and Cambazoglu, B. Barla and Junqueira, Flavio P.},
+  Booktitle                = {Proceedings of the 34th International ACM SIGIR Conference on Research and Development in Information Retrieval},
+  Year                     = {2011},
+
+  Address                  = {New York, NY, USA},
+  Pages                    = {963--972},
+  Publisher                = {ACM},
+  Series                   = {SIGIR '11},
+
+  Acmid                    = {2010045},
+  Doi                      = {10.1145/2009916.2010045},
+  ISBN                     = {978-1-4503-0757-4},
+  Keywords                 = {intra-query parallelism, multicore architectures, posting list intersection, query processing, web search engines},
+  Location                 = {Beijing, China},
+  Numpages                 = {10},
+  Owner                    = {danilobustos},
+  Timestamp                = {2014.12.14},
+  Url                      = {http://doi.acm.org/10.1145/2009916.2010045}
 }
 
 @InProceedings{Tonellotto:2011,

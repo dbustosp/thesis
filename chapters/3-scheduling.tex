@@ -73,7 +73,20 @@ Cada uno de los 14 estadísticos mencionados anteriormente están relacionados l
 
 \subsection{Método de predicción SIGIR}
 \label{scheduling:sigir}
-Aquí va la explicación del método de SIGIR 2014
+
+Lograr bajos tiempos de respuestas es un objetivo principal en el diseño de un motor de búsqueda. 
+
+Consultas que requieren gran cantidad de tiempo para ser resueltas degradan considerablemente la satisfacción del usuario (que desea respuestas rápidas). 
+
+
+Para proveer una respuesta oportuna al usuario, los motores de búsqueda poseen acuerdos de nivel de servicio, por ejemplo, que el 99% de las consultas sean respondidas en 100 ms. 
+
+Los motores de búsqueda están optimizados para reducir el percentil más alto de los tiempos de respuesta (también llamado tail latency).
+
+Paralelizar el procesamiento de cada consulta es una solución promitente para reducir el tiempo de ejecución \citep{Jeon:2013, Tatikonda:2011}. Esto es posible con los servidores que existen hoy en día que poseen múltiples núcleos, en donde paralelizando múltiples threads se puede resolver una query para reducir el tiempo de ejecución de esta. 
+
+En el contexto de un motor de búsqueda una consulta se puede clasificar como larga y como corta. Una query larga es aquella que toma un tiempo considerable en ser procesada y una query corta es aquella que se puede resolver rápidamente. Cuando un sistema está con una baja carga de trabajo paralelizar todas las consultas no tiene un impacto en el rendimiento, sin embargo, cuando un sistema está sometido a una moderada o alta carga de trabajo paralelizar todas las queries entrantes es ineficiente  \citep{Jeon:2014}, debido a que el costo de paralelizar queries cortas es alto. 
+
 
 
 \section{Wand \textit{multi-threaded}}
@@ -98,7 +111,7 @@ Cuando el método se da cuenta que $p$ no es un pivote real, lo que se hace es b
 \includegraphics[scale=.75]{images/get_new_candidate.eps}
 \caption{Ejemplo de cómo opera la functión getNewCandidate()}
 \label{fig:getNewCandidate}
-\end{figure}
+\end{figure}%y
 
 
 \begin{algorithm}[!th]
