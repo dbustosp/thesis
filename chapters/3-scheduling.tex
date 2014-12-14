@@ -89,11 +89,53 @@ Sin embargo, como se dijo anteriormente en \ref{marco:bmw}, usando solo las máx
 
 BMW utiliza dos principales ideas en su diseño: (1) Se usa los \textit{upper bounds} globales para determinar un pivote candidato (como en Wand tradicional), para luego usar los \textit{upper bounds} locales para determinar si es que el pivote candidato es un pivote real o no, y (2) Se intenta siempre utilizar \textit{shallow pointer movement} por sobre \textit{deep pointer movement}.
 
- 
+En el algoritmo 
 
+\begin{algorithm}[tp]
+\caption{\em $BMW(\theta, L, docID)$: Block Max Wand}
+\label{alg:bmw}
+\begin{algorithmic}[1]
+\REQUIRE Un \textit{threshold} $\theta$, listas invertidas $L$ de los términos en la consulta
+\ENSURE $docID$, si existe un documento $docID$ tal que $score(docID)$ $\geq$ $\theta$. de lo contrario END-OF-FILE
+\WHILE {true}
+	\STATE $Sort(L);$
+	\STATE $p = findPivot(L,\theta);$
+	\STATE $d = L[p] \rightarrow currentDoc;$
+	\IF {$d == $ END-OF-FILE}
+  		\STATE $break;$
+	\ENDIF
+		
+	\FOR {$ i = 0...p $}
+		\STATE $NextShallow(d, L[i]);$
+	\ENDFOR
+	
+	\IF {$isRealPivot(\theta, p);$}
+		\IF {$L[0] \rightarrow currentDoc == d$}
+			\STATE $scoreDoc(d, p);$
+			\FOR {$ i = 0...p $}
+				\STATE $Next(d + 1, L[i]);$
+			\ENDFOR
+		\ELSE
+			\WHILE {$List[p - 1] \rightarrow currentDoc == p $}
+				\STATE $p = p - 1;$			
+			\ENDWHILE
+			
+			\FOR {$ i = 0...p $}
+				\STATE $Next(d, L[i]);$
+			\ENDFOR
+			
+		\ENDIF		
+	\ELSE	
+		\STATE $d' = getNewCandidate();$
+		\FOR {$ i = 0...p $}
+			\STATE $Next(d', L[i]);$
+		\ENDFOR
+	\ENDIF
+	
+\ENDWHILE
 
-
-
+\end{algorithmic}
+\end{algorithm}
 
 \subsection{Wand con heaps locales}
 En el esquema LH, cada \textit{thread} procesa una porción del índice invertido mientras mantiene un \textit{heap} local con los mejores $K$ documentos que el específico hilo de ejecución ha encontrado hasta ahora. Al final del proceso, los resultados deben ser reunido en un solo conjunto final global. Los resultados en \citep{Rojas:2013} muestran que el esquema LH es más eficientes para aquellas transacciones que toman poco tiempo en ser resueltas. En la Figura \ref{fig:wand-heap-local} se muestra el esquema de ejecución para \textit{heaps} locales explicado anteriormente. 
