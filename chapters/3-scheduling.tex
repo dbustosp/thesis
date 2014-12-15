@@ -83,32 +83,32 @@ Al igual que el método anterior presentado en \ref{scheduling:glasgow}, se util
 
 
 
-\begin{table}[!th]
-\centering
-\caption{Resumen de los estadísticos del presente método SIGIR}
-\label{tabla:estadisticosSigir}
-
-\begin{tabular}{| l | l | l |}
-  \hline
-  \textbf{Categoría} & \textbf{Característica} & \textbf{Descripción}  \\
-  \hline
-  \pbox{3cm}{ Característica \\ del \\ término} & 
-  \pbox{30cm}{ mediaA \\ mediaG \\ mediaH \\ MaxPuntaje \\ VarPuntaje \\ Ndocs \\ Nmaxima \\ NdocsMedia \\ NdocsMaximo \\ Ndocs5 \\ NdocsThreshold \\ NdocsK \\ IDF \\ timeTerm} & 
-  \pbox{20cm}{ Media aritmética del puntaje \\ Media geométrica del puntaje \\ Media harmónica del puntaje \\ Puntaje máximo \\ Varianza de puntaje \\ Número de documentos \\ Número de máximos \\ Número de documentos con puntaje mayor al puntaje medio \\ Número de documentos con puntaje máximo \\ Número de documentos dentro del 5\% más alto \\ Número de documentos dentro del 5\% del umbra \\ Número de inserciones al conjunto top-K \\ IDF \\ Tiempo en resolver el término como una query }  \\ 
-  \hline  
-  \pbox{3cm}{ Característica \\ de \\ la \\ consulta} & 
-  \pbox{30cm}{ Inglés \\ NumAigTerm} & 
-  \pbox{20cm}{ Describe si la consulta está en inglés o no \\ augmented requirements}  \\  
-  \hline
-  
-
-  
-\end{tabular}
+%\begin{table}[!th]
+%\centering
+%\caption{Resumen de los estadísticos del presente método SIGIR}
+%\label{tabla:estadisticosSigir}
+%
+%\begin{tabular}{| l | l | l |}
+%  \hline
+%  \textbf{Categoría} & \textbf{Característica} & \textbf{Descripción}  \\
+%  \hline
+%  \pbox{3cm}{ Característica \\ del \\ término} & 
+%  \pbox{30cm}{ mediaA \\ mediaG \\ mediaH \\ MaxPuntaje \\ VarPuntaje \\ Ndocs \\ Nmaxima \\ NdocsMedia \\ NdocsMaximo \\ Ndocs5 \\ NdocsThreshold \\ NdocsK \\ IDF \\ timeTerm} & 
+%  \pbox{20cm}{ Media aritmética del puntaje \\ Media geométrica del puntaje \\ Media harmónica del puntaje \\ Puntaje máximo \\ Varianza de puntaje \\ Número de documentos \\ Número de máximos \\ Número de documentos con puntaje mayor al puntaje medio \\ Número de documentos con puntaje máximo \\ Número de documentos dentro del 5\% más alto \\ Número de documentos dentro del 5\% del umbra \\ Número de inserciones al conjunto top-K \\ IDF \\ Tiempo en resolver el término como una query }  \\ 
+%  \hline  
+%  \pbox{3cm}{ Característica \\ de \\ la \\ consulta} & 
+%  \pbox{30cm}{ Inglés \\ NumAigTerm} & 
+%  \pbox{20cm}{ Describe si la consulta está en inglés o no \\ augmented requirements}  \\  
+%  \hline   
+%\end{tabular}
+%\end{table}
 
 
-\end{table}
+Siguiendo la misma lógica del método presentado en la sección anterior, como las características presentadas en la Tabla \ref{tabla:estadisticosSigir} son de un solo término y generalmente las consultas contienen varios términos, se debe combinar estas características utilizando funciones de agregación. En este método se usa cuatro agregadores: máximo, mínimo, varianza y suma. Por ejemplo, para una query que contiene los términos 'casa' y 'perro', para cada una de las características de la Tabla \ref{tabla:estadisticosSigir} se calculará desde las dos listas invertidas el máximo, el mínimo, la varianza y la suma. Por lo tanto utilizando los agregadores para cada query se tiene 4 x 14 = 56 características totales.
 
- 
+Lo anterior es muy costoso mantenerlo en memoria RAM  obtenerlo a mano rápidamente y costoso calcularlo, se reduce la gamma de características.
+
+
 
 %Cuando un sistema está con una baja carga de trabajo paralelizar todas las consultas no tiene un impacto en el rendimiento, sin embargo, cuando un sistema está sometido a una moderada o %alta carga de trabajo paralelizar todas las queries entrantes es ineficiente, debido a que el costo de paralelizar queries cortas es alto.
 
@@ -198,12 +198,12 @@ En el esquema LH, cada \textit{thread} procesa una porción del índice invertid
 
 El diseño aplicado para implementar el esquema LH se puede ver en la Figura \ref{fig:TopKMultiThreadWandOperatorLocal}. La clase principal es la TopKMultiThreadWandOperatorLocal, que es la encargada de controlar el paralelismo en la resolución de las transacciones. Para explicar de mejor manera cada una de las clases involucradas en la implementación, se presenta el siguiente diccionario de datos.
 
-\begin{sidewaysfigure}[!ht]
+\begin{figure}[!ht]
 \centering
 \includegraphics[scale=.75]{images/TopKMultiThreadWandOperatorLocal.eps}
 \caption{Diagrama de clases para el esquema LH}
 \label{fig:TopKMultiThreadWandOperatorLocal}
-\end{sidewaysfigure}
+\end{figure}
 
 \begin{list}{}{}
 	\item \textbf{TopKMultiThreadWandOperatorLocal}. Clase encargada de devolver los mejores K documentos para una query dada. Si es que la query debe ser resuelta en forma paralela, esta clase además debe controlar el paralelismo que se produce en la resolución de ésta, inicializando las variables correspondientes para lanzar los hilos de ejecución y luego escogiendo los mejores documentos desde todos los heaps creados por los diferentes threads (proceso de merge). En esta clase se define un mapa que asocia cada término del índice invertido con el puntaje del mejor documento en esa lista invertida (upper bound de la lista invertida) y además se define cuántos documentos se van a retornar al final del proceso (atributo K). El método execute inicializa las variables locales para los diferentes threads, posteriormente hace el llamado al método \emph{thread-execute} (en el cual se llevará a cabo la resolución de la transacción de lectura en forma paralela), finalmente se toman los resultados parciales de cada uno de los hilos de ejecución y se ejecuta el proceso que mezcla los resultados, retornando solo los mejores K documentos. 
@@ -247,15 +247,23 @@ El diseño implementado para este esquema posee como clase principal a TopKMulti
 
 \end{list}
 
-\begin{sidewaysfigure}[!ht]
+\begin{figure}[!ht]
 \centering
 \includegraphics[scale=.75]{images/TopKMultiThreadWandOperatorLocks.eps}
 \caption{Diagrama de clases para el esquema SH}
 \label{fig:TopKMultiThreadWandOperatorLocks}
-\end{sidewaysfigure}
+\end{figure}
 
 
-\section{Estrategia \textit{baseline}}
+
+
+\section{Estrategias de planificación}
+\label{scheduling:es}
+
+Nosotros optamos por un enfoque de Wand Heap Compartido para ser usado en los experimentos.
+
+
+\subsection{Estrategia \textit{1TQ}}
 \label{scheduling:baseline}
 Un simple camino para construir un sistema que responda a múltiples consultas simultáneamente usando múltiple hilos de ejecución, es usando estos hilos de manera independiente. Para hacer esto se debe mantener un conjunto de \textit{threads} consumidores que trabajarán en paralelo y se encargarán de resolver las \textit{queries} secuencialmente (una a una) desde una misma cola, esto es lo que en este trabajo se denomina estrategia de Un Thread Por Query (1TQ). En la Figura \ref{fig:1TQ} se puede apreciar el esquema de ejecución en donde cada uno de los procesos genera una petición de alguna consulta en la cola, si quedan \textit{queries} por procesar entonces se le asigna al proceso una consulta que tendrá que resolver de manera secuencial. Se debe tener en cuenta que cada vez que un proceso genera una solicitud de \textit{query}, se bloquea la estructura de datos que contiene las consultas a procesar y luego se procesa la solicitud, de esta forma se asegura un acceso seguro por parte de los distintos \textit{threads}. 
 
@@ -286,21 +294,8 @@ En la Figura \ref{fig:small_jobs} queda reflejado lo dicho en el párrafo anteri
 \end{figure}
 
 
-\section{Estrategias de \textit{scheuling}}
-\label{scheduling:es}
-nosotros optamos por un enfoque de Wand Heap Compartido para ser usado en los experimentos.
 
-%\subsection{FR}
-%\label{scheduling:fr}
-
-%\subsection{Times}
-%\label{scheduling:times}
-
-%\subsection{TimesRanges}
-%\label{scheduling:timesranges}
-
-
-\section{Estrategia de unidades de trabajo}
+\subsection{Estrategia unidades de trabajo}
 \label{scheduling:unidadestrabajo}
 Con respecto a los esquemas explicados hasta ahora, el esquema 1TQ tiene la ventaja que no solo requiere menos control, sino que también permite a los hilos de ejecución trabajar sin pausa mientras un \textit{batch} de consultas está siendo procesado. En esta sección se propone un esquema híbrido basado en unidades de procesamiento (\textit{Processing Units}) que aproveche las ventajas de ambos enfoques. (se requiere ver el tema de bloques).
 En este nuevo esquema de planificación, las consultas pasan a través de una fase en la cual cada \textit{query} es evaluada y se determina un apropiado número de unidades de procesamiento (\textit{processing units}) para poder resolver dicha consulta. Este proceso es llevado a cabo de manera similar al proceso en donde se determina la cantidad de \textit{threads} apropiados para resolver una determina transacción de lectura. Este número de unidades de procesamiento es creado y asociado a cada consulta, finalmente se guarda en una cola de unidades de trabajo. Un conjunto de \textit{threads} consumidores extraen las unidades desde la cola y las procesa independientemente. Cuando un \textit{thread} finalice el procesamiento de la unidad de trabajo actual automáticamente leerá la siguiente unidad de trabajo desde la cola. 
@@ -314,4 +309,17 @@ Generalmente lo que se hace habitualmente es estimar el número de \textit{threa
 \end{figure}
 
 El procesamiento de cada hilo de ejecución es una versión de Wand con heap compartido (SH), adaptado de manera tal que cada unidad de trabajo es resuelta independientemente de si existen otras unidades siendo procesada al mismo tiempo o no. La única excepción es que la unidad que inicializa la consulta es siempre ejecutada antes del resto de las otras unidades de la misma consulta y la entrega de resultados se hace una vez que todas las unidades de trabajo de la \textit{query} han finalizado. Este enfoque híbrido permite reducir el tiempo perdido al final de cada \textit{batch} sin generar una importante pérdida de trabajo mientras las \textit{queries} del \textit{batch} están siendo procesadas.
+
+
+\subsection{Estrategia FR}
+\label{scheduling:fr}
+
+// Se explica
+
+// Esquema de ejecución
+
+// Algoritmo
+
+// Ejemplo de cómo van quedando los bloques
+
 
