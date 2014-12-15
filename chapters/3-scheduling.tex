@@ -82,26 +82,29 @@ En el contexto de un motor de búsqueda una consulta puede ser clasificada segú
 Al igual que el método anterior presentado en \ref{scheduling:glasgow}, se utilizan características de las listas invertidas de los términos de la consulta, es decir, toda la información necesaria estaba guardada en el índice invertido. En el presente método además se agregan características propias de las consultas que llegan al motor de búsqueda. 
 
 
+\begin{table}[!th]
+\caption{Resumen de los estadísticos del presente método}
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{Categoría} & \textbf{Característica} & \textbf{Descripción} \\ \hline
+\multicolumn{ 1}{|p{3cm}|}{Característica} & MediaA & Media aritmética del puntaje \\ \cline{ 2- 3}
+\multicolumn{ 1}{|p{3cm}|}{del} & MediaG & Media geométrica del puntaje \\ \cline{ 2- 3}
+\multicolumn{ 1}{|p{3cm}|}{término} & MediaH & Media harmónica del puntaje \\ \cline{ 2- 3}
+\multicolumn{ 1}{|c|}{} & MaxPuntaje & Puntaje máximo \\ \cline{ 2- 3}
+\multicolumn{ 1}{|c|}{} & VarPuntaje & Varianza de puntaje \\ \cline{ 2- 3}
+\multicolumn{ 1}{|c|}{} & Ndocs & Número de documentos \\ \cline{ 2- 3}
+\multicolumn{ 1}{|c|}{} & Nmaxima & Número de máximos \\ \cline{ 2- 3}
+\multicolumn{ 1}{|c|}{} & NdocsMedia & Número de documentos con puntaje mayor al puntaje medio \\ \cline{ 2- 3}
+\multicolumn{ 1}{|c|}{} & NdocsMaximo & Número de documentos con puntaje máximo \\ \cline{ 2- 3}
+\multicolumn{ 1}{|c|}{} & Ndocs5 & Número de documentos dentro del 5\% más alto \\ \cline{ 2- 3}
+\multicolumn{ 1}{|c|}{} & NdocsThreshold & Número de documentos dentro del 5\% del umbral \\ \cline{ 2- 3}
+\multicolumn{ 1}{|c|}{} & NdocsK & Número de inserciones al conjunto top-K \\ \cline{ 2- 3}
+\multicolumn{ 1}{|c|}{} & IDF & Frecuencia Inversa de Documento \\ \cline{ 2- 3}
+\multicolumn{ 1}{|c|}{} & timeTerm & Tiempo en resolver el término como una query \\ \hline
+\end{tabular}
+\label{tabla:estadisticosSigir}
+\end{table}
 
-%\begin{table}[!th]
-%\centering
-%\caption{Resumen de los estadísticos del presente método SIGIR}
-%\label{tabla:estadisticosSigir}
-%
-%\begin{tabular}{| l | l | l |}
-%  \hline
-%  \textbf{Categoría} & \textbf{Característica} & \textbf{Descripción}  \\
-%  \hline
-%  \pbox{3cm}{ Característica \\ del \\ término} & 
-%  \pbox{30cm}{ mediaA \\ mediaG \\ mediaH \\ MaxPuntaje \\ VarPuntaje \\ Ndocs \\ Nmaxima \\ NdocsMedia \\ NdocsMaximo \\ Ndocs5 \\ NdocsThreshold \\ NdocsK \\ IDF \\ timeTerm} & 
-%  \pbox{20cm}{ Media aritmética del puntaje \\ Media geométrica del puntaje \\ Media harmónica del puntaje \\ Puntaje máximo \\ Varianza de puntaje \\ Número de documentos \\ Número de máximos \\ Número de documentos con puntaje mayor al puntaje medio \\ Número de documentos con puntaje máximo \\ Número de documentos dentro del 5\% más alto \\ Número de documentos dentro del 5\% del umbra \\ Número de inserciones al conjunto top-K \\ IDF \\ Tiempo en resolver el término como una query }  \\ 
-%  \hline  
-%  \pbox{3cm}{ Característica \\ de \\ la \\ consulta} & 
-%  \pbox{30cm}{ Inglés \\ NumAigTerm} & 
-%  \pbox{20cm}{ Describe si la consulta está en inglés o no \\ augmented requirements}  \\  
-%  \hline   
-%\end{tabular}
-%\end{table}
 
 
 Siguiendo la misma lógica del método presentado en la sección anterior, como las características presentadas en la Tabla \ref{tabla:estadisticosSigir} son de un solo término y generalmente las consultas contienen varios términos, se debe combinar estas características utilizando funciones de agregación. En este método se usa cuatro agregadores: máximo, mínimo, varianza y suma. Por ejemplo, para una query que contiene los términos 'casa' y 'perro', para cada una de las características de la Tabla \ref{tabla:estadisticosSigir} se calculará desde las dos listas invertidas el máximo, el mínimo, la varianza y la suma. Por lo tanto utilizando los agregadores para cada query se tiene 4 x 14 = 56 características totales.
@@ -301,7 +304,7 @@ Con respecto a los esquemas explicados hasta ahora, el esquema 1TQ tiene la vent
 En este nuevo esquema de planificación, las consultas pasan a través de una fase en la cual cada \textit{query} es evaluada y se determina un apropiado número de unidades de procesamiento (\textit{processing units}) para poder resolver dicha consulta. Este proceso es llevado a cabo de manera similar al proceso en donde se determina la cantidad de \textit{threads} apropiados para resolver una determina transacción de lectura. Este número de unidades de procesamiento es creado y asociado a cada consulta, finalmente se guarda en una cola de unidades de trabajo. Un conjunto de \textit{threads} consumidores extraen las unidades desde la cola y las procesa independientemente. Cuando un \textit{thread} finalice el procesamiento de la unidad de trabajo actual automáticamente leerá la siguiente unidad de trabajo desde la cola. 
 Generalmente lo que se hace habitualmente es estimar el número de \textit{threads} con el que se resolverá la consulta, como se muestra en la Figura \ref{fig:unit_process} en este nuevo enfoque se intenta estimar el número de unidades de trabajo con el que se resolverá cada consulta. Además, se debe controlar el acceso concurrente de los hilos de ejecución a la cola de unidades de trabajo, de tal manera que solo un thread tenga acceso exclusivo a la estructura de datos. 
 
-\begin{figure}[H]
+\begin{figure}[!th]
 \centering
 \includegraphics[scale=.75]{images/unit_process.eps}
 \caption{Procesamiento de consultas utilizando unidades de trabajo}
