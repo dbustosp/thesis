@@ -5,11 +5,67 @@ Nosotros optamos por un enfoque de Wand Heap Compartido para ser usado en los ex
 
 Se habla de enfoque de bloques también.
 
+Recordar el contexto de planificación de queries y ejecución de queries.
 
 \section{Estrategias por bloques}
-\label{scheduling:fr}
+\label{scheduling:bloques}
 
-// Se explica
+Hablar sobre las estrategias por bloques
+
+Se utilizará predictor de tiempo para setear threads
+
+Se muestra scheduler.odg para el esquema de forma general
+
+La estrategia teorica FR presentada en (citar) que estudia X, dio pie a la propuesta de... 
+La estrategia de planificación FR es un algoritmo teórico de planificación de trabajos paralelos (parallel job) que llegan al sistema uno a uno \citep{Ye:2007}.
+
+
+\subsection{Estrategia FR}
+\label{scheduling:fr}
+La estrategia de planificación FR asume que cada query que llega al motor de búsqueda posee el tiempo en que se domorará en ser procesada. 
+
+Sehace una clsificación de las queries entre Big y Small con el objetivo de crear estructuras de datos denominadas Rooms y Walls, en donde Walls y Tooms estarán formadas por queries Bigs y Smalls respectivamente. Ambas estructuras tienen un número máximo de máquinas disponibles para procesar las queries. Una consulta es Big si el número de máquinas requeridas para procesarlas es m (siendo m el número de máquinas disponibles),, de lo contrario, la query es small. 
+% Debe estar bloqueada porque eventualmente el ejecutador de queries estará sacando
+
+% ----  Descripción del algoritmo ----
+Como se puede ver en el Algoritmo \ref{alg:fr}, cuando una nueva query llega al sistema se analiza si esta es de tipo Big o Small; esto se hace en el método isBig(), que retorna verdadero si es que el número de máquinas requeridas para procesarla es igual al máximo de máquinas disponibles, de lo contrario retorna falso. Si la consulta es big, entonces se crea un nuevo Wall, se agrega la query al bloque y el bloque es planificado en la lista de planificación SchedulingList. Si se está en presencia de una transacción de lectura Small, entonces se busca algún bloque disponible para planificar la query, esto se hace desde el primer bloque abierto para recibir transacciones de lectura hasta el final de la schedulingList. Finalmente, si es eventualmente no se encuentra algún bloque disponible para planificar la query, entonces se crea un nuevo bloque Room, se asigna la consulta al bloque y se asigna el bloque a la lista de scheduling. Cabe destacar que se dice que un bloque está abierto cuando (isOpen) cuando aún le quedan máquinas disponibles o cuando el proceso de ejecución ya ha tomado las queries de este bloque para resolverlas.
+%----- Fin descripción algoritmo ----
+
+\begin{algorithm}[!th]
+\caption{\em $assignQuery(L, Q)$: Planificación de consulta}
+\label{alg:fr}
+\begin{algorithmic}[1]
+\REQUIRE Una SchedulingList $L$ en donde se hará la planificación, QueryObject $Q$ a planificar
+\ENSURE SchedulingList $L$ con la nueva query planificada
+
+\IF {$isBig(query)$}
+	\STATE $block = new Wall();$
+	\STATE $block \rightarrow addQuery(query);$
+	\STATE $L \rightarrow addBlock(block);$
+\ELSE
+	\STATE $asignada = false;$
+	\FOR {$ i = L \rightarrow firstOpenBlockLocked()...L \rightarrow sizeLocked()$}
+		\STATE $room\_block = L \rightarrow getBlockLocked(i);$
+		
+		\IF {$(room\_block \rightarrow isOpen()) AND 
+				(room\_block \rightarrow freeThreads() >= query \rightarrow getThreads())$
+			}
+			\STATE $room\_block \rightarrow addQuery(query)$
+			\STATE $asignada = true$
+			\STATE $break;$
+		\ENDIF
+	\ENDFOR
+	
+	\IF {$!(asignada)$}
+		\STATE $block = new Room();$
+		\STATE $block \rightarrow addQuery(query);$
+		\STATE $L \rightarrow addBlockLocked(block);$		
+	\ENDIF
+\ENDIF
+
+\end{algorithmic}
+\end{algorithm}
+
 
 // Esquema de ejecución
 
