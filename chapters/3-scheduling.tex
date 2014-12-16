@@ -81,6 +81,20 @@ En el contexto de un motor de búsqueda una consulta puede ser clasificada segú
 
 Al igual que el método anterior presentado en \ref{scheduling:glasgow}, se utilizan características de las listas invertidas de los términos de la consulta, es decir, toda la información necesaria estaba guardada en el índice invertido. En el presente método además se agregan características propias de las consultas que llegan al motor de búsqueda. 
 
+// Hablar sobre el proceos de escritura y mostrar la tabla como resumen
+
+
+Siguiendo la misma lógica del método presentado en la sección anterior, como las características presentadas en la Tabla \ref{tabla:estadisticosSigir} son de un solo término y generalmente las consultas contienen varios términos, se debe combinar estas características utilizando funciones de agregación. En este método se usa cuatro agregadores: máximo, mínimo, varianza y suma. Por ejemplo, para una query que contiene los términos 'casa' y 'perro', para cada una de las características de la Tabla \ref{tabla:estadisticosSigir} se calculará desde las dos listas invertidas el máximo, el mínimo, la varianza y la suma. Por lo tanto utilizando los agregadores para cada query se tiene 4 x 14 = 56 características totales.
+
+Lo anterior es muy costoso mantenerlo en memoria RAM  obtenerlo a mano rápidamente y costoso calcularlo, se reduce la gamma de características.
+
+
+Como se dijo anteriormente, en este nuevo método se agregarán características propias de la consulta. Estas características obtienen la complejidad de una transacción de lectura, la cual afecta el tiempo de ejecución de esta. Por ejemplo, el número de términos en la consulta y el idioma que está escrita, están correlacionado con el tiempo de ejecución. 
+
+// resescritura incrementa la complejidad 
+
+Las características propias de las queries son convenientes, ya que están disponible en tiempo de ejecución a un bajo costo. 
+
 
 \begin{table}[!th]
 \caption{Resumen de los estadísticos del presente método}
@@ -101,15 +115,22 @@ Al igual que el método anterior presentado en \ref{scheduling:glasgow}, se util
 \multicolumn{ 1}{|c|}{} & NdocsK & Número de inserciones al conjunto top-K \\ \cline{ 2- 3}
 \multicolumn{ 1}{|c|}{} & IDF & Frecuencia Inversa de Documento \\ \cline{ 2- 3}
 \multicolumn{ 1}{|c|}{} & timeTerm & Tiempo en resolver el término como una query \\ \hline
+\multicolumn{ 1}{|p{3cm}|}{Característica} & Inglés & Indica si la consulta está en inglés o no \\ \cline{ 2- 3}
+\multicolumn{ 1}{|p{3cm}|}{de la} & NumAumTerm & xxxxxx \\ \cline{ 2- 3}
+\multicolumn{ 1}{|p{3cm}|}{consulta} & Complejidad & Indica el grado de complejidad de la consulta \\ \cline{ 2- 3} 
+\multicolumn{ 1}{|c|}{} & Relax & Relax count applied or not \\ \cline{ 2- 3} 
+\multicolumn{ 1}{|c|}{} & NumTermsAntes & Indica el número de términos en la consulta original \\ \cline{ 2- 3} 
+\multicolumn{ 1}{|c|}{} & NumTermsDespues & Indica el número de términos después del proceso de reescritura \\ \cline{ 2- 3} 
+\hline
+
 \end{tabular}
 \label{tabla:estadisticosSigir}
 \end{table}
 
 
+Tener las 56 características de cada uno de los términos del índice invertido en memoria es muy costoso para el sistema, sobretodo pensando en que ese mismo espacio (4.47 GB aproximadamente), se puede utilizar para guardar trozos del índice invertido (citar paper microsoft). Es por esto que se desarolla un estudio de las características más relevantes.
 
-Siguiendo la misma lógica del método presentado en la sección anterior, como las características presentadas en la Tabla \ref{tabla:estadisticosSigir} son de un solo término y generalmente las consultas contienen varios términos, se debe combinar estas características utilizando funciones de agregación. En este método se usa cuatro agregadores: máximo, mínimo, varianza y suma. Por ejemplo, para una query que contiene los términos 'casa' y 'perro', para cada una de las características de la Tabla \ref{tabla:estadisticosSigir} se calculará desde las dos listas invertidas el máximo, el mínimo, la varianza y la suma. Por lo tanto utilizando los agregadores para cada query se tiene 4 x 14 = 56 características totales.
-
-Lo anterior es muy costoso mantenerlo en memoria RAM  obtenerlo a mano rápidamente y costoso calcularlo, se reduce la gamma de características.
+ 
 
 
 
