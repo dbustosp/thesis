@@ -1,0 +1,136 @@
+\chapter{Predicción de rendimiendo de transacciones de lectura}
+\label{cap:prediccion}
+
+Lograr bajos tiempos de respuestas es uno de los objetivos principales en el diseño de un motor de búsqueda, ya que de esta forma se le puede entregar una respuesta oportunda al usuario. Además estos poseen acuerdos de nivel de servicio (SLA), por ejemplo, que el 99\% de las consultas sean respondidas en $100 ms$. Por lo tanto, las transacciones de lectura que requieren una gran cantidad de tiempo para ser resueltas degradan considerablemente la satisfacción del usuario, y es por esto que las máquinas de búsqueda están optimizadas para reducir el percentil más alto de los tiempos de respuesta (también llamado $tail latency$). Paralelizar el procesamiento de cada consulta es una solución promitente para reducir el tiempo de ejecución \citep{Jeon:2013, Tatikonda:2011}. Esto es posible con los modernos servidores que existen hoy en día que poseen múltiples núcleos, en donde se puede resolver una consulta paralelizando múltiples hilos de ejecución, reduciendo el tiempo de ejecución de esta.
+
+Conocer de antemano la eficiencia de una \textit{query} es una ventaja muy importante, puesto que aquellas consultas que tomaran una mayor cantidad de tiempo en ser resueltas se les puede asignar un mayor número de \textit{threads} para procesarla, de esta manera se reduce el tiempo de procesamiento de las consultas y se cumple con la cota superior de tiempo prometida al usuario. Adicionalmente, que un sistema de recuperación de la información como un motor de búsqueda conozca anticipadamente cuánto tardará una consulta en ser procesada, permite implementar técnicas efectivas de planificación de transacciones de lecturas, por ejemplo, en el contexto de procesamiento paralelo de \textit{queries} por lotes (\textit{batches}) se pueden crear grupos de consultas que posean tiempos de respuesta parecidos, así se tiende a disminuir tanto el desbalance de carga entre los procesadores como el tiempo en procesar el \textit{batch} completo.
+
+Existen trabajos en donde es estudia la correlación de algunos estadísticos presentes en las listas del índice invertido con el tiempo de respuesta de una transacción de lectura (citar trabajos que estudian los estadísticos). El más intuitivo es el número de documentos que hay en una lista invertida, mientras más larga es una lista invertida mayor es el tiempo que toma en ser resuelta. A continuación se presenta la implementación de métodos de predicción de eficiencia de queries basado en en los estudios (glasgow, sigir, oscar).  
+
+\section{Método de predicción Glasgow}
+\label{scheduling:glasgow}
+El presente método \citep{Macdonald:2012} se basa en estadísticos obtenidos previamente calculados desde el índice invertido. Los puntajes de los documentos son obtenidos mediante el método BM25. Para cada consulta que llega al sistema, se toman los términos y para cada uno de ellos desde su propia lista invertida se obtiene los siguientes estadísticos $s(t)$:
+
+\begin{list}{}{}
+	\item \textbf{Media aritmética}. Se calcula la media aritmética del puntaje de los documentos.
+
+	\item \textbf{Media geométrica}. Se calcula la media geométrica del puntaje de los documentos.
+
+	\item \textbf{Media harmónica}.  Se calcula la media harmónica del puntaje de los documentos. 
+
+	\item \textbf{Máximo puntaje}. Se obtiene el puntaje máximo perteneciente a algún documento dentro de la lista invertida. En otras palabras, se obtiene el \textit{upper bound} $UB_t$ de la lista. 
+
+	\item \textbf{Varianza del puntaje}. Se extrae la varianza de puntaje de los documentos desde la lista invertida del término $t$. 
+	
+	\item \textbf{Número de documentos}. Se calcula el largo de la lista invertida. 
+
+	\item \textbf{Número de maximos}. Se obtiene el número de veces en que aparece un puntaje máximo, es decir, el número de veces en que se actualiza el puntaje máximo. 
+
+	\item \textbf{Número de documentos mayor a la media}. Se extrae el número de documentos que sobrepasa en puntaje al puntaje promedio. 
+	
+	\item \textbf{Número de documentos con puntaje máximo}. Se calcula el número de documentos que tienen el puntaje máximo dentro en la lista invertida del término $t$. 
+	
+	\item \textbf{Número de documentos dentro del 5\% más alto}. Se obtiene el número de documentos cuyos puntajes están dentro del 5\% superior dentrl de la lista invertida. 
+	
+	\item \textbf{Número de documentos dentro del 5\% del umbral (\textit{threshold})}. Se calcula el número de documentos cuyos puntaje están dentro del 5\% superior o inferior al umbral. Recordar que el \textit{threshold} es el puntaje de documento más bajo dentro del conjunto de los \textit{top-K}.
+	
+	\item \textbf{Número de inserciones en el conjunto de los mejores K documentos}. Para obtener este estadístico se asume que el término $t$ es una consulta con un solo término, se resuelve esta \textit{query} con el método \textit{Wand}  y se calcula el número de inserciones de documentos que se hizo al \textit{heap}. Recordar que las inserciones al \textit{heap} ocurren cuando el puntaje aproximado del documento supera el puntaje más bajo que en el \textit{heap} en ese momento (umbral o \textit{threshold}).
+	
+	\item \textbf{Frecuencia inversa de documento del término}. Se calcula el \textit{idf} del término $t$.
+	
+	\item \textbf{Tiempo en ser procesado el término}. Se obtiene el tiempo que toma ser procesado el término como una \textit{query} de un solo término.
+
+\end{list}
+
+
+Cada uno de los 14 estadísticos mencionados anteriormente están relacionados linealmente con la eficiencia de una transacción de lectura y son la base para la implementación del predictor, que está basado en un modelo de regresión lineal múltiple \citep{Chambers:1991}. A continuacion se muestra un resumen de estos estadísitcos en la Tabla \ref{tabla:estadisticosGlasgow}. 
+
+\begin{table}[H]
+\centering
+\caption{Resumen de los estadísticos que se deben extraer desde el índice invertido}
+\label{tabla:estadisticosGlasgow}
+\begin{tabular}{|l|}
+	\hline
+	\textbf{Estadísticos del término s(t)} \\	
+	1. Media aritmética	 \\ \hline
+	2. Media geométrica	 \\ \hline
+	3. Media harmónica	 \\ \hline
+	4. Puntaje máximo	 \\ \hline
+	5. Varianza del puntaje	 \\ \hline
+	6. Número de documentos	 \\ \hline
+	7. Número de máximos	 \\ \hline
+	8. Número docs > media	 \\ \hline
+	9. Número docs = máximo puntaje	 \\ \hline
+	10. Número docs dentro del 5\% más alto	 \\ \hline
+	11. Número docs dentro del 5\% del umbral	 \\ \hline
+	12. Número de inserciones al conjunto top-K	 \\ \hline
+	13. IDF	 \\ \hline
+	14. Tiempo en resolver $t$ como \textit{query}	\\ \hline  
+\end{tabular}
+\end{table}
+
+
+\section{Método de predicción SIGIR}
+\label{scheduling:sigir}
+En el contexto de un motor de búsqueda una consulta puede ser clasificada según el tiempo en que tome procesarla. En \citep{Jeon:2014} clasifican a una query como breve (0 - 30 ms), intermedia (30 - 80 ms) y prolongada ($ > 80 ms$). 
+
+
+Al igual que el método anterior presentado en \ref{scheduling:glasgow}, se utilizan características de las listas invertidas de los términos de la consulta, es decir, toda la información necesaria estaba guardada en el índice invertido. En el presente método además se agregan características propias de las consultas que llegan al motor de búsqueda. 
+
+// Hablar sobre el proceos de escritura y mostrar la tabla como resumen
+
+
+Siguiendo la misma lógica del método presentado en la sección anterior, como las características presentadas en la Tabla \ref{tabla:estadisticosSigir} son de un solo término y generalmente las consultas contienen varios términos, se debe combinar estas características utilizando funciones de agregación. En este método se usa cuatro agregadores: máximo, mínimo, varianza y suma. Por ejemplo, para una query que contiene los términos 'casa' y 'perro', para cada una de las características de la Tabla \ref{tabla:estadisticosSigir} se calculará desde las dos listas invertidas el máximo, el mínimo, la varianza y la suma. Por lo tanto utilizando los agregadores para cada query se tiene 4 x 14 = 56 características totales.
+
+Lo anterior es muy costoso mantenerlo en memoria RAM  obtenerlo a mano rápidamente y costoso calcularlo, se reduce la gamma de características.
+
+
+Como se dijo anteriormente, en este nuevo método se agregarán características propias de la consulta. Estas características obtienen la complejidad de una transacción de lectura, la cual afecta el tiempo de ejecución de esta. Por ejemplo, el número de términos en la consulta y el idioma que está escrita, están correlacionado con el tiempo de ejecución. 
+
+// resescritura incrementa la complejidad 
+
+Las características propias de las queries son convenientes, ya que están disponible en tiempo de ejecución a un bajo costo. 
+
+
+\begin{table}[!th]
+\caption{Resumen de los estadísticos del presente método}
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{Categoría} & \textbf{Característica} & \textbf{Descripción} \\ \hline
+\multicolumn{ 1}{|p{3cm}|}{Característica} & MediaA & Media aritmética del puntaje \\ \cline{ 2- 3}
+\multicolumn{ 1}{|p{3cm}|}{del} & MediaG & Media geométrica del puntaje \\ \cline{ 2- 3}
+\multicolumn{ 1}{|p{3cm}|}{término} & MediaH & Media harmónica del puntaje \\ \cline{ 2- 3}
+\multicolumn{ 1}{|c|}{} & MaxPuntaje & Puntaje máximo \\ \cline{ 2- 3}
+\multicolumn{ 1}{|c|}{} & VarPuntaje & Varianza de puntaje \\ \cline{ 2- 3}
+\multicolumn{ 1}{|c|}{} & Ndocs & Número de documentos \\ \cline{ 2- 3}
+\multicolumn{ 1}{|c|}{} & Nmaxima & Número de máximos \\ \cline{ 2- 3}
+\multicolumn{ 1}{|c|}{} & NdocsMedia & Número de documentos con puntaje mayor al puntaje medio \\ \cline{ 2- 3}
+\multicolumn{ 1}{|c|}{} & NdocsMaximo & Número de documentos con puntaje máximo \\ \cline{ 2- 3}
+\multicolumn{ 1}{|c|}{} & Ndocs5 & Número de documentos dentro del 5\% más alto \\ \cline{ 2- 3}
+\multicolumn{ 1}{|c|}{} & NdocsThreshold & Número de documentos dentro del 5\% del umbral \\ \cline{ 2- 3}
+\multicolumn{ 1}{|c|}{} & NdocsK & Número de inserciones al conjunto top-K \\ \cline{ 2- 3}
+\multicolumn{ 1}{|c|}{} & IDF & Frecuencia Inversa de Documento \\ \cline{ 2- 3}
+\multicolumn{ 1}{|c|}{} & timeTerm & Tiempo en resolver el término como una query \\ \hline
+\multicolumn{ 1}{|p{3cm}|}{Característica} & Inglés & Indica si la consulta está en inglés o no \\ \cline{ 2- 3}
+\multicolumn{ 1}{|p{3cm}|}{de la} & NumAumTerm & xxxxxx \\ \cline{ 2- 3}
+\multicolumn{ 1}{|p{3cm}|}{consulta} & Complejidad & Indica el grado de complejidad de la consulta \\ \cline{ 2- 3} 
+\multicolumn{ 1}{|c|}{} & Relax & Relax count applied or not \\ \cline{ 2- 3} 
+\multicolumn{ 1}{|c|}{} & NumTermsAntes & Indica el número de términos en la consulta original \\ \cline{ 2- 3} 
+\multicolumn{ 1}{|c|}{} & NumTermsDespues & Indica el número de términos después del proceso de reescritura \\ \cline{ 2- 3} 
+\hline
+
+\end{tabular}
+\label{tabla:estadisticosSigir}
+\end{table}
+
+
+Tener las 56 características de cada uno de los términos del índice invertido en memoria es muy costoso para el sistema, sobretodo pensando en que ese mismo espacio (4.47 GB aproximadamente), se puede utilizar para guardar trozos del índice invertido (citar paper microsoft). Es por esto que se desarolla un estudio de las características más relevantes.
+
+ 
+
+
+
+%Cuando un sistema está con una baja carga de trabajo paralelizar todas las consultas no tiene un impacto en el rendimiento, sin embargo, cuando un sistema está sometido a una moderada o %alta carga de trabajo paralelizar todas las queries entrantes es ineficiente, debido a que el costo de paralelizar queries cortas es alto.
+
+
+
