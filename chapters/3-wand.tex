@@ -281,28 +281,12 @@ El diseño implementado para este esquema posee como clase principal a TopKMulti
 
 
 
-
-
-
 \section{Estrategias de planificación}
-\label{scheduling:estrategiasplanificacion}
+\label{scheduling:es}
 
 Nosotros optamos por un enfoque de Wand Heap Compartido para ser usado en los experimentos.
+
 Se habla de enfoque de bloques también.
-
-
-
-\subsection{Estrategias por bloques}
-\label{scheduling:estrategiasbloques}
-
-// Se explica
-
-// Esquema de ejecución
-
-// Algoritmo
-
-// Ejemplo de cómo van quedando los bloques
-
 
 \subsection{Estrategia \textit{1TQ}}
 \label{scheduling:baseline}
@@ -350,5 +334,17 @@ Generalmente lo que se hace habitualmente es estimar el número de \textit{threa
 \end{figure}
 
 El procesamiento de cada hilo de ejecución es una versión de Wand con heap compartido (SH), adaptado de manera tal que cada unidad de trabajo es resuelta independientemente de si existen otras unidades siendo procesada al mismo tiempo o no. La única excepción es que la unidad que inicializa la consulta es siempre ejecutada antes del resto de las otras unidades de la misma consulta y la entrega de resultados se hace una vez que todas las unidades de trabajo de la \textit{query} han finalizado. Este enfoque híbrido permite reducir el tiempo perdido al final de cada \textit{batch} sin generar una importante pérdida de trabajo mientras las \textit{queries} del \textit{batch} están siendo procesadas.
+
+
+\subsection{Estrategia FR}
+\label{scheduling:fr}
+
+// Se explica
+
+// Esquema de ejecución
+
+// Algoritmo
+
+// Ejemplo de cómo van quedando los bloques
 
 
