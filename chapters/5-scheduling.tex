@@ -6,17 +6,21 @@ Por lo anteriormente mencionado, se hace imperioso tener un sistema diseñado qu
 
 A continuación se muestra las diferentes estrategias de planificación de transacciones de lectura abordadas en el presente trabajo utilizando diferentes enfoques; se presentan tres enfoques diferentes: El primero consiste en crear bloques de consultas en donde previamente a cada una de ellas se le asigna el número de hebras que utilizará en su resolución, luego el bloque es procesado en paralelo por los diferentes hilos de ejecución asignados; El segundo enfoque corresponde a unidades de trabajos, en la que a cada \textit{query} se le asigna un número determinado de unidades de trabajo y los \textit{threads} compiten por ellas desde una cola; (3) El tercer enfoque y último es el más básico, cada hilo de ejecución se hace cargo de una consulta y lleva a cabo su procesamiento, en este enfoque la competencia entre los hilos de ejecución es por las consultas. 
 
+
 \section{Estrategias por bloques}
 \label{scheduling:bloques}
+Un sistema de planificación de un motor de búsqueda trabaja en un contexto \textit{online}, esto significa que desconoce las transacciones que vendrán en el futuro y que cuando llega una nueva transacción de lectura, se debe tomar una decisión rápida acerca de qué hacer con ella. En el contexto del presente trabajo, para que el planificador tome una decisión se debe conocer el número de hebras con los que cada \textit{query} será resuelta y para lo cual se utiliza los predictores mostrados en \ref{cap:prediccion}; una vez que se predice el tiempo, se asigna el numero de hilos de ejecución con los que la consulta será resuelta para cumplir con la cota de tiempo impuesta.
+
+
 
 Hablar sobre las estrategias por bloques
-
-Se utilizará predictor de tiempo para setear threads
 
 Se muestra scheduler.odg para el esquema de forma general
 
 La estrategia teorica FR presentada en (citar) que estudia X, dio pie a la propuesta de... 
 La estrategia de planificación FR es un algoritmo teórico de planificación de trabajos paralelos (parallel job) que llegan al sistema uno a uno \citep{Ye:2007}.
+
+
 
 
 \subsection{Estrategia FR}
@@ -155,6 +159,8 @@ La idea de esta estrategia es separar las queries que tengan tiempos de procesam
 
 \section{Estrategia unidades de trabajo}
 \label{scheduling:unidadestrabajo}
+Decir que aquí para planificar se necesita conocer las unidades de trabajos requeridas en vez de threads como en las estrategias por bloques.
+
 Con respecto a los esquemas explicados hasta ahora, el esquema 1TQ tiene la ventaja que no solo requiere menos control, sino que también permite a los hilos de ejecución trabajar sin pausa mientras un \textit{batch} de consultas está siendo procesado. En esta sección se propone un esquema híbrido basado en unidades de procesamiento (\textit{Processing Units}) que aproveche las ventajas de ambos enfoques. (se requiere ver el tema de bloques).
 En este nuevo esquema de planificación, las consultas pasan a través de una fase en la cual cada \textit{query} es evaluada y se determina un apropiado número de unidades de procesamiento (\textit{processing units}) para poder resolver dicha consulta. Este proceso es llevado a cabo de manera similar al proceso en donde se determina la cantidad de \textit{threads} apropiados para resolver una determina transacción de lectura. Este número de unidades de procesamiento es creado y asociado a cada consulta, finalmente se guarda en una cola de unidades de trabajo. Un conjunto de \textit{threads} consumidores extraen las unidades desde la cola y las procesa independientemente. Cuando un \textit{thread} finalice el procesamiento de la unidad de trabajo actual automáticamente leerá la siguiente unidad de trabajo desde la cola. 
 Generalmente lo que se hace habitualmente es estimar el número de \textit{threads} con el que se resolverá la consulta, como se muestra en la Figura \ref{fig:unit_process} en este nuevo enfoque se intenta estimar el número de unidades de trabajo con el que se resolverá cada consulta. Además, se debe controlar el acceso concurrente de los hilos de ejecución a la cola de unidades de trabajo, de tal manera que solo un thread tenga acceso exclusivo a la estructura de datos. 
