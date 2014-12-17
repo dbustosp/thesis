@@ -386,6 +386,26 @@
   Url                      = {http://doi.acm.org/10.1145/2348283.2348508}
 }
 
+@InProceedings{Gil-Costa:2013,
+  Title                    = {Service Deployment Algorithms for Vertical Search Engines},
+  Author                   = {Gil-Costa, Veronica and Inostrosa-Psijas, Alonso and Marin, Mauricio and Feuestein, Esteban},
+  Booktitle                = {Proceedings of the 2013 21st Euromicro International Conference on Parallel, Distributed, and Network-Based Processing},
+  Year                     = {2013},
+
+  Address                  = {Washington, DC, USA},
+  Pages                    = {140--147},
+  Publisher                = {IEEE Computer Society},
+  Series                   = {PDP '13},
+
+  Acmid                    = {2497552},
+  Doi                      = {10.1109/PDP.2013.28},
+  ISBN                     = {978-0-7695-4939-2},
+  Numpages                 = {8},
+  Owner                    = {danilobustos},
+  Timestamp                = {2014.12.16},
+  Url                      = {http://dx.doi.org/10.1109/PDP.2013.28}
+}
+
 @PhdThesis{tesis:2013,
   Title                    = { {T{\'i}tulo Tesis} },
   Author                   = { Juan Gonz{\'a}lez },
@@ -447,6 +467,43 @@
   Owner                    = {danilobustos},
   Timestamp                = {2014.11.03},
   Url                      = {http://dx.doi.org/10.1007/978-3-540-30213-1_5}
+}
+
+@InCollection{Hurink:2008,
+  Title                    = {Online Algorithm for Parallel Job Scheduling and Strip Packing},
+  Author                   = {Hurink, JohannL. and Paulus, JacobJan},
+  Booktitle                = {Approximation and Online Algorithms},
+  Publisher                = {Springer Berlin Heidelberg},
+  Year                     = {2008},
+  Editor                   = {Kaklamanis, Christos and Skutella, Martin},
+  Pages                    = {67-74},
+  Series                   = {Lecture Notes in Computer Science},
+  Volume                   = {4927},
+
+  Doi                      = {10.1007/978-3-540-77918-6_6},
+  ISBN                     = {978-3-540-77917-9},
+  Language                 = {English},
+  Owner                    = {danilobustos},
+  Timestamp                = {2014.12.17},
+  Url                      = {http://dx.doi.org/10.1007/978-3-540-77918-6_6}
+}
+
+@Article{Hurink2008B,
+  Title                    = {Online scheduling of parallel jobs on two machines is 2-competitive },
+  Author                   = {J.L. Hurink and J.J. Paulus},
+  Journal                  = {Operations Research Letters },
+  Year                     = {2008},
+  Number                   = {1},
+  Pages                    = {51 - 56},
+  Volume                   = {36},
+
+  Abstract                 = {We consider online scheduling of parallel jobs on parallel machines. For the problem with two machines and the objective of minimizing the makespan, we show that 2 is a tight lower bound on the competitive ratio. For the problem with m machines, we derive lower bounds using an \{ILP\} formulation. },
+  Doi                      = {http://dx.doi.org/10.1016/j.orl.2007.06.001},
+  ISSN                     = {0167-6377},
+  Keywords                 = {Online scheduling},
+  Owner                    = {danilobustos},
+  Timestamp                = {2014.12.17},
+  Url                      = {http://www.sciencedirect.com/science/article/pii/S0167637707000661}
 }
 
 @InProceedings{Jeon:2013,

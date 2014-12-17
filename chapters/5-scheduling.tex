@@ -9,19 +9,9 @@ A continuación se muestra las diferentes estrategias de planificación de trans
 
 \section{Estrategias por bloques}
 \label{scheduling:bloques}
-Un sistema de planificación de un motor de búsqueda trabaja en un contexto \textit{online}, esto significa que desconoce las transacciones que vendrán en el futuro y que cuando llega una nueva transacción de lectura, se debe tomar una decisión rápida acerca de qué hacer con ella. En el contexto del presente trabajo, para que el planificador tome una decisión se debe conocer el número de hebras con los que cada \textit{query} será resuelta y para lo cual se utiliza los predictores mostrados en \ref{cap:prediccion}; una vez que se predice el tiempo, se asigna el numero de hilos de ejecución con los que la consulta será resuelta para cumplir con la cota de tiempo impuesta.
+Un sistema de planificación de un motor de búsqueda trabaja en un contexto \textit{online}, esto significa que desconoce las transacciones que vendrán en el futuro y que cuando llega una nueva transacción de lectura, se debe tomar una decisión rápida acerca de qué hacer con ella. En el contexto del presente trabajo, para que el planificador tome una decisión se debe conocer el número de hebras con los que cada \textit{query} será resuelta y para lo cual se utiliza los predictores mostrados en \ref{cap:prediccion}; una vez que se predice el tiempo, se asigna el numero de hilos de ejecución con los que la consulta será resuelta para cumplir con la cota de tiempo impuesta.  
 
-
-
-Hablar sobre las estrategias por bloques
-
-Se muestra scheduler.odg para el esquema de forma general
-
-La estrategia teorica FR presentada en (citar) que estudia X, dio pie a la propuesta de... 
-La estrategia de planificación FR es un algoritmo teórico de planificación de trabajos paralelos (parallel job) que llegan al sistema uno a uno \citep{Ye:2007}.
-
-
-
+Bajo el contexto de un motor de búsqueda en el que se debe planificar transacciones de lecturas que eventualmente serán resueltas de forma paralela por diferentes hilos de ejecución, existe una estrategia teórica llamada FR que aborda este problema \citep{Ye:2007} y se adapta a nuestro escenario de un motor de búsqueda vertical; además se propone dos nuevas estrategias siguiendo el mismo enfoque de FR, pero estas enfocadas principalmente en mejorar la asignación de consultas a bloques, para así reducir el tiempo ocioso de las hebras. 
 
 \subsection{Estrategia FR}
 \label{scheduling:fr}
