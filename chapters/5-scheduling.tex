@@ -1,11 +1,10 @@
 \chapter{Estrategias de planificación de queries}
 \label{cap:planificacion}
+Los motores de búsqueda verticales son sistemas dedicados a un solo propósito e ideado con el propósito de lidiar con cargas de trabajos dinámicas. Un ejemplo de un motor de búsqueda vertical es un motor de publicidad que ejecuta una consulta cada vez que un usuario abre un correo electrónico en por ejemplo, el servicio de \textit{Yahoo! mail}; de esta forma se muestra publicidad de acuerdo al contenido del correo electrónico. Eventualmente millones de usuarios concurrentes están conectados a sus correos electrónicos, por lo que la carga de trabajo esperada para el motor de búsqueda puede llegar a órdenes de las cien mil consultas por segundo \citep{Gil-Costa:2013}. Adicionalmente, el hecho que las actualizaciones en un motor de búsqueda vertical ocurran con mayor frecuencia que en uno de propósito general, hace que el diseño de los algoritmos para procesar las \textit{queries} sea diferente; también se debe permitir la actualización del índice invertido.
 
-Nosotros optamos por un enfoque de Wand Heap Compartido para ser usado en los experimentos.
+Por lo anteriormente mencionado, se hace imperioso tener un sistema diseñado que soporte altas cargas de trabajo, y las respuestas a consultas esten en una cota de tiempo aceptable para el usuario sin mermar la calidad de los resultados obtenidos. También es necesario que las estructuras de datos y los algoritmos implementados soporten la concurrencia entre las transacciones de lecturas y escrituras; dicho de otra forma, eventualmente el motor de búsqueda tendrá que dejar de procesar consultas para poder servir las transacciones de escritura que actualizan el índice invertido.
 
-Se habla de enfoque de bloques también.
-
-Recordar el contexto de planificación de queries y ejecución de queries.
+A continuación se muestra las diferentes estrategias de planificación de transacciones de lectura abordadas en el presente trabajo utilizando diferentes enfoques; se presentan tres enfoques diferentes: El primero consiste en crear bloques de consultas en donde previamente a cada una de ellas se le asigna el número de hebras que utilizará en su resolución, luego el bloque es procesado en paralelo por los diferentes hilos de ejecución asignados; El segundo enfoque corresponde a unidades de trabajos, en la que a cada \textit{query} se le asigna un número determinado de unidades de trabajo y los \textit{threads} compiten por ellas desde una cola; (3) El tercer enfoque y último es el más básico, cada hilo de ejecución se hace cargo de una consulta y lleva a cabo su procesamiento, en este enfoque la competencia entre los hilos de ejecución es por las consultas. 
 
 \section{Estrategias por bloques}
 \label{scheduling:bloques}
@@ -23,7 +22,6 @@ La estrategia de planificación FR es un algoritmo teórico de planificación de
 \subsection{Estrategia FR}
 \label{scheduling:fr}
 La estrategia de planificación FR asume que cada query que llega al motor de búsqueda posee el tiempo en que se domorará en ser procesada. 
-
 Sehace una clsificación de las queries entre Big y Small con el objetivo de crear estructuras de datos denominadas Rooms y Walls, en donde Walls y Tooms estarán formadas por queries Bigs y Smalls respectivamente. Ambas estructuras tienen un número máximo de máquinas disponibles para procesar las queries. Una consulta es Big si el número de máquinas requeridas para procesarlas es m (siendo m el número de máquinas disponibles),, de lo contrario, la query es small. 
 % Debe estar bloqueada porque eventualmente el ejecutador de queries estará sacando
 
@@ -32,7 +30,7 @@ Como se puede ver en el Algoritmo \ref{alg:fr}, cuando una nueva query llega al 
 %----- Fin descripción algoritmo ----
 
 \begin{algorithm}[!th]
-\caption{\em $assignQuery(L, Q)$: Planificación de consulta}
+\caption{\em $schedulerFR::assignQuery(L, Q)$: Planificación de consulta estrategia FR}
 \label{alg:fr}
 \begin{algorithmic}[1]
 \REQUIRE Una SchedulingList $L$ en donde se hará la planificación, QueryObject $Q$ a planificar
@@ -73,6 +71,103 @@ Como se puede ver en el Algoritmo \ref{alg:fr}, cuando una nueva query llega al 
 
 // Ejemplo de cómo van quedando los bloques
 
+Se intuye que habrá pérdida de eficiencia al final de cada bloque. 
+
+
+\subsection{Estrategia Times}
+\label{scheduling:times}
+La idea de esta estrategia es separar las queries que tengan tiempos de procesamiento muy diferentes, es decir, se crearán bloques de queries que tienen poca diferencia de tiempo, de esta forma se quiere reducir el tiempo perdido entre un bloque y otro. Cada bloque b tendrá un tiempo t, que será el menor tiempo perteneciente a alguna de las consultas ya planificadas en el bloque. La métrica establecida para que una query sea planificada en un bloque, es que el tiempo del bloque tb no puedo doblar al tiempo de la consulta tq, y viceversa. Si esta condición falla, entonces significa que la query q que se está intentando planificar posee tiempos que se escapa a los rangos de tiempo del bloque b. A continuación se muestra el algoritmo para la presente estrategia
+
+\begin{algorithm}[!th]
+\caption{\em $schedulerTimes::assignQuery(L, Q)$: Planificación de consulta estrategias Times}
+\label{alg:times}
+\begin{algorithmic}[1]
+\REQUIRE Una SchedulingList $L$ en donde se hará la planificación, QueryObject $Q$ a planificar
+\ENSURE SchedulingList $L$ con la nueva query planificada
+	\STATE $blocks_viewed = 0$
+	
+	\FOR {$ i = L \rightarrow firstOpenBlockLocked()...L \rightarrow sizeLocked()$}
+		\STATE $block = lista\_bloques \rightarrow getBlockLocked(i);$
+		
+		\IF {$block \rightarrow isOpen() AND block \rightarrow freeThreads() \geq query \rightarrow getThreads()$}
+			\STATE $queries = block \rightarrow getQueries();$
+			\STATE $tiempo\_min = queries[0] \rightarrow getEstimatedTime();$
+			
+			\FOR {$ j = 1 ...queries->size()$}
+				\IF {$queries[j] \rightarrow getEstimatedTime() < tiempo_min$}
+					\STATE $tiempo\_min = queries[j] \rightarrow getEstimatedTime();$
+				\ENDIF
+			\ENDFOR
+			
+			\IF {$tiempo\_min < estimated\_time$}
+				\STATE $diff = 2*tiempo_min - estimated_time;$
+			\ELSE
+				\STATE $diff = 2*estimated_time - tiempo_min;$
+			\ENDIF
+			
+			\IF {$diff < 0$}
+				\STATE $diff = 0.0-diff;$
+				\IF {$diff < best_diff$}
+					\STATE $best_diff = diff;$
+					\STATE $best_block = i;$
+				\ENDIF
+			\ELSE
+				\STATE $valido = true;$
+			\ENDIF
+			
+			\IF {$ valido $}
+				\STATE $block \rightarrow addQuery(query);$
+				\STATE $asignada = true;$
+				\STATE $break;$
+			\ENDIF
+			
+			\STATE $bloques_revisados++;$
+			
+			\IF {$bloques_revisados \geq max_bloques_rev$}
+				\STATE $break;$
+			\ENDIF
+			
+		\ENDIF
+		
+	\ENDFOR
+	
+	\IF {$ ! asignada $}
+		\IF {$ (bloques\_revisados \geq max\_bloques_rev) $}
+			\STATE $block = lista\_bloques \rightarrow getBlockLocked(best\_block);$
+			\STATE $block \rightarrow addQuery(query);$
+		\ELSE
+			\STATE $block = new QueryBlock();$
+			\STATE $block \rightarrow addQuery(query);$
+			\STATE $lista\_bloques \rightarrow addBlockLocked(block);$
+			
+		\ENDIF	
+	\ENDIF
+
+\end{algorithmic}
+\end{algorithm}
+
+
+
+
+\subsection{Estrategia TimesRanges}
+\label{scheduling:fr}
+
+
+\section{Estrategia unidades de trabajo}
+\label{scheduling:unidadestrabajo}
+Con respecto a los esquemas explicados hasta ahora, el esquema 1TQ tiene la ventaja que no solo requiere menos control, sino que también permite a los hilos de ejecución trabajar sin pausa mientras un \textit{batch} de consultas está siendo procesado. En esta sección se propone un esquema híbrido basado en unidades de procesamiento (\textit{Processing Units}) que aproveche las ventajas de ambos enfoques. (se requiere ver el tema de bloques).
+En este nuevo esquema de planificación, las consultas pasan a través de una fase en la cual cada \textit{query} es evaluada y se determina un apropiado número de unidades de procesamiento (\textit{processing units}) para poder resolver dicha consulta. Este proceso es llevado a cabo de manera similar al proceso en donde se determina la cantidad de \textit{threads} apropiados para resolver una determina transacción de lectura. Este número de unidades de procesamiento es creado y asociado a cada consulta, finalmente se guarda en una cola de unidades de trabajo. Un conjunto de \textit{threads} consumidores extraen las unidades desde la cola y las procesa independientemente. Cuando un \textit{thread} finalice el procesamiento de la unidad de trabajo actual automáticamente leerá la siguiente unidad de trabajo desde la cola. 
+Generalmente lo que se hace habitualmente es estimar el número de \textit{threads} con el que se resolverá la consulta, como se muestra en la Figura \ref{fig:unit_process} en este nuevo enfoque se intenta estimar el número de unidades de trabajo con el que se resolverá cada consulta. Además, se debe controlar el acceso concurrente de los hilos de ejecución a la cola de unidades de trabajo, de tal manera que solo un thread tenga acceso exclusivo a la estructura de datos. 
+
+\begin{figure}[!th]
+\centering
+\includegraphics[scale=.75]{images/unit_process.eps}
+\caption{Procesamiento de consultas utilizando unidades de trabajo}
+\label{fig:unit_process}
+\end{figure}
+
+El procesamiento de cada hilo de ejecución es una versión de Wand con heap compartido (SH), adaptado de manera tal que cada unidad de trabajo es resuelta independientemente de si existen otras unidades siendo procesada al mismo tiempo o no. La única excepción es que la unidad que inicializa la consulta es siempre ejecutada antes del resto de las otras unidades de la misma consulta y la entrega de resultados se hace una vez que todas las unidades de trabajo de la \textit{query} han finalizado. Este enfoque híbrido permite reducir el tiempo perdido al final de cada \textit{batch} sin generar una importante pérdida de trabajo mientras las \textit{queries} del \textit{batch} están siendo procesadas.
+
 
 
 \section{Estrategia \textit{1TQ}}
@@ -104,20 +199,3 @@ En la Figura \ref{fig:small_jobs} queda reflejado lo dicho en el párrafo anteri
 \caption{Ejecución en paralelo de \textit{large jobs}}
 \label{fig:large_jobs}
 \end{figure}
-
-
-
-\section{Estrategia unidades de trabajo}
-\label{scheduling:unidadestrabajo}
-Con respecto a los esquemas explicados hasta ahora, el esquema 1TQ tiene la ventaja que no solo requiere menos control, sino que también permite a los hilos de ejecución trabajar sin pausa mientras un \textit{batch} de consultas está siendo procesado. En esta sección se propone un esquema híbrido basado en unidades de procesamiento (\textit{Processing Units}) que aproveche las ventajas de ambos enfoques. (se requiere ver el tema de bloques).
-En este nuevo esquema de planificación, las consultas pasan a través de una fase en la cual cada \textit{query} es evaluada y se determina un apropiado número de unidades de procesamiento (\textit{processing units}) para poder resolver dicha consulta. Este proceso es llevado a cabo de manera similar al proceso en donde se determina la cantidad de \textit{threads} apropiados para resolver una determina transacción de lectura. Este número de unidades de procesamiento es creado y asociado a cada consulta, finalmente se guarda en una cola de unidades de trabajo. Un conjunto de \textit{threads} consumidores extraen las unidades desde la cola y las procesa independientemente. Cuando un \textit{thread} finalice el procesamiento de la unidad de trabajo actual automáticamente leerá la siguiente unidad de trabajo desde la cola. 
-Generalmente lo que se hace habitualmente es estimar el número de \textit{threads} con el que se resolverá la consulta, como se muestra en la Figura \ref{fig:unit_process} en este nuevo enfoque se intenta estimar el número de unidades de trabajo con el que se resolverá cada consulta. Además, se debe controlar el acceso concurrente de los hilos de ejecución a la cola de unidades de trabajo, de tal manera que solo un thread tenga acceso exclusivo a la estructura de datos. 
-
-\begin{figure}[!th]
-\centering
-\includegraphics[scale=.75]{images/unit_process.eps}
-\caption{Procesamiento de consultas utilizando unidades de trabajo}
-\label{fig:unit_process}
-\end{figure}
-
-El procesamiento de cada hilo de ejecución es una versión de Wand con heap compartido (SH), adaptado de manera tal que cada unidad de trabajo es resuelta independientemente de si existen otras unidades siendo procesada al mismo tiempo o no. La única excepción es que la unidad que inicializa la consulta es siempre ejecutada antes del resto de las otras unidades de la misma consulta y la entrega de resultados se hace una vez que todas las unidades de trabajo de la \textit{query} han finalizado. Este enfoque híbrido permite reducir el tiempo perdido al final de cada \textit{batch} sin generar una importante pérdida de trabajo mientras las \textit{queries} del \textit{batch} están siendo procesadas.
