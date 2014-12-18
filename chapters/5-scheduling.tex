@@ -69,13 +69,16 @@ Como se puede ver en el Algoritmo \ref{alg:fr}, cuando una nueva \textit{query} 
 \end{algorithm}
 
 
-// Esquema de ejecución
+% --- Descripción proceso ---
+En la Figura X se presenta un ejemplo de ejecucion la estrategia FR. Ya han llegado al sistema consultas: q0 (2 threads), q1 (16 threads), q2 (4 threads), q3 (2 threads), q4 (2 threads), q5 (8 threads) y q6 (16 threads). Se puede ver cómo se van formando las estructuras de datos llamadas \textit{Rooms} y \textit{Walls}. Suponer que eventualmente arriba al sistema una nueva consulta que será resuelta con 8 \textit{threads}, entonces el algoritmo verifica en primera instancia la $Room_0$, sin embargo, en esta estructura no hay suficientes \textit{threads} disponibles para procesar la consulta (posee solo 6 disponibles). Finalmente la planifica en la $Room_1$.
 
-// Algoritmo
-
-// Ejemplo de cómo van quedando los bloques
-
-Se intuye que habrá pérdida de eficiencia al final de cada bloque. 
+\begin{figure}[!th]
+\centering
+\includegraphics[scale=.75]{images/proceso_FR.eps}
+\caption{Ejemplo de procesamiento de la estrategia FR}
+\label{fig:proceso_FR}
+\end{figure} 
+%----- Fin descripción proceso ----
 
 
 \subsection{Estrategia Times}
