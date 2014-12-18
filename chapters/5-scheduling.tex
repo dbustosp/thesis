@@ -80,9 +80,10 @@ En la Figura X se presenta un ejemplo de ejecucion la estrategia FR. Ya han lleg
 \end{figure} 
 %----- Fin descripción proceso ----
 
-
 \subsection{Estrategia Times}
 \label{scheduling:times}
+Se intuye que una de las desventajas de la estrategia FR es que al planificar una consulta en algún bloque, solo verifica si es que este posee el número de threads desocupados suficientes tal que sea mayor o igual al número de threads requerido por la consulta. Esto puede generar pérdida de eficiencia importante en los procesamientos de los bloques, puesto que algunas transacciones de lecturas pueden tomar mayor tiempo en ser procesadas y los hilos de ejecución que ya han terminado su trabajo estarán ociosos esperando por otros para continuar con el siguiente bloque. Para abordar esta posible pérdida de eficiencia, se diseña una política de planificación alternativa tomando en cuenta el tiempo esperado de la transacción de lectura y no el número de threads como en la estrategia FR.
+
 La idea de esta estrategia es separar las queries que tengan tiempos de procesamiento muy diferentes, es decir, se crearán bloques de queries que tienen poca diferencia de tiempo, de esta forma se quiere reducir el tiempo perdido entre un bloque y otro. Cada bloque b tendrá un tiempo t, que será el menor tiempo perteneciente a alguna de las consultas ya planificadas en el bloque. La métrica establecida para que una query sea planificada en un bloque, es que el tiempo del bloque tb no puedo doblar al tiempo de la consulta tq, y viceversa. Si esta condición falla, entonces significa que la query q que se está intentando planificar posee tiempos que se escapa a los rangos de tiempo del bloque b. A continuación se muestra el algoritmo para la presente estrategia
 
 \begin{algorithm}[!th]
