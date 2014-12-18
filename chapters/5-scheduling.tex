@@ -9,13 +9,25 @@ A continuación se muestra las diferentes estrategias de planificación de trans
 
 \section{Estrategias por bloques}
 \label{scheduling:bloques}
-Un sistema de planificación de un motor de búsqueda trabaja en un contexto \textit{online}, esto significa que desconoce las transacciones que vendrán en el futuro y que cuando llega una nueva transacción de lectura, se debe tomar una decisión rápida acerca de qué hacer con ella. En el contexto del presente trabajo, para que el planificador tome una decisión se debe conocer el número de hebras con los que cada \textit{query} será resuelta y para lo cual se utiliza los predictores mostrados en \ref{cap:prediccion}; una vez que se predice el tiempo, se asigna el numero de hilos de ejecución con los que la consulta será resuelta para cumplir con la cota de tiempo impuesta.  
+Un sistema de planificación de un motor de búsqueda trabaja en un contexto \textit{online}, esto significa que desconoce las transacciones que vendrán en el futuro y que cuando llega una nueva transacción de lectura, se debe tomar una decisión rápida acerca de qué hacer con ella. En el contexto del presente trabajo, para que el planificador tome una decisión se debe conocer el número de hebras con los que cada \textit{query} será resuelta y para lo cual se utiliza los predictores mostrados en el Capítulo \ref{cap:prediccion}; una vez que se predice el tiempo, se asigna el numero de hilos de ejecución con los que la consulta será resuelta para cumplir con la cota de tiempo impuesta.
 
-Bajo el contexto de un motor de búsqueda en el que se debe planificar transacciones de lecturas que eventualmente serán resueltas de forma paralela por diferentes hilos de ejecución, existe una estrategia teórica llamada FR que aborda este problema \citep{Ye:2007} y se adapta a nuestro escenario de un motor de búsqueda vertical; además se propone dos nuevas estrategias siguiendo el mismo enfoque de FR, pero estas enfocadas principalmente en mejorar la asignación de consultas a bloques, para así reducir el tiempo ocioso de las hebras. 
+\begin{figure}[!th]
+\centering
+\includegraphics[scale=.75]{images/scheduler_bloques.eps}
+\caption{Enfoque de planificación para estrategias por bloques}
+\label{fig:schedulerbloques}
+\end{figure}  
+
+Bajo el contexto de un motor de búsqueda en el que se debe planificar transacciones de lecturas que eventualmente serán resueltas de forma paralela por diferentes hilos de ejecución, existe una estrategia teórica llamada FR que aborda este problema \citep{Ye:2007} y se adapta a nuestro escenario de un motor de búsqueda vertical; esta estrategia del estado del arte da pie para que en el presente trabajo de tesis se proponga dos nuevas estrategias siguiendo el mismo enfoque de FR, pero estas enfocadas principalmente en mejorar la asignación de consultas a bloques, para así reducir el tiempo ocioso de las hebras. 
+En la Figura \ref{fig:schedulerbloques} se muestra el proceso completo del presente enfoque; las consultas que llegan al sistema las recibe el planificador \textit{scheduler} y las envía al estimador (\textit{estimator}), que calcula el número de hilos de ejecución para la consulta. Una vez que a la \textit{query} se le predice el tiempo de ejecución y el número de \textit{threads} a utilizar, este planifica la consulta en algún bloque correspondiente depenediendo de la política que se este utilizando. A continuación se muestran las diferentes estrategias propuestas. 
 
 \subsection{Estrategia FR}
 \label{scheduling:fr}
-La estrategia de planificación FR asume que cada query que llega al motor de búsqueda posee el tiempo en que se domorará en ser procesada. 
+La estrategia FR posee como requisito que cada una de las consultas a planificar se le haya asignado el número de hebras con las cuales se resolverá; esto se hará siguiendo el esquema \ref{fig:schedulerbloques}. Para la asignación de hilos de ejecución a las consultas (que se hace en el \textit{estimator}), lo que se hace es definir un tiempo en que se espera que la transacción de lectura sea resuelta (un requerimiento de cota superior de tiempo), de esta manera a cada \textit{query} se le asigna la cantidad mínima de hebras tal que el tiempo en resolver la consulta sea menor al tiempo esperado.
+
+Por lo explicado en el párrafo anterior, el algoritmo FR asume que cada \textit{query} que llega al motor de búsqueda posee el número de hebras que debe utilizarse en su resolución.  
+
+
 Sehace una clsificación de las queries entre Big y Small con el objetivo de crear estructuras de datos denominadas Rooms y Walls, en donde Walls y Tooms estarán formadas por queries Bigs y Smalls respectivamente. Ambas estructuras tienen un número máximo de máquinas disponibles para procesar las queries. Una consulta es Big si el número de máquinas requeridas para procesarlas es m (siendo m el número de máquinas disponibles),, de lo contrario, la query es small. 
 % Debe estar bloqueada porque eventualmente el ejecutador de queries estará sacando
 
