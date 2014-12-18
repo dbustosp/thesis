@@ -34,7 +34,7 @@ Como se puede ver en el Algoritmo \ref{alg:fr}, cuando una nueva \textit{query} 
 %----- Fin descripción algoritmo ----
 
 \begin{algorithm}[!th]
-\caption{\em $schedulerFR::assignQuery(L, Q)$: Planificación de consulta estrategia FR}
+\caption{\em $schedulerFR::assignQuery(L, Q)$: Planificación de consulta}
 \label{alg:fr}
 \begin{algorithmic}[1]
 \REQUIRE Una SchedulingList $L$ en donde se hará la planificación, QueryObject $Q$ a planificar
@@ -49,7 +49,7 @@ Como se puede ver en el Algoritmo \ref{alg:fr}, cuando una nueva \textit{query} 
 	\FOR {$ i = L \rightarrow firstOpenBlockLocked() ... L \rightarrow size()$}
 		\STATE $room\_block = L \rightarrow getBlockLocked(i);$
 		
-		\IF {$(room\_block \rightarrow isOpen()) AND 
+		\IF {$(room\_block \rightarrow isOpen()) \& \& 
 				(room\_block \rightarrow freeThreads() >= query \rightarrow getThreads())$
 			}
 			\STATE $room\_block \rightarrow addQuery(query)$
@@ -84,81 +84,46 @@ En la Figura X se presenta un ejemplo de ejecucion la estrategia FR. Ya han lleg
 \label{scheduling:times}
 Se intuye que una de las desventajas de la estrategia FR es que al planificar una consulta en algún bloque, solo verifica si es que este posee el número de threads desocupados suficientes tal que sea mayor o igual al número de threads requerido por la consulta. Esto puede generar pérdida de eficiencia importante en los procesamientos de los bloques, puesto que algunas transacciones de lecturas pueden tomar mayor tiempo en ser procesadas y los hilos de ejecución que ya han terminado su trabajo estarán ociosos esperando por otros para continuar con el siguiente bloque. Para abordar esta posible pérdida de eficiencia, se diseña una política de planificación alternativa en donde además de tomar en cuenta el número de threads disponible en cada bloque (como en la estrategia anterior), se toma en cuenta el tiempo esperado de la transacción de lectura.
 
-Cada consulta $q$ tiene asociado un número de threads $NT_q$ y un tiempo $t_predicho$, que es el tiempo en que se espera que la consulta sea resuelta con $NT_q$ hilos de ejecución. La idea de esta estrategia es separar las transacciones de lectura que tengan tiempos de procesamiento muy diferentes en bloques distintos, es decir, se crearán bloques con consultas que tengan poca diferencia de tiempo unas de otra, de esta forma se quiere reducir el tiempo que se podría perder entre un bloque y otro por el desbalance de carga de los \textit{threads}. Cada bloque $B$ tendrá un tiempo $t_B$, que será el tiempo de la consulta con menor tiempo dentro del bloque. La métrica establecida para que una transacción de lectura que llega al sistema sea planificada en un bloque, es que el tiempo del bloque $t_B$ no sea el doble del tiempo de la consulta $t_q$ entrante, y viceversa. Si esta condición falla, entonces significa que la consulta $q$ que se está intentando planificar posee tiempos que se escapa a los rangos de tiempo del bloque $B$. A continuación se muestra el algoritmo para la presente estrategia
+Cada consulta $q$ tiene asociado un número de threads $NT_q$ y un tiempo $t_predicho$, que es el tiempo en que se espera que la consulta sea resuelta con $NT_q$ hilos de ejecución. La idea de esta estrategia es separar las transacciones de lectura que tengan tiempos de procesamiento muy diferentes en bloques distintos, es decir, se crearán bloques con consultas que tengan poca diferencia de tiempo unas de otra, de esta forma se quiere reducir el tiempo que se podría perder entre un bloque y otro por el desbalance de carga de los \textit{threads}. Cada bloque $B$ tendrá un tiempo $t_B$, que será el tiempo de la consulta con menor tiempo dentro del bloque. La métrica establecida para que una transacción de lectura que llega al sistema sea planificada en un bloque, es que el tiempo del bloque $t_B$ no sea el doble del tiempo de la consulta $t_q$ entrante, y viceversa. Si esta condición falla, entonces significa que la consulta $q$ que se está intentando planificar posee tiempos que se escapa a los rangos de tiempo del bloque $B$.
+
+El Algoritmo \ref{alg:times} muestra el funcionamiento de la estrategia \textit{Times}, esta recibe como entrada la consulta a planificar y la lista de bloques (\textit{SchedulingList}). El algoritmo Times trabaja de manera similar a la estrategia FR, la diferencia es que en esta estrategia una consulta puede ser planificada en un bloque siempre y cuando este tenga \textit{threads} disponibles suficientes para procesarla y que el tiempo de la consulta no doble al tiempo mínimo dentro del bloque perteneciente a alguna \textit{query} ya planificada; si esta no puede ser planificada, entonces el bloque se desecha y se busca por otro bloque. Existirá un número limitado de bloques que se pueden desechar (\textit{MAX_BLOCKS_CHECKED}), si eventualmente se llega a este valor, se escoge aquel bloque con la mínima diferencia de tiempo con la consulta. En el peor de los casos, ningún bloque tendrá espacio suficiente para planificar la consulta y se deberá crear uno nuevo. Notar que en esta estrategia ya no se clasifican las queries de acuerdo al número de \textit{threads} que utilizan. 
 
 \begin{algorithm}[!th]
-\caption{\em $schedulerTimes::assignQuery(L, Q)$: Planificación de consulta estrategias Times}
+\caption{\em $schedulerTimes::assignQuery(L, Q)$: Planificación de consulta}
 \label{alg:times}
 \begin{algorithmic}[1]
 \REQUIRE Una SchedulingList $L$ en donde se hará la planificación, QueryObject $Q$ a planificar
-\ENSURE SchedulingList $L$ con la nueva query planificada
-	\STATE $blocks_viewed = 0$
-	
-	\FOR {$ i = L \rightarrow firstOpenBlockLocked()...L \rightarrow sizeLocked()$}
-		\STATE $block = lista\_bloques \rightarrow getBlockLocked(i);$
-		
-		\IF {$block \rightarrow isOpen() AND block \rightarrow freeThreads() \geq query \rightarrow getThreads()$}
-			\STATE $queries = block \rightarrow getQueries();$
-			\STATE $tiempo\_min = queries[0] \rightarrow getEstimatedTime();$
-			
-			\FOR {$ j = 1 ...queries->size()$}
-				\IF {$queries[j] \rightarrow getEstimatedTime() < tiempo_min$}
-					\STATE $tiempo\_min = queries[j] \rightarrow getEstimatedTime();$
-				\ENDIF
-			\ENDFOR
-			
-			\IF {$tiempo\_min < estimated\_time$}
-				\STATE $diff = 2*tiempo_min - estimated_time;$
-			\ELSE
-				\STATE $diff = 2*estimated_time - tiempo_min;$
-			\ENDIF
-			
-			\IF {$diff < 0$}
-				\STATE $diff = 0.0-diff;$
-				\IF {$diff < best_diff$}
-					\STATE $best_diff = diff;$
-					\STATE $best_block = i;$
-				\ENDIF
-			\ELSE
-				\STATE $valido = true;$
-			\ENDIF
-			
-			\IF {$ valido $}
-				\STATE $block \rightarrow addQuery(query);$
-				\STATE $asignada = true;$
+\ENSURE SchedulingList $L$ con la nueva query planificada	
+	\STATE $blocks\_viewed = 0$
+	\STATE $blockValid = false;$	
+	\STATE $best\_diff = INF;$	
+	\FOR {$ i = L \rightarrow firstOpenBlockLocked() ... L \rightarrow size()$}
+		\STATE $block = L \rightarrow getBlockLocked(i);$		
+		\IF {$ block block \rightarrow freeThreads() \geq query \rightarrow getThreads() $}
+			\STATE $tiempo\_min = block \rightarrow getMinimumTime()$			
+			\IF {$ block \rightarrow isSchedulable(query) $}
+				\STATE $L \rightarrow addQuery(query);$
+				\STATE $assigned = true;$
 				\STATE $break;$
-			\ENDIF
-			
-			\STATE $bloques_revisados++;$
-			
-			\IF {$bloques_revisados \geq max_bloques_rev$}
+			\ENDIF						
+			\STATE $blocks\_viewed++;$			
+			\IF {$blocks\_viewed \geq MAX\_BLOCKS\_CHECKED$}
 				\STATE $break;$
-			\ENDIF
-			
-		\ENDIF
-		
-	\ENDFOR
-	
-	\IF {$ ! asignada $}
-		\IF {$ (bloques\_revisados \geq max\_bloques_rev) $}
-			\STATE $block = lista\_bloques \rightarrow getBlockLocked(best\_block);$
-			\STATE $block \rightarrow addQuery(query);$
-		\ELSE
-			\STATE $block = new QueryBlock();$
-			\STATE $block \rightarrow addQuery(query);$
-			\STATE $lista\_bloques \rightarrow addBlockLocked(block);$
-			
-		\ENDIF	
-	\ENDIF
-
+			\ENDIF			
+		\ENDIF		
+	\ENDFOR	
+	\IF {$ !(assigned)  \& \& (blocks\_viewed \geq MAX\_BLOCKS\_CHECKED) $}
+		\STATE $block = new QueryBlock();$
+		\STATE $block \rightarrow addQuery(query);$
+		\STATE $L \rightarrow addBlockLocked(block);$		
+	\ENDIF	
 \end{algorithmic}
 \end{algorithm}
 
-
-
-
 \subsection{Estrategia TimesRanges}
-\label{scheduling:fr}
+\label{scheduling:timesranges}
+
+
 
 
 \section{Estrategia unidades de trabajo}
