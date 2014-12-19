@@ -70,7 +70,7 @@ Como se puede ver en el Algoritmo \ref{alg:fr}, cuando una nueva \textit{query} 
 
 
 % --- Descripción proceso ---
-En la Figura X se presenta un ejemplo de ejecucion la estrategia FR. Ya han llegado al sistema consultas: q0 (2 threads), q1 (16 threads), q2 (4 threads), q3 (2 threads), q4 (2 threads), q5 (8 threads) y q6 (16 threads). Se puede ver cómo se van formando las estructuras de datos llamadas \textit{Rooms} y \textit{Walls}. Suponer que eventualmente arriba al sistema una nueva consulta que será resuelta con 8 \textit{threads}, entonces el algoritmo verifica en primera instancia la $Room_0$, sin embargo, en esta estructura no hay suficientes \textit{threads} disponibles para procesar la consulta (posee solo 6 disponibles). Finalmente la planifica en la $Room_1$.
+En la Figura \ref{alg:fr} se presenta un ejemplo de ejecucion la estrategia FR. Ya han llegado al sistema consultas: q0 (2 threads), q1 (16 threads), q2 (4 threads), q3 (2 threads), q4 (2 threads), q5 (8 threads) y q6 (16 threads). Se puede ver cómo se van formando las estructuras de datos llamadas \textit{Rooms} y \textit{Walls}. Suponer que eventualmente arriba al sistema una nueva consulta que será resuelta con 8 \textit{threads}, entonces el algoritmo verifica en primera instancia la $Room_0$, sin embargo, en esta estructura no hay suficientes \textit{threads} disponibles para procesar la consulta (posee solo 6 disponibles). Finalmente la planifica en la $Room_1$.
 
 \begin{figure}[!th]
 \centering
@@ -119,6 +119,18 @@ El Algoritmo \ref{alg:times} muestra el funcionamiento de la estrategia \textit{
 	\ENDIF	
 \end{algorithmic}
 \end{algorithm}
+
+En la Figura \ref{fig:proceso_Times} se muestra un ejemplo de la estrategia \textit{Times}, en el que una consulta llega al sistema y debe ser planificada. El estimador utilizado predijo que la transacción de lectura entrante se demorará 135 ms. con 8 \textit{threads}; en otras palabras, 8 hilos de ejecución es el número mínimo con el que se cumple que el tiempo de la consulta (135 ms.) es menor que la cota superior de tiempo (140 ms.). El algoritmo intenta planificar la consulta en primera instancia en el bloque $B_0$, sin embargo, el tiempo de la consulta (135 ms.) es el doble del mínimo tiempo en el bloque (55 ms.). Posteriormente, el bloque $B_1$ no posee \textit{threads} disponibles. Finalmente la \textit{query} $q_7$ es planificada en el bloque $B_2$, ya que reúne todas las condiciones necesarias explicadas anteriormente en el algoritmo \label{alg:times}. 
+
+\begin{figure}[!th]
+\centering
+\includegraphics[scale=.75]{images/proceso_Times.eps}
+\caption{Ejemplo de procesamiento de la estrategia Times}
+\label{fig:proceso_Times}
+\end{figure} 
+
+
+
 
 \subsection{Estrategia TimesRanges}
 \label{scheduling:timesranges}
