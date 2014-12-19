@@ -9,7 +9,11 @@ A continuación se muestra las diferentes estrategias de planificación de trans
 
 \section{Estrategias por bloques}
 \label{scheduling:bloques}
-Un sistema de planificación de un motor de búsqueda trabaja en un contexto \textit{online}, esto significa que desconoce las transacciones que vendrán en el futuro y que cuando llega una nueva transacción de lectura, se debe tomar una decisión rápida acerca de qué hacer con ella. Adicionalmente, una transacción de lectura debe ser resuelta dentro de una cota superior de tiempo, al cual llamaremos $t_limite$. En el contexto del presente trabajo, para que el planificador tome una decisión con respecto a una query, debe conocer de ella (1) su tiempo de ejecución y (2) el número de hebras con los que será resuelta. El tiempo de ejecución de cada consulta se obtiene utilizando los métodos de predicción de tiempos mostrados en el Capítulo \ref{cap:prediccion}; una vez que se predice el tiempo esperado $t_esperado$ de cada query para 1,2,4,8 y 16 threads, se asigna el numero de hilos de ejecución tal que se cumpla que $t_esperado < t_limite$, de esta forma se satisface la condición de que todas las consultas deben ser resueltas en una cota superior de tiempo previamente definida.
+Un sistema de planificación de un motor de búsqueda trabaja en un contexto \textit{online}, esto significa que desconoce las transacciones que vendrán en el futuro y que cuando llega una nueva transacción de lectura, se debe tomar una decisión rápida acerca de qué hacer con ella. Adicionalmente, una transacción de lectura debe ser resuelta dentro de una cota superior de tiempo, al cual llamaremos $t_{limite}$. En el contexto del presente trabajo, para que el planificador tome una decisión con respecto a una \textit{query}, debe conocer de ella (1) su tiempo de ejecución y (2) el número de hebras con los que será resuelta. El tiempo de ejecución de cada consulta se obtiene utilizando los métodos de predicción de tiempos mostrados en el Capítulo \ref{cap:prediccion}; una vez que se predice el tiempo esperado $t_{esperado}$ de cada \textit{query} para $1$,$2$,$4$,$8$ y $16$ \textit{threads}, se asigna el numero de hilos de ejecución tal que se cumpla que $t_esperado < t_limite$, de esta forma se satisface la condición de que todas las consultas deben ser resueltas en una cota superior de tiempo previamente definida.
+
+Bajo el contexto de un motor de búsqueda en el que se debe planificar transacciones de lecturas que eventualmente serán resueltas de forma paralela por diferentes hilos de ejecución, existe una estrategia teórica llamada FR que aborda este problema \citep{Ye:2007} y se adapta a nuestro escenario de un motor de búsqueda vertical; esta estrategia del estado del arte da pie para que en el presente trabajo de tesis se proponga dos nuevas estrategias siguiendo el mismo enfoque de FR, pero estas enfocadas principalmente en mejorar la asignación de consultas a bloques, para así reducir el tiempo ocioso de las hebras. 
+
+En la Figura \ref{fig:schedulerbloques} se muestra el proceso completo del presente enfoque; las consultas que llegan al sistema las recibe el planificador \textit{scheduler} y las envía al estimador (\textit{estimator}), que calcula el número adecuado de hilos de ejecución para la consulta tal que la consulta sea resuelta en un tiempo inferior al tiempo límite $t_limite$. Una vez que a la \textit{query} se le predice el tiempo de ejecución y el número de \textit{threads} a utilizar, este planifica la consulta en algún bloque correspondiente depenediendo de la política que se este utilizando. A continuación se muestran las diferentes estrategias propuestas. 
 
 \begin{figure}[!th]
 \centering
@@ -18,8 +22,6 @@ Un sistema de planificación de un motor de búsqueda trabaja en un contexto \te
 \label{fig:schedulerbloques}
 \end{figure}  
 
-Bajo el contexto de un motor de búsqueda en el que se debe planificar transacciones de lecturas que eventualmente serán resueltas de forma paralela por diferentes hilos de ejecución, existe una estrategia teórica llamada FR que aborda este problema \citep{Ye:2007} y se adapta a nuestro escenario de un motor de búsqueda vertical; esta estrategia del estado del arte da pie para que en el presente trabajo de tesis se proponga dos nuevas estrategias siguiendo el mismo enfoque de FR, pero estas enfocadas principalmente en mejorar la asignación de consultas a bloques, para así reducir el tiempo ocioso de las hebras. 
-En la Figura \ref{fig:schedulerbloques} se muestra el proceso completo del presente enfoque; las consultas que llegan al sistema las recibe el planificador \textit{scheduler} y las envía al estimador (\textit{estimator}), que calcula el número adecuado de hilos de ejecución para la consulta tal que la consulta sea resuelta en un tiempo inferior al tiempo límite $t_limite$. Una vez que a la \textit{query} se le predice el tiempo de ejecución y el número de \textit{threads} a utilizar, este planifica la consulta en algún bloque correspondiente depenediendo de la política que se este utilizando. A continuación se muestran las diferentes estrategias propuestas. 
 
 \subsection{Estrategia FR}
 \label{scheduling:fr}
@@ -67,7 +69,6 @@ Como se puede ver en el Algoritmo \ref{alg:fr}, cuando una nueva \textit{query} 
 
 \end{algorithmic}
 \end{algorithm}
-
 
 % --- Descripción proceso ---
 En la Figura \ref{alg:fr} se presenta un ejemplo de ejecucion la estrategia FR. Ya han llegado al sistema consultas: q0 (2 threads), q1 (16 threads), q2 (4 threads), q3 (2 threads), q4 (2 threads), q5 (8 threads) y q6 (16 threads). Se puede ver cómo se van formando las estructuras de datos llamadas \textit{Rooms} y \textit{Walls}. Suponer que eventualmente arriba al sistema una nueva consulta que será resuelta con 8 \textit{threads}, entonces el algoritmo verifica en primera instancia la $Room_0$, sin embargo, en esta estructura no hay suficientes \textit{threads} disponibles para procesar la consulta (posee solo 6 disponibles). Finalmente la planifica en la $Room_1$.
@@ -129,13 +130,13 @@ En la Figura \ref{fig:proceso_Times} se muestra un ejemplo de la estrategia \tex
 \label{fig:proceso_Times}
 \end{figure} 
 
-
-
-
 \subsection{Estrategia TimesRanges}
 \label{scheduling:timesranges}
-Esta estrategia también intenta disminuir la posible perdida de eficiencia de la estrategia FR. La idea de TimesRanges es clasificar y agrupas las queries de acuerdo a sus tiempos; Para planificar una query que arriba al sistema, se debe encontrar un bloque que cumpla con: (1) Número de threads libres suficientes, y (2) Que el bloque sea de la misma clase que la consulta. Si no se encuentra ningún bloque, entonces se crea un nuevo bloque. Las clases de los bloques estarán definidas por los tiempos de las consultas que contienen y se pueden definir tantas clases como se quiera. Por ejemplo, se puede definir tres tipos de clases de queries inicialmente: (1) Aquellas que se demoren menos del 10\% del tiempo límite; (2) Aquellas que se demoren más (o igual) del 10\% y menos del 25% del tiempo límite; (3) Aquellas que se demoren más (o igual) del 25\% y menos del 50% del tiempo límite; y (4) Aquellas que se demoren más (o igual) del 50% del tiempo límite. De esta forma reducimos la diferencia de tiempos entre las queries pertenecientes a un mismo bloque, lo que significa que consultas dentro de un mismo bloque deberían ser resueltas en tiempos muy parecidos.
+Esta estrategia también intenta disminuir la posible perdida de eficiencia de la estrategia \textit{FR}. La idea de \textit{TimesRanges} es clasificar y agrupar las consulta de acuerdo a rangos de tiempos; Para planificar una transacción de lectura que arriba al sistema, se debe encontrar un bloque que cumpla con: (1) Número de \textit{threads} libres suficientes, y (2) que el bloque sea del mismo rango de tiempo que la consulta. Inicialmente se define tres tipos de rangos: (1) aquellas que se demoren menos del 10\% del tiempo límite; (2) aquellas que se demoren más (o igual) del 10\% y menos del 25\% del tiempo límite; (3) aquellas que se demoren más (o igual) del 25\% y menos del 50\% del tiempo límite; y (4) aquellas que se demoren más (o igual) del 50\% del tiempo límite. De esta forma reducimos la diferencia de tiempos entre las consultas pertenecientes a un mismo bloque, lo que significa que consultas dentro de un mismo bloque deberían ser resueltas en tiempos muy parecidos. Recordar que el tiempo límite es la cota superior de tiempo en que una consulta debe ser resuelta.
 
+El procedimiento de la estrategias \textit{TimesRanges} se puede ver en el algoritmo \ref{alg:timesranges}. Para que una transacción de lectura sea planificada bajo la presente estrategia, lo primero es obtener el rango de tiempo en que se encuentra la consulta entrante; posteriormente, se busca algún bloque que no haya sido procesado y que además posea un número de threads disponibles suficiente para procesar la quer, y se planifica la consulta. Si no se encuentra un bloque que satisfaga las condiciones de la consulta entrante, entonces se crea uno nuevo paa planificarla. 
+
+%Cabe señalar que el rango de tiempo del bloque quedará sujeto al rango de tiempo de la primera query entrante.
 
 \begin{algorithm}[!th]
 \caption{\em $schedulerTimesRanges::assignQuery(L, Q)$: Planificación de consulta}
@@ -146,18 +147,20 @@ Esta estrategia también intenta disminuir la posible perdida de eficiencia de l
 	\STATE $range = getQueryRange(query);;$		
 	\FOR {$ i = L \rightarrow firstOpenBlockLocked() ... L \rightarrow size()$}
 		\STATE $block = L \rightarrow getBlockLocked(i);$	
-		
 		\IF {$ block block \rightarrow freeThreads() \geq query \rightarrow getThreads() \& \&  block_ranges[i] == range$}
-			
-		Se verifica si es que posee los threads suficientes para planificar la consulta y además si son de la misma clase. (es decir, 
+			\STATE $block = L \rightarrow addQuery(query);$
+			\STATE $asignada = true;$
+			\STATE $break;$	
+		\ENDIF
 	\ENDFOR
-
-
+	\IF {$ !(asignada) $}
+		\STATE $block = new QueryBlock();$	
+		\STATE $block->addQuery(query);$	
+		\STATE $L \rightarrow addBlockLocked(block);$
+		\STATE $block_ranges[L \rightarrow size - 1] = range;$	
+	\ENDIF
 \end{algorithmic}
 \end{algorithm}
-
-
-
 
 \section{Estrategia unidades de trabajo}
 \label{scheduling:unidadestrabajo}
@@ -175,8 +178,6 @@ Generalmente lo que se hace habitualmente es estimar el número de \textit{threa
 \end{figure}
 
 El procesamiento de cada hilo de ejecución es una versión de Wand con heap compartido (SH), adaptado de manera tal que cada unidad de trabajo es resuelta independientemente de si existen otras unidades siendo procesada al mismo tiempo o no. La única excepción es que la unidad que inicializa la consulta es siempre ejecutada antes del resto de las otras unidades de la misma consulta y la entrega de resultados se hace una vez que todas las unidades de trabajo de la \textit{query} han finalizado. Este enfoque híbrido permite reducir el tiempo perdido al final de cada \textit{batch} sin generar una importante pérdida de trabajo mientras las \textit{queries} del \textit{batch} están siendo procesadas.
-
-
 
 \section{Estrategia \textit{1TQ}}
 \label{scheduling:baseline}
