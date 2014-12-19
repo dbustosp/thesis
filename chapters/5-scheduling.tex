@@ -134,7 +134,28 @@ En la Figura \ref{fig:proceso_Times} se muestra un ejemplo de la estrategia \tex
 
 \subsection{Estrategia TimesRanges}
 \label{scheduling:timesranges}
-Esta estrategia también intenta disminuir la posible perdida de eficiencia de la estrategia FR. La idea de TimesRanges es clasificar y agrupas las queries de acuerdo a sus tiempos; Para planificar una query que arriba al sistema, se debe encontrar un bloque que cumpla con: (1) Número de threads libres suficientes, y (2) Que el bloque sea de la misma clase que la consulta. Si no se encuentra ningún bloque, entonces se crea un nuevo bloque. Las clases de los bloques estarán definidas por los tiempos de las consultas que contienen y se pueden definir tantas clases como se quiera. Por ejemplo, se puede definir tres tipos de clases de queries inicialmente: (1) Aquellas que se demoren menos del 10\% del tiempo límite; (2) Aquellas que se demoren más (o igual) del 10\% y menos del 25% del tiempo límite; (3) Aquellas que se demoren más (o igual) del 25\% y menos del 50% del tiempo límite; y (4) Aquellas que se demoren más (o igual) del 50% del tiempo límite. De esta forma reducimos la diferencia de tiempos entre las queries pertenecientes a un mismo bloque, lo que significa que consultas dentro de un mismo bloque deberían ser resueltas en tiempos muy parecidos.  
+Esta estrategia también intenta disminuir la posible perdida de eficiencia de la estrategia FR. La idea de TimesRanges es clasificar y agrupas las queries de acuerdo a sus tiempos; Para planificar una query que arriba al sistema, se debe encontrar un bloque que cumpla con: (1) Número de threads libres suficientes, y (2) Que el bloque sea de la misma clase que la consulta. Si no se encuentra ningún bloque, entonces se crea un nuevo bloque. Las clases de los bloques estarán definidas por los tiempos de las consultas que contienen y se pueden definir tantas clases como se quiera. Por ejemplo, se puede definir tres tipos de clases de queries inicialmente: (1) Aquellas que se demoren menos del 10\% del tiempo límite; (2) Aquellas que se demoren más (o igual) del 10\% y menos del 25% del tiempo límite; (3) Aquellas que se demoren más (o igual) del 25\% y menos del 50% del tiempo límite; y (4) Aquellas que se demoren más (o igual) del 50% del tiempo límite. De esta forma reducimos la diferencia de tiempos entre las queries pertenecientes a un mismo bloque, lo que significa que consultas dentro de un mismo bloque deberían ser resueltas en tiempos muy parecidos.
+
+
+\begin{algorithm}[!th]
+\caption{\em $schedulerTimesRanges::assignQuery(L, Q)$: Planificación de consulta}
+\label{alg:timesranges}
+\begin{algorithmic}[1]
+\REQUIRE Una SchedulingList $L$ en donde se hará la planificación, QueryObject $Q$ a planificar
+\ENSURE SchedulingList $L$ con la nueva query planificada	
+	\STATE $range = getQueryRange(query);;$		
+	\FOR {$ i = L \rightarrow firstOpenBlockLocked() ... L \rightarrow size()$}
+		\STATE $block = L \rightarrow getBlockLocked(i);$	
+		
+		\IF {$ block block \rightarrow freeThreads() \geq query \rightarrow getThreads() \& \&  block_ranges[i] == range$}
+			
+		Se verifica si es que posee los threads suficientes para planificar la consulta y además si son de la misma clase. (es decir, 
+	\ENDFOR
+
+
+\end{algorithmic}
+\end{algorithm}
+
 
 
 
