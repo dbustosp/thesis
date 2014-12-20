@@ -140,6 +140,28 @@
   Url                      = {http://doi.acm.org/10.1145/1658377.1658378}
 }
 
+@InProceedings{Bonacic:2010,
+  Title                    = {Building Efficient Multi-threaded Search Nodes},
+  Author                   = {Bonacic, Carolina and Garc\'{\i}a, Carlos and Marin, Mauricio and Prieto-Matias, Manuel and Tirado, Francisco},
+  Booktitle                = {Proceedings of the 19th ACM International Conference on Information and Knowledge Management},
+  Year                     = {2010},
+
+  Address                  = {New York, NY, USA},
+  Pages                    = {1249--1258},
+  Publisher                = {ACM},
+  Series                   = {CIKM '10},
+
+  Acmid                    = {1871595},
+  Doi                      = {10.1145/1871437.1871595},
+  ISBN                     = {978-1-4503-0099-5},
+  Keywords                 = {multithreading, query processing, web search engines},
+  Location                 = {Toronto, ON, Canada},
+  Numpages                 = {10},
+  Owner                    = {danilobustos},
+  Timestamp                = {2014.12.20},
+  Url                      = {http://doi.acm.org/10.1145/1871437.1871595}
+}
+
 @Book{Borodin:1998,
   Title                    = {Online Computation and Competitive Analysis},
   Author                   = {Borodin, Allan and El-Yaniv, Ran},
@@ -300,6 +322,29 @@
   Owner                    = {danilobustos},
   Timestamp                = {2014.10.30},
   Url                      = {http://doi.acm.org/10.1145/1498759.1498761}
+}
+
+@Article{Dean:2013,
+  Title                    = {The Tail at Scale},
+  Author                   = {Dean, Jeffrey and Barroso, Luiz Andr{\'e}},
+  Journal                  = {Commun. ACM},
+  Year                     = {2013},
+
+  Month                    = feb,
+  Number                   = {2},
+  Pages                    = {74--80},
+  Volume                   = {56},
+
+  Acmid                    = {2408794},
+  Address                  = {New York, NY, USA},
+  Doi                      = {10.1145/2408776.2408794},
+  ISSN                     = {0001-0782},
+  Issue_date               = {February 2013},
+  Numpages                 = {7},
+  Owner                    = {danilobustos},
+  Publisher                = {ACM},
+  Timestamp                = {2014.12.20},
+  Url                      = {http://doi.acm.org/10.1145/2408776.2408794}
 }
 
 @InProceedings{Ding:2011,
@@ -700,6 +745,27 @@
   Url                      = {http://doi.acm.org/10.1145/564376.564382}
 }
 
+@InProceedings{Tatikonda:2011,
+  Title                    = {Posting List Intersection on Multicore Architectures},
+  Author                   = {Tatikonda, Shirish and Cambazoglu, B. Barla and Junqueira, Flavio P.},
+  Booktitle                = {Proceedings of the 34th International ACM SIGIR Conference on Research and Development in Information Retrieval},
+  Year                     = {2011},
+
+  Address                  = {New York, NY, USA},
+  Pages                    = {963--972},
+  Publisher                = {ACM},
+  Series                   = {SIGIR '11},
+
+  Acmid                    = {2010045},
+  Doi                      = {10.1145/2009916.2010045},
+  ISBN                     = {978-1-4503-0757-4},
+  Keywords                 = {intra-query parallelism, multicore architectures, posting list intersection, query processing, web search engines},
+  Location                 = {Beijing, China},
+  Numpages                 = {10},
+  Owner                    = {danilobustos},
+  Timestamp                = {2014.12.20},
+  Url                      = {http://doi.acm.org/10.1145/2009916.2010045}
+}
 
 @InProceedings{Tonellotto:2011,
   Title                    = {Query Efficiency Prediction for Dynamic Pruning},
