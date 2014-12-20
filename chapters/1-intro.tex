@@ -2,43 +2,60 @@
 \label{cap:intro}
 
 
-
 \section{Antecedentes y motivaci\'on}
 \label{intro:motivacion}
+La World Wide Web es conocida como una gran teleraña mundial en la que existen millones de computadores conectados y la que desde el año 1993 crece exponencialmente, a tal punto que es incapaz de detectar sus propios cambios. A medida que pasa el tiempo y la \textit{Web} sigue creciendo, los motores de búsqueda se convierten en una herramienta cada vez más usada e importante para los usuarios. Estas máquinas ayudan a los usuarios a buscar contenido dentro de la \textit{Web}, puesto que conocen en cuáles documentos de la \textit{Web} aparecen qué palabras. Si estas máquinas no existieran, los usuarios estarían obligados a conocer los localizadores de recursos uniformes (\textit{URL}) de cada uno de los sitios a visitar. Además, los motores de búsquedas en cierto modo conectan la \textit{Web}, ya que existe un gran número de páginas Web que no tienen referencia desde otras páginas, siendo el único modo de acceder a ellas a través de un motor de búsqueda \citep{Baeza-Yates:2008}.  
 
+La tendencia actual es incluir lo que han llamado búsqueda en tiempo real, que consiste en incluir en los resultados de las búsquedas documentos actualizados en el pasado muy reciente, por ejemplo, en una ventana de tiempo de minutos. Esto permite incluir en los resultados de las búsquedas a sistemas muy activos respecto de publicación de nuevos documentos, tales como \textit{Twitter}\footnote{http://www.twitter.com}. Esto presenta desafíos importantes para los motores de búsqueda puesto que no solo deben procesar eficientemente a decenas de miles de consultas por segundo, sino que también deben permitir que sus índices invertidos \citep{Zobel:2006} sean actualizados de manera concurrente con las consultas que llegan al sistema. Por lo tanto, es relevante diseñar estrategias que permitan administrar a decenas de miles de usuarios concurrentes por segundo y a la vez ser eficientes.
+
+Típicamente, un motor de búsqueda de gran escala como \textit{Google}\footnote{http://www.google.com} o \textit{Yahoo!}\footnote{http://www.yahoo.com}, recibe del orden de las decenas de miles de consultas por segundo, a lo cual hay que sumarle la cantidad de actualizaciones a los datos del índice que ocurren por segundo. Esto genera cargas de trabajo que deben ser servidas por muchos procesadores organizados de manera de satisfacer dos métricas de eficiencias relevantes:
+
+\begin{enumerate}
+  \item El tiempo de respuesta por operación. Este debe ser del orden de las pocas decenas de milisegundos en cada servicio con el fin de poder responder al usuario en tiempos del orden de la fracción de segundo.
+  \item El número de transacciones de lectura y/o escrituras servidas por segundo (\textit{throughput}), el cual no debe verse afectado con la intensidad de tráfico de operaciones que llegan al motor de búsqueda.
+\end{enumerate}
+
+Los motores de búsquedas verticales hacen distinciones de tópicos específicos, estos son sometidos a la misma intensidad de trabajo que un motor de búsqueda horizontal como \textit{Yahoo!}, la diferencia más importante entre ambos es que estos últimos poseen un índice invertido muy grande, es decir, que cada lista invertida tiene un tamaño lo suficientemente grande como para sustentar de manera eficiente el paralelismo. Por el contrario, esto no ocurre en el caso de motores de búsqueda verticales, donde la cantidad de documentos a ser indexados es menor que los que existen en la \textit{Web} mundial.
+
+Por otra parte, los procesadores actuales tienden a aumentar cada vez más la cantidad de núcleos, lo cual permite incrementar la cantidad de hilos de ejecución disponibles para procesar consultas. Un enfoque tradicional para realizar el procesamiento de consultas es asignar una hebra para resolver una consulta individual, aquí el paralelismo se logra procesando muchas consultas individuales en diferentes núcleos, una por cada hebra y se maximiza el número de \textit{queries} resolviéndose al mismo tiempo; sin embargo, esto hace que eventualmente una consulta se demore mucho tiempo en ser resuelta. Un enfoque alternativo es utilizar todos los \textit{threads} disponibles en una máquina para resolver cada transación de lectura que llega al sistema, de esta forma se minimizaría el tiempo de resolución por consulta, sin embargo la resolución de \textit{consultas} es secuencial. Quizás sea mejor un punto intermedio en que se pueda resolver consultas a un tiempo considerable y a la vez paralelizar el procesamiento de \textit{queries}.
+
+Hoy en día los motores de búsquedas junto con sus centros de datos consumen el 2\% de la energía mundial, lo cual se espera que en los próximos años esta cifra aumente alrededor del 30\%, puesto que la \textit{Web} se duplica cada ocho meses y el número de nuevos usuarios que se conectan a esta crece año a año, para lo cual se hace casi inevitable el aumento de máquinas (\textit{hardware}) a los centros de procesamiento de datos de compañías dueñas de motores de búsqueda a gran escala. Es por esto que se hace imprescindible diseñar e implementar algoritmos que trabajen en paralelo para de esta forma mejorar el \textit{throughput} de los motores de búsqueda, así se podrá resolver transacciones de manera más rápida en períodos de altas cargas de trabajo y apagar aquellos servidores que fueron prendidos en períodos críticos de carga de trabajo. Llegar a soluciones que aporten a mejorar el tiempo de respuesta de una transacción de lectura y el throughput de un motor de búsqueda, requiere conocimientos de diferentes áreas de ciencias de la computación como: Recuperación de la información, computación paralela, compresión de datos, \textit{scheduling}, entre otras. 
+
+Los desafíos expuestos anteriormente hace que existe una comunidad activa intentando encontrar soluciones eficientes para sistemas de recuperación de la información como los motores de búsqueda.  
 
 
 \section{Descripci\'on del problema}
 \label{intro:problema}
 
 
-
-
 \section{Objetivos y solución propuesta}
-
+\label{intro:objetivosysolucion}
 
 \subsection{Objetivo General}
+\label{intro:objetivogeneral}
 
 
 \subsection{Objetivos Espec\'ificos}
+\label{intro:objetivosespecificos}
+
+
+
 
 
 \subsection{Alcances}
-
+\label{intro:alcances}
 
 
 \subsection{Soluci\'on propuesta}
 \label{intro:solucionpropuesta}
 
-
-
 \subsection{Caracter\'isticas de la solución}
 \label{intro:caracteristicassolucion}
 
 
+
 \subsection{Prop\'osito de la solución}
 \label{intro:propositosolucion}
-
 
 
 \section{Metodolog\'ia y herramientas de desarrollo}
