@@ -27,9 +27,47 @@ Los desafíos expuestos anteriormente hace que existe una comunidad activa inten
 \section{Descripci\'on del problema}
 \label{intro:problema}
 
+% Wand problema no se sabe de la poda y depende del índice invertido
+% Qué enfoque usar en Wand SH o LHx
+% Cuántos threads a queries
+% Planificación de queries
+% Procesamiento batches para la actualización concurrente del índice invertido
+
+Los motores de búsquedas poseen SLAS (usuarios), entre los cuales se garantiza un cota superior de tiempo apra la retornar la respuesta de una query a un usuario. Decidir si utilizar todos los threads o un solo threads de una máquina para resolver una query dependerá de los objetivos del sistema, generalmente estos dos enfoques son muy limitados para un motor de búsqueda. Encontrar un punto medio en donde se pueda cumplir con una superior de tiempo aceptable para responder cada consulta y además tener un buen throughput no es una tarea sencilla. ¿Es posible encontrar este punto medio? 
+
+Wand es un método para resolver queries, posee dos enfoques. ¿Qué enfoque se adapta mejor a nuestros requerimientos de manera de minimizar los tiempos de respuesta a las queries? 
+
+Planificación de queries es importante porque blah blah... es posible planificar queries de manera de reducir el tiempo en procesar grupos de queries.  
+
+
+
+
+% -- threads/ query ---
+Algunas de las listas invertidas que componen el índice, las de los términos más populares, tienen un tamaño lo suficientemente grande como para ofrecer una cantidad de paralelismo suficiente para utilizar varios threads para procesar consultas individuales. Sin embargo, pueden existir muchas otras listas que es mejor procesarlas con menos threads y lo mismo para documentos que contengan unas pocas decenas de términos. 
+
+Cuando el número de núcleos del procesador es grande y cuando se trata de motores de búsqueda verticales puede ocurrir frecuentemente que la cantidad de datos a ser procesados para resolver cada operación individual no sea lo suficientemente grande como para lograr una cantidad suficiente de paralelismo para mantener a todos lo hilos realizando trabajo productivo todo el tiempo que dura la operación. Esto requiere estudiar si es posible utilizar eficientemente un enfoque de asignar grupos de hilos a grupos de operaciones concurrentes.
+% --- threads - query ---
+
+% --- Wand ---
+El algoritmo de WAND es actualmente usado por varios motores de búsqueda comercial y tiene como objetivo generar un ranking de documentos de manera de obtener los top-k documentos para una transacción de lectura dada. Wand posee un enfoque de dos niveles, donde el primer nivel itera en paralelo sobre la listas invertidas de los términos de la consulta (transacción de lectura) y determina documentos candidatos usando una evaluación que no es costosa en tiempo de ejecución. En el segundo nivel, los candidatos son evaluados completamente  y el puntaje de cada documento candidato es calculado completamente para obtener desde ese conjunto los top-k documentos de mayor puntaje.
+%El problema es que como trabajar con poda dinámica no se sabe cu´ando terminará o si hará buena poda, etc. de esta forma no se sabe
+% --- Wand ---
+
+
+
+
 
 \section{Objetivos y solución propuesta}
 \label{intro:objetivosysolucion}
+
+% Wand de heap compartido y Wand de heaps locales
+
+% Predicción de tiempos de respuestas a queries
+
+% Desarrollar estrategia de planificación por bloques y por unidades de trabajo. 
+
+% Dónde meto el 1T/Q? 
+
 
 \subsection{Objetivo General}
 \label{intro:objetivogeneral}
