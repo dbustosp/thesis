@@ -28,15 +28,42 @@ Los desafíos expuestos anteriormente hace que existe una comunidad activa inten
 \label{intro:problema}
 Para proveer un tiempo de respuesta adecuado a cada una de las consultas de los usuarios, los motores de búsquedas operan bajo un nivel de acuerdo de servicio \citep{Jeon:2014}, por ejemplo, garantizar una cota superior de tiempo para la respuesta a una consulta. Para un motor de búsqueda es muy importante reducir el tiempo de ejecución de aquellas consultas que tomarán mucho tiempo en ser resueltas, esto es muchas veces más importante que reducir el tiempo medio de respuesta \citep{Dean:2013}. Por lo anteriormente descrito, se plantea la siguiente pregunta que guiará el presente trabajo: ''¿Es posible diseñar un modelo de procesamiento y de planificación de transacciones de lectura que (1) asegure una cota superior de tiempo de respuesta para las consultas de los usuarios, y (2) minimice el tiempo en procesar lotes de \textit{queries}?''.  
 
-Los motores de búsqueda utilizan un método multihilo llamado \textit{Wand} para obtener el conjunto de los mejores documentos (conjunto \textit{top-K}) para una transacción de lectura, el cual posee dos enfoques: (1) Con \textit{heap} locales, en el que cada hebra procesa una parte del índice invertido y obtiene su propio conjunto \textit{top-K}, posteriormente la habera maestra hace la combinación de resultatos para obtener el conjunto final. (2) Con \textit{heap} compartido, en el que cada hebra procesa una parte del índice invertido y cada vez que ella encuentra un documento que debe estar dentro del conjunto \textit{top-K} final, se pide acceso exclusivo al \textit{heap} compartido y se inserta. Existen trabajos en donde se estudia ambos enfoques \citep{Rojas:2013}, sin embargo, aún no es posible ser categórico en decir cuál enfoque es mejor que otro. Por lo tanto, para poder crear un modelo eficiente de procesamiento y de planificación de transacciones de lectura primero se debe analizar ambos enfoques y decidir cuál se ajusta de mejor forma al presente contexto.
+Los motores de búsqueda utilizan un método multihilo llamado \textit{Wand} para obtener el conjunto de los mejores documentos (conjunto \textit{top-K}) para una transacción de lectura, el cual posee dos enfoques: (1) Con \textit{heap} locales, en el que cada hebra procesa una parte del índice invertido y obtiene su propio conjunto \textit{top-K}, posteriormente la hebra maestra hace la combinación de resultatos para obtener el conjunto final. (2) Con \textit{heap} compartido, en el que cada hebra procesa una parte del índice invertido y cada vez que ella encuentra un documento que debe estar dentro del conjunto \textit{top-K} final, se pide acceso exclusivo al \textit{heap} compartido y se inserta. Existen trabajos en donde se estudia ambos enfoques \citep{Rojas:2013}, sin embargo, aún no es posible ser categórico en decir cuál enfoque es mejor que otro. Por lo tanto, para poder crear un modelo eficiente de procesamiento y de planificación de transacciones de lectura primero se debe analizar ambos enfoques y decidir cuál se ajusta de mejor forma al presente contexto.
 
 Decidir si utilizar una o todas las hebras de una máquina para resolver una transacción de lectura dependerá de los objetivos del sistema de recuperación de la información, generalmente estos dos enfoques son limitados. Encontrar un punto medio en donde se pueda cumplir con (1) una cota superior aceptable de tiempo para responder a cada consulta y (2) tener un buen \textit{throughput}, es un desafío importante para un motor de búsqueda. Por lo tanto, a través del presente trabajo se intenta encontrar una forma de asignación eficiente de \textit{threads} a consultas de manera tal que se cumplan los dos requerimientos mencionados anteriormente. 
 
 
+\section{Solución propuesta}
+\label{intro:solucionpropuesta}
+La solución propuesta en este trabajo implica el diseño e implementación de estrategias de planificación de transacciones de lectura para motores de búsqueda verticales. A su vez, la estrategia generada como solución tendrá como foco principal una sola máquina, en donde el procesamiento de consultras deberá explicar el multithreading 
 
-\section{Objetivos y solución propuesta}
+
+\subsection{Caracter\'isticas de la solución}
+\label{intro:caracteristicassolucion}
+La solución propuesta incluye al menos la implementación de un método de predicción de tiempo de respuesta a transacciones de lectura para la asignación eficiente de hilos de ejecucion, con el objetivo de reducir el tiempo de procesamiento de las consultas. 
+
+Se espera la implementación dos modelos para el procesamiento \textit{multithreading }de consultas: Con \textit{heap} compartido y con \textit{heaps} locales. De esta manera el método Wand toma es flexible para trabajar con una o más hebras. 
+
+La solución que se espera encontrar debería tener estrategias de reordenamiento dinámico de las transacciones que llegan al procesador. 
+
+Finalmente, se espera reunir en un solo esquema las mejores soluciones anteriormente descritas, y mediante experimentación evaluar el rendimiento y efectividad de esta nueva estrategia. Se pretende buscar el esquema óptimo de solución con las implementaciones descritas.
+
+La métrica a optimizar es el número consultas resueltas por unidad de tiempo pero garantizando un tiempo de respuesta individual menor a una cota superior establecida y el tiempo medio en resolver conjuntos de transacciones. Por lo tanto, si se diseña una estrategia de procesamiento de consultas que le permita a cada máquina alcanzar una mayor tasa de resolución de consultas, la recompensa puede ser una reducción del total de nodos desplegados en producción.
+
+
+\subsection{Prop\'osito de la solución}
+\label{intro:propositosolucion}
+
+El primer propósito de la solución es asegurar una cota superior de tiempo en las respuestas de las consultas que llegan al motor de búsqueda, esto implica entregarla al usuario tiempos aceptables en sus búsquedas.
+
+Un segundo propósito de la solución es reducir el tiempo de procesamiento de lotes de queries. Esto traería como beneficio alcanzar un uso más eficiente de los recursos asignados a las operaciones de un motor de búsqueda en un centro de datos, ya que los procesadores serán utilizados de manera más eficiente, esto implicaría que un motor de búsqueda vertical estará preparado de mejor forma para resolver flujos grandes de transacciones y los tiempos en resolver cada transacción será menor.
+
+Finalmente, se espera proveer un modelo de procesamiento y planificación de transacciones de lectura para un motor de búsqueda que sea flexible a la actualización concurrente de su índice invertido. De esta forma se permitirá incluir en las respuestas de las consultas a contenido creado en el pasado muy reciente.
+
+
+
+\section{Objetivos}
 \label{intro:objetivosysolucion}
-
 % Wand de heap compartido y Wand de heaps locales
 
 % Predicción de tiempos de respuestas a queries
@@ -44,45 +71,3 @@ Decidir si utilizar una o todas las hebras de una máquina para resolver una tra
 % Desarrollar estrategia de planificación por bloques y por unidades de trabajo. 
 
 % Dónde meto el 1T/Q? 
-
-
-\subsection{Objetivo General}
-\label{intro:objetivogeneral}
-
-
-\subsection{Objetivos Espec\'ificos}
-\label{intro:objetivosespecificos}
-
-
-
-
-
-\subsection{Alcances}
-\label{intro:alcances}
-
-
-\subsection{Soluci\'on propuesta}
-\label{intro:solucionpropuesta}
-
-\subsection{Caracter\'isticas de la solución}
-\label{intro:caracteristicassolucion}
-
-
-
-\subsection{Prop\'osito de la solución}
-\label{intro:propositosolucion}
-
-
-\section{Metodolog\'ia y herramientas de desarrollo}
-\subsection{Metodolog\'ia}
-
-
-
-\subsection{Herramientas de desarrollo}
-
-
-\section{Resultados obtenidos}
-
-
-\section{Organizaci\'on del documento}
-
