@@ -74,10 +74,17 @@ Finalmente, se espera proveer un modelo de procesamiento y planificación de tra
 % Dónde meto el 1T/Q? 
 \subsection{Objetivo general}
 \label{intro:objetivogeneral}
-Diseñar, analizar, implementar y evaluar estrategias de procesamiento y planificación de transacciones de lectura para motores de búsqueda verticales para la \textit{Web}. Estas deben ser capaces de resolver de manera eficiente el problema de procesar decenas de miles de transacciones de lectura, asegurando una cota superior de tiempo de respuesta de cada operación y además ser flexible a la llegada de transacciones de escritura. 
+Diseñar, analizar, implementar y evaluar estrategias de procesamiento y planificación de transacciones de lectura para motores de búsqueda verticales para la \textit{Web}. Estas deben ser capaces de resolver de manera eficiente el problema de procesar decenas de miles de consultas, asegurando una cota superior de tiempo de respuesta de cada operación y además ser flexible a la llegada de transacciones de escritura. 
 
 
 \subsection{Objetivos específicos}
 \label{intro:objetivosespecificos}
-
-
+\begin{itemize}	
+	\item Desarrollar algoritmos paralelos de procesamiento de transacciones de lectura que sean eficientes.
+	
+	\item Obtener estrategias online que permitan realizar la gestión eficiente de threads a través de algoritmos que se ajusten a los tamaños de las estructuras de datos involucrados en el procesamiento de las transacciones de lectura.
+    
+    \item Obtener estrategias de reordenamiento dinámico de transacciones de lectura que llegan a un procesador con múltiples núcleos.
+    
+    \item Obtener un modelo de costo que permita analizar la eficiencia y escalabilidad de las estrategias diseñadas en motores de búsqueda verticales.
+\end{itemize}
