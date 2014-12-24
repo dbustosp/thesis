@@ -15,72 +15,10 @@ La ventaja de este diseño es que ambas opciones son flexibles a utilizar cualqu
 \label{fig:diagramawand}
 \end{figure}
 
-Existen dos formas de implementar Wand \textit{multithreaded}. Una de ellas es usando \textit{heaps} locales (LH), es decir, un \textit{heap} por hilo de ejecución (\textit{thread}) y el otro es usando \textit{heaps} compartidos (SH). El estudio en \citep{Rojas:2013} se muestra indicios que el esquema SH es generalmente más eficiente. Logrando rápidamente un óptimo valor para el threshold, el esquema SH posee las siguientes ventajas: (1) Se puede reducir el número de calculo de puntajes completos y (2) se ejecutan pocas operaciones de actualización del heap (reduciendo el número de \textit{locks} que se hace a la estructura de dato). A continuación se presenta el diseño llevado a cabo para ambos esquemas.
+Existen dos formas de implementar Wand. Una de ellas es usando \textit{heaps} locales (LH), es decir, un \textit{heap} por hilo de ejecución (\textit{thread}) y el otro es usando \textit{heaps} compartidos (SH). El estudio en \citep{Rojas:2013} se muestra indicios que el esquema SH es generalmente más eficiente. Logrando rápidamente un óptimo valor para el threshold, el esquema SH posee las siguientes ventajas: (1) Se puede reducir el número de calculo de puntajes completos y (2) se ejecutan pocas operaciones de actualización del heap (reduciendo el número de \textit{locks} que se hace a la estructura de dato). A continuación se presenta el diseño llevado a cabo para ambos esquemas.
 
-\section{Block max wand}
-Recordar que en el método de Wand para descartar documentos y encontrar un documento que potencialmente podría estar en el conjunto \textit{top-K}, lo que se hace es usar los \textit{upper bounds} globales de cada lista, es decir, la máxima contribución (puntaje o \textit{score}) de algún documento de la lista invertida. Además, Wand tradicional es una estrategia DAAT, por lo que por cada lista invertida ocupa un puntero al documento actual que se desea evaluar. Además, usa un método que recibe como entrada un identificador del documento $docID$ y una lista invertida $L$, y retorna el primer $docID'$ que sea mayor o igual al documento $docID$. A esto se le conoce como movimiento de puntero profundo (\textit{deep pointer movement}) debido a la razón que generalmente implica una descompresión del boque en el que se encuentra el documento.
+A continuacion se muestra las dos formas en que se implementó Wand y también la implementación de Block Max Wand.
 
-Sin embargo, como se dijo anteriormente en \ref{marco:bmw}, usando solo las máximas contribuciones por cada bloque no hará que el método funcione correctamente, puesto que hará que eventualmente se pierdan documentos que podrían estar en el conjunto final de los mejores $K$ documentos. Como ahora se tiene las máximas contribuciones por cada bloque, BMW utiliza otra función la cual recibe como parámetro un identificador de documento $docID$ y una lista invertida. Lo que se hace es mover el puntero actual al correspondiente bloque donde eventualmente se debería encontrar el documento $docID$. A esta función se le conoce como movimiento de puntero superficial (\textit{shallow pointer movement}), por la razón que no involucra una descompresión de bloque. Se debe notar que para que esta función trabaje correctamente se requiere tener almacenada las fronteras de cada uno de los bloques de las listas invertidas.
-
-BMW utiliza dos principales ideas en su diseño: (1) Se usa los \textit{upper bounds} globales para determinar un pivote candidato (como en Wand tradicional), para luego usar los \textit{upper bounds} locales para determinar si es que el pivote candidato es un pivote real o no, y (2) Se intenta siempre utilizar \textit{shallow pointer movement} por sobre \textit{deep pointer movement}.
-
-En el Algoritmo \ref{alg:bmw} se puede apreciar cómo el método \textit{Block-Max-Wand} trabaja. Recordar que todas las listas invertidas poseen un puntero al documento actual que se desea evaluar (\textit{currentDoc}). Lo primero que se hace es ordenar en orden creciente las listas invertidas de acuerdo a su correspondiente \textit{currentDoc}. La función \textit{findPivot()} es la misma que se utiliza en el método Wand tradicional (\ref{marco:wand}), se itera sobre las listas invertidas y se retorna la posición de la lista en donde se cumple que la suma de los \textit{upper bounds} globales es mayor al \textit{threshold} ($\theta$). Luego la función \textit{NextShallow()} se encarga de avanzar los punteros de las listas invertidas al inicio del bloque que debería contener el documento $d$. Posteriormente la función \textit{isRealPivot()} verifica si es que el pivote $p$ encontrado es un pivote real o no, para cada una de las listas desde la posición $0$ hasta la posición $p$, se suma los \textit{upper bounds} de los bloques en donde se encuentran los punteros (recordar que con \textit{NextShallow()} los punteros de las listas quedaron apuntando a los bloques en donde se debería encontrar el documento $d$), si la suma es mayor al threshold entonces retorna verdadero, de lo contrario retorna falso. El método \textit{scoreDoc()} calcula el puntaje del documento que se le pasa por parámetro. 
-
-Cuando el método se da cuenta que $p$ no es un pivote real, lo que se hace es buscar un nuevo candidato a través de la función \textit{getNewCandidate()}, la cual hace avanzar los punteros de las listas invertidas hasta el bloque siguiente que contenga el mínimo $docID$. Para ver explicar de mejor manera esta idea se presenta la Figura \ref{fig:getNewCandidate}, aquí se puede ver que el documento $4868$ es el pivote, cuando este documento no es un pivote real (la función \textit{isRealPivote} retorna falso), lo que se hará es escoger un documento $d'$ tal que $d = min(d1,d2,d3,d4)$ en donde $d1,d2,d3$ son la frontera del bloque actual más uno (inicio del bloque siguiente) y $d4$ es el \textit{currentDoc} de la cuarta lista. Notar que para hacer un descarte seguro de documentos, siempre se debe incluir a la elección del nuevo candidato el \textit{currentDoc} de la lista inmediatamente siguiente a la lista pivote (en este caso 9009).  
-
-\begin{figure}[!th]
-\centering
-\includegraphics[scale=.75]{images/get_new_candidate.eps}
-\caption{Ejemplo de cómo opera la functión getNewCandidate()}
-\label{fig:getNewCandidate}
-\end{figure}%y
-
-
-\begin{algorithm}[!th]
-\caption{\em $BMW(\theta, L, docID)$: Block Max Wand}
-\label{alg:bmw}
-\begin{algorithmic}[1]
-\REQUIRE Un \textit{threshold} $\theta$, listas invertidas $L$ de los términos en la consulta
-\ENSURE $docID$, si existe un documento $docID$ tal que $score(docID)$ $\geq$ $\theta$. de lo contrario END-OF-FILE
-\WHILE {true}
-	\STATE $Sort(L);$
-	\STATE $p = findPivot(L,\theta);$
-	\STATE $d = L[p] \rightarrow currentDoc;$
-	\IF {$d == $ END-OF-FILE}
-  		\STATE $break;$
-	\ENDIF
-		
-	\FOR {$ i = 0...p $}
-		\STATE $NextShallow(d, L[i]);$
-	\ENDFOR
-	
-	\IF {$isRealPivot(\theta, p);$}
-		\IF {$L[0] \rightarrow currentDoc == d$}
-			\STATE $scoreDoc(d, p);$
-			\FOR {$ i = 0...p $}
-				\STATE $Next(d + 1, L[i]);$
-			\ENDFOR
-		\ELSE
-			\WHILE {$List[p - 1] \rightarrow currentDoc == p $}
-				\STATE $p = p - 1;$			
-			\ENDWHILE
-			
-			\FOR {$ i = 0...p $}
-				\STATE $Next(d, L[i]);$
-			\ENDFOR
-			
-		\ENDIF		
-	\ELSE	
-		\STATE $d' = getNewCandidate();$
-		\FOR {$ i = 0...p $}
-			\STATE $Next(d', L[i]);$
-		\ENDFOR
-	\ENDIF
-	
-\ENDWHILE
-
-\end{algorithmic}
-\end{algorithm}
 
 \section{Wand con heaps locales}
 En el esquema LH, cada \textit{thread} procesa una porción del índice invertido mientras mantiene un \textit{heap} local con los mejores $K$ documentos que el específico hilo de ejecución ha encontrado hasta ahora. Al final del proceso, los resultados deben ser reunido en un solo conjunto final global. Los resultados en \citep{Rojas:2013} muestran que el esquema LH es más eficientes para aquellas transacciones que toman poco tiempo en ser resueltas. En la Figura \ref{fig:wand-heap-local} se muestra el esquema de ejecución para \textit{heaps} locales explicado anteriormente. 
@@ -149,3 +87,71 @@ El diseño implementado para este esquema posee como clase principal a TopKMulti
 \caption{Diagrama de clases para el esquema SH}
 \label{fig:TopKMultiThreadWandOperatorLocks}
 \end{figure}
+
+
+
+
+\section{Block max wand}
+Recordar que en el método de Wand para descartar documentos y encontrar un documento que potencialmente podría estar en el conjunto \textit{top-K}, lo que se hace es usar los \textit{upper bounds} globales de cada lista, es decir, la máxima contribución (puntaje o \textit{score}) de algún documento de la lista invertida. Además, Wand tradicional es una estrategia DAAT, por lo que por cada lista invertida ocupa un puntero al documento actual que se desea evaluar. Además, usa un método que recibe como entrada un identificador del documento $docID$ y una lista invertida $L$, y retorna el primer $docID'$ que sea mayor o igual al documento $docID$. A esto se le conoce como movimiento de puntero profundo (\textit{deep pointer movement}) debido a la razón que generalmente implica una descompresión del boque en el que se encuentra el documento.
+
+Sin embargo, como se dijo anteriormente en \ref{marco:bmw}, usando solo las máximas contribuciones por cada bloque no hará que el método funcione correctamente, puesto que hará que eventualmente se pierdan documentos que podrían estar en el conjunto final de los mejores $K$ documentos. Como ahora se tiene las máximas contribuciones por cada bloque, BMW utiliza otra función la cual recibe como parámetro un identificador de documento $docID$ y una lista invertida. Lo que se hace es mover el puntero actual al correspondiente bloque donde eventualmente se debería encontrar el documento $docID$. A esta función se le conoce como movimiento de puntero superficial (\textit{shallow pointer movement}), por la razón que no involucra una descompresión de bloque. Se debe notar que para que esta función trabaje correctamente se requiere tener almacenada las fronteras de cada uno de los bloques de las listas invertidas.
+
+BMW utiliza dos principales ideas en su diseño: (1) Se usa los \textit{upper bounds} globales para determinar un pivote candidato (como en Wand tradicional), para luego usar los \textit{upper bounds} locales para determinar si es que el pivote candidato es un pivote real o no, y (2) Se intenta siempre utilizar \textit{shallow pointer movement} por sobre \textit{deep pointer movement}.
+
+En el Algoritmo \ref{alg:bmw} se puede apreciar cómo el método \textit{Block-Max-Wand} trabaja. Recordar que todas las listas invertidas poseen un puntero al documento actual que se desea evaluar (\textit{currentDoc}). Lo primero que se hace es ordenar en orden creciente las listas invertidas de acuerdo a su correspondiente \textit{currentDoc}. La función \textit{findPivot()} es la misma que se utiliza en el método Wand tradicional (\ref{marco:wand}), se itera sobre las listas invertidas y se retorna la posición de la lista en donde se cumple que la suma de los \textit{upper bounds} globales es mayor al \textit{threshold} ($\theta$). Luego la función \textit{NextShallow()} se encarga de avanzar los punteros de las listas invertidas al inicio del bloque que debería contener el documento $d$. Posteriormente la función \textit{isRealPivot()} verifica si es que el pivote $p$ encontrado es un pivote real o no, para cada una de las listas desde la posición $0$ hasta la posición $p$, se suma los \textit{upper bounds} de los bloques en donde se encuentran los punteros (recordar que con \textit{NextShallow()} los punteros de las listas quedaron apuntando a los bloques en donde se debería encontrar el documento $d$), si la suma es mayor al threshold entonces retorna verdadero, de lo contrario retorna falso. El método \textit{scoreDoc()} calcula el puntaje del documento que se le pasa por parámetro. 
+
+Cuando el método se da cuenta que $p$ no es un pivote real, lo que se hace es buscar un nuevo candidato a través de la función \textit{getNewCandidate()}, la cual hace avanzar los punteros de las listas invertidas hasta el bloque siguiente que contenga el mínimo $docID$. Para ver explicar de mejor manera esta idea se presenta la Figura \ref{fig:getNewCandidate}, aquí se puede ver que el documento $4868$ es el pivote, cuando este documento no es un pivote real (la función \textit{isRealPivote} retorna falso), lo que se hará es escoger un documento $d'$ tal que $d = min(d1,d2,d3,d4)$ en donde $d1,d2,d3$ son la frontera del bloque actual más uno (inicio del bloque siguiente) y $d4$ es el \textit{currentDoc} de la cuarta lista. Notar que para hacer un descarte seguro de documentos, siempre se debe incluir a la elección del nuevo candidato el \textit{currentDoc} de la lista inmediatamente siguiente a la lista pivote (en este caso 9009).  
+
+\begin{figure}[!th]
+\centering
+\includegraphics[scale=.75]{images/get_new_candidate.eps}
+\caption{Ejemplo de cómo opera la functión getNewCandidate()}
+\label{fig:getNewCandidate}
+\end{figure}%y
+
+
+\begin{algorithm}[!th]
+\caption{\em $BMW(\theta, L, docID)$: Block Max Wand}
+\label{alg:bmw}
+\begin{algorithmic}[1]
+\REQUIRE Un \textit{threshold} $\theta$, listas invertidas $L$ de los términos en la consulta
+\ENSURE $docID$, si existe un documento $docID$ tal que $score(docID)$ $\geq$ $\theta$. de lo contrario END-OF-FILE
+\WHILE {true}
+	\STATE $Sort(L);$
+	\STATE $p = findPivot(L,\theta);$
+	\STATE $d = L[p] \rightarrow currentDoc;$
+	\IF {$d == $ END-OF-FILE}
+  		\STATE $break;$
+	\ENDIF
+		
+	\FOR {$ i = 0...p $}
+		\STATE $NextShallow(d, L[i]);$
+	\ENDFOR
+	
+	\IF {$isRealPivot(\theta, p);$}
+		\IF {$L[0] \rightarrow currentDoc == d$}
+			\STATE $scoreDoc(d, p);$
+			\FOR {$ i = 0...p $}
+				\STATE $Next(d + 1, L[i]);$
+			\ENDFOR
+		\ELSE
+			\WHILE {$List[p - 1] \rightarrow currentDoc == p $}
+				\STATE $p = p - 1;$			
+			\ENDWHILE
+			
+			\FOR {$ i = 0...p $}
+				\STATE $Next(d, L[i]);$
+			\ENDFOR
+			
+		\ENDIF		
+	\ELSE	
+		\STATE $d' = getNewCandidate();$
+		\FOR {$ i = 0...p $}
+			\STATE $Next(d', L[i]);$
+		\ENDFOR
+	\ENDIF
+	
+\ENDWHILE
+
+\end{algorithmic}
+\end{algorithm}

@@ -1,26 +1,19 @@
 \chapter{Evaluación experimental}
 \label{cap:evaluacionexperimental}
 
-Se utilizará predictor de tiempo para setear threads en bloques
+En el presente capítulo se presenta los resultados obtenidos de las diferentes implementaciones para los métodos propuestos en la secciones anteriores. Se comienza por la implementación de los diferentes enfoques de los métodos de procesamiento de transacciones de lectura, posteriormente se muestra los resultados obtenidos para los diferentes métodos de predicción de tiempos de respuestas para consultas y el comportamiento que tienen para diferente conjunto de datos. Finalmente se presenta el comportamiento de las diferentes estrategias de planificación presentadas para diferentes tipos de escenarios.
 
 
-Se hace una introducción.
+\section{Hardware y conjunto de datos}
+\label{evaluacionexperimental:hardwareydatos}
+%% Hablar un poco del hardware utilizado en los experimentos
 
-\section{Predicción de tiempo de respuesta a transacción de lectura}
-\label{evaluacionexperimental:ptrq}
-Se hace experimentos con predictor perfecto
+Se utilizaron dos conjuntos de datos para llevar a cabo los experimentos, estos son frecuentemente usados por la comunidad del área de Information Retrieval para experimentar. El primero de ellos es GOV2, este conjunto es una colección de aproximadamente 25 millones de páginas Web obtenida desde los dominios .gov y que pesa 426 GB. La otra colección de datos utilizada es la ClueWeb09, la cual fue creada para apoyar la investigación en recuperación de la información y las tecnologías relacioanadas con el lenguaje humano. Consiste en alrededor de un billón de páginas en diez lenguajes diferentes y 50 millones en Inglés. ClueWeb09 pesa 5 TB en forma comprimidad y 25 TB descomprimida. 
 
-Nosotros optamos por un enfoque de Wand Heap Compartido para ser usado en los experimentos.
+% Las consultas
 
-Se hace una breve introducción al cpaítulo anterior. 
 
-Se menciona los resultados obtenidos con la regresión, se dice que no se tuvieron muy buenos resultados con la regresión, se deja a ver por qué no se obtuvieron muy buenos resultados (índice con los que se hicieron experimentos, consultas, etc.).
 
-	//menos que 10% tpo esperado, menos que 25%, menos que 50% y el resto (en el timesRanges)
-\subsection{Predictor perfecto}
-\label{evaluacionexperimental:predictorperfecto}
-
-Decir que no es el foco de esta tesi, que los resultados obtenidos no fueron muy buenos s y que para evaluar los algoritmos de scheduling  también se usará un predictor perfecto. Decir cómo se obtuvo un predictor perfecto y ojalá mostrar algún algoritmo.
 
 
 \section{Wand multithreaded}
@@ -98,6 +91,36 @@ Se muestra un gráfico y tabla de eficiencia.
 
 
 
+
+
+
+
+
+
+\begin{comment}
+
+Se hace una introducción.
+
+\section{Predicción de tiempo de respuesta a transacción de lectura}
+\label{evaluacionexperimental:ptrq}
+Se hace experimentos con predictor perfecto
+
+Nosotros optamos por un enfoque de Wand Heap Compartido para ser usado en los experimentos.
+
+Se hace una breve introducción al cpaítulo anterior. 
+
+Se menciona los resultados obtenidos con la regresión, se dice que no se tuvieron muy buenos resultados con la regresión, se deja a ver por qué no se obtuvieron muy buenos resultados (índice con los que se hicieron experimentos, consultas, etc.).
+
+	//menos que 10% tpo esperado, menos que 25%, menos que 50% y el resto (en el timesRanges)
+\subsection{Predictor perfecto}
+\label{evaluacionexperimental:predictorperfecto}
+
+Decir que no es el foco de esta tesi, que los resultados obtenidos no fueron muy buenos s y que para evaluar los algoritmos de scheduling  también se usará un predictor perfecto. Decir cómo se obtuvo un predictor perfecto y ojalá mostrar algún algoritmo.
+
+
+
+
+
 \section{Estrategias de scheduling}
 \label{evaluacionexperimental:estrategiasscheduling}
 
@@ -112,3 +135,5 @@ Hablar separado cada una de ellas, mostrando implementación y cómo se llevaron
 Conclusiones para cada uno de los gráficos realizados. 
 
 Se intuye que habrá pérdida de eficiencia al final de cada bloque en FR.
+
+\end{comment}
