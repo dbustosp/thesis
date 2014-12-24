@@ -10,9 +10,7 @@ En el presente capítulo se presenta los resultados obtenidos de las diferentes 
 
 Se utilizaron dos conjuntos de datos para llevar a cabo los experimentos, estos son frecuentemente usados por la comunidad del área de Information Retrieval para experimentar. El primero de ellos es GOV2, este conjunto es una colección de aproximadamente 25 millones de páginas Web obtenida desde los dominios .gov y que pesa 426 GB. La otra colección de datos utilizada es la ClueWeb09, la cual fue creada para apoyar la investigación en recuperación de la información y las tecnologías relacioanadas con el lenguaje humano. Consiste en alrededor de un billón de páginas en diez lenguajes diferentes y 50 millones en Inglés. ClueWeb09 pesa 5 TB en forma comprimidad y 25 TB descomprimida. 
 
-% Las consultas
-
-
+% Las consultas (queries)
 
 
 
@@ -70,12 +68,20 @@ Se muestra el código y ojalá se muestra algún flujo de ejecución para una qu
 Se muestra un gráfico y tabla de eficiencia.
 
 
-\begin{figure}[!ht]
-\centering
-\includegraphics[scale=.75]{images/eficiencias_wand.eps}
-\caption{Eficiencias para Wand con heaps compartido y locales}
-\label{fig:eficiencias_wand}
-\end{figure}
+
+\subsection{Resultados obtenidos}
+\label{evaluacionexperimental:resultadosObtenidos}
+
+En la Figura \ref{fig:tiempos_wand} se puede observar el tiempo promedio del enfoque LH y el enfoque SH en resolver un conjunto de 10000 consultas de la colección gov2. A medida que crece el número de threads, el enfoque de heaps compartidos toma ventaja por sobre el enfoque de heaps locales, sin embargo, con un thread se puede observar que LH (117.486 ms) requiere un tiempo menor que SH (130.591 ms), esto se debe porque aquí no se usa una estructura de dato compartida que retrase a los hilos de ejecución esperando a que otros la liberen. LH requiere menos tiempo en resolver el log de consultas para 2,4,8 y 16 threads. 
+
+El esquema LH puede estar muy supeditado a la distribución de documentos en las listas del índice invertido, ya que si un thread procesa su parte corrrespondiente del índice invertido en donde los mejores puntajes se encuentran al final, entonces el heap tendrá un umbral bajo el proceso de descarte omitirá pocos documentos, esto implca que el tiempo de ejecución requerido será mayor, retrasando el proceso que mezcla los resultados para obtener el conjunto top-K dinal. 
+
+Como el esquema SH ocupa un solo heap para obtener el conjunto top-K final, el heap tiende a llenarse rápidamente con los mejores documentos globales, esto implica que el puntaje mínimo del heap (que trabaja de umbral) tiende a crecer rápidamente, permitiendo un mejor descarte de documentos y menos tiempo de ejecución para las hebras. 
+
+Adicionalmente en la Figura \ref{fig:eficiencias_wand} se puede ver que en forma general con la estrategia de enfoques compartidos se obtiene mejores eficiencias que con la estrategia LH. En Con SH la mejor eficiencia que se obtiene es con 4 threads (0.962 ms), mientras que con 2 y con 8 threads se obtiene una eficiencia de 0.887 y 0.8312600071 milisegundos; en general se obtiene buenas eficiencias para 1,2,4 y 8 hebras, sin embargo, con 16 threads la eficiencia baja considerablemente (0.5403329185) con respecto a las anteriores, esto se debe principalmente a la tecnología hyperthreading de la máquina utilizada y que el uso exclusivo del heap compartido por parte de los threads no tiene un fuerte impacto en el rendimiento.  
+La eficiencia baja de LH se debe porque para obtener el conjunto top-K final de una consulta debe haber una sincronización de todos los threads en que cada uno de ellos envíe sus top-K locales a la hebra maestra y además porque existe un costo adicional de calcular el conjunto top-K final entre los P * K documentos seleccionados (siendo P el número de procesadores). 
+                     
+Para los siguientes experimentos del presente trabajo se ocupará el enfoque SH para resolver las transacciones de lectura.
 
 
 \begin{figure}[!ht]
@@ -85,8 +91,14 @@ Se muestra un gráfico y tabla de eficiencia.
 \label{fig:tiempos_wand}
 \end{figure}
 
-\subsection{Resultados obtenidos}
-\label{evaluacionexperimental:resultadosObtenidos}
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale=.75]{images/eficiencias_wand.eps}
+\caption{Eficiencias para Wand con heaps compartido y locales}
+\label{fig:eficiencias_wand}
+\end{figure}
+
+
 
 
 
