@@ -16,7 +16,13 @@ Se utilizaron dos conjuntos de datos para llevar a cabo los experimentos, estos 
 
 \section{Wand multithreaded}
 \label{evaluacionexperimental:wm}
-En esta sección se muestra la implementación de las dos alternativas que se tienen para el procesamiento de consultas a través del algoritmo Wand \citep{Broder:2003}. En las secciones \ref{scheduling:wlh} y \ref{scheduling:wsh} se explica el diseño que se llevará a cabo. 
+En esta sección se muestra la implementación de dos enfoques para el procesamiento de consultas a través del algoritmo Wand \citep{Broder:2003}. El primer enfoque es el esquema de heap locales (LH), en el que cada thread obtiene sus mejores documentos para una query dada y luego una hebra maestra se encarga de mezclar todos los resultados de cada uno de los threads para construir en conjunto top-K final; el segundo enfoque es el enfoque de heap compartido (SH), en el que se tiene un heap visible a todos lo shilos de ejecución y en donde ellos compiten por el acceso a esta estructura de datos. El detalle del diseño de los enfoques LH y SH están disponibles en \ref{scheduling:wlh} y \ref{scheduling:wsh}. 
+
+\subsection{Esquema LH}
+
+
+
+
 
 // Cómo se llevaron a cabo los experimentos
 // Datos
@@ -24,8 +30,9 @@ En esta sección se muestra la implementación de las dos alternativas que se ti
 // Programación 
 
 
-\subsection{Wand heap local}
-\label{evaluacionexperimental:wlh}
+
+\begin{comment}
+
 Recordar que en el esquema Wand LH cada uno de los hilos de ejecución computa el conjunto top-K local y luego la hebra maestra hace la mezcla de resultados escogiendo el mejor conjunto top-K global. Este enfoque tiene la ventaja de que es simple de implementar, puesto que no se requiere mecanismos para controlar el paralelismo entre los threads. Sin embargo, se requiere que cada uno de los (P - 1) threads envíe su conjunto solución a la hebra maestra (que también computó su propio conjunto solución), para que crear el resultado final de entre los P x K documentos, donde P es el número de threads encargadas de resolver la consulta y K se es el tamaño del conjunto que se quiere obtener. 
 
 Los resultados en \citep{Rojas:2013} muestran indicios que el esquema LH tendría ventajas por sobre el SH para aquellas transacciones que toman poco tiempo en ser resueltas. 
@@ -52,12 +59,13 @@ El Código \ref{code:topkmultithreadwandoperatorlocal} muestra la implementació
 
 Mostrar topK Wand operator
 
+\end{comment}
 
 
-\subsection{Wand heap compartido}
-\label{evaluacionexperimental:whc}
 
- el proceso de descarte tiende a ser más eficiente porque los documentos con mayor puntaje tienden a estar en el heap
+\begin{comment}
+
+el proceso de descarte tiende a ser más eficiente porque los documentos con mayor puntaje tienden a estar en el heap
 
 Se habla un poco de las ventajas que se tenía con este esquema nuevamente, qué se hizo para la implementación, cómo se programó, etc. 
 
@@ -67,7 +75,7 @@ Se muestra el código y ojalá se muestra algún flujo de ejecución para una qu
 
 Se muestra un gráfico y tabla de eficiencia.
 
-
+\end{comment}
 
 \subsection{Resultados obtenidos}
 \label{evaluacionexperimental:resultadosObtenidos}
@@ -97,16 +105,6 @@ Para los siguientes experimentos del presente trabajo se ocupará el enfoque SH 
 \caption{Eficiencias para Wand con heaps compartido y locales}
 \label{fig:eficiencias_wand}
 \end{figure}
-
-
-
-
-
-
-
-
-
-
 
 
 \begin{comment}
