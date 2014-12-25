@@ -21,6 +21,7 @@ A continuacion se muestra las dos formas en que se implementó Wand y también l
 
 
 \section{Wand con heaps locales}
+\label{scheduling:wlh}
 En el esquema LH, cada \textit{thread} procesa una porción del índice invertido mientras mantiene un \textit{heap} local con los mejores $K$ documentos que el específico hilo de ejecución ha encontrado hasta ahora. Al final del proceso, los resultados deben ser reunido en un solo conjunto final global. Los resultados en \citep{Rojas:2013} muestran que el esquema LH es más eficientes para aquellas transacciones que toman poco tiempo en ser resueltas. En la Figura \ref{fig:wand-heap-local} se muestra el esquema de ejecución para \textit{heaps} locales explicado anteriormente. 
 
 \begin{figure}[!ht]

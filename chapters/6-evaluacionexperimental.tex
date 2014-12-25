@@ -16,22 +16,48 @@ Se utilizaron dos conjuntos de datos para llevar a cabo los experimentos, estos 
 
 \section{Wand multithreaded}
 \label{evaluacionexperimental:wm}
-En esta sección se muestra la implementación de dos enfoques para el procesamiento de consultas a través del algoritmo Wand \citep{Broder:2003}. El primer enfoque es el esquema de heap locales (LH), en el que cada thread obtiene sus mejores documentos para una query dada y luego una hebra maestra se encarga de mezclar todos los resultados de cada uno de los threads para construir en conjunto top-K final; el segundo enfoque es el enfoque de heap compartido (SH), en el que se tiene un heap visible a todos lo shilos de ejecución y en donde ellos compiten por el acceso a esta estructura de datos. El detalle del diseño de los enfoques LH y SH están disponibles en \ref{scheduling:wlh} y \ref{scheduling:wsh}. 
+En esta sección se muestra la implementación de dos enfoques para el procesamiento de consultas a través del algoritmo Wand \citep{Broder:2003}. El primer enfoque es el esquema de heap locales (LH), en el que cada thread obtiene sus mejores documentos para una query dada y luego una hebra maestra se encarga de mezclar todos los resultados de cada uno de los threads para construir en conjunto top-K final; el segundo enfoque es el enfoque de heap compartido (SH), en el que se tiene un heap visible a todos lo shilos de ejecución y en donde ellos compiten por el acceso a esta estructura de datos. El detalle del diseño de los enfoques LH y SH están disponibles en \ref{scheduling:wlh} y \ref{scheduling:whc}. 
 
 \subsection{Esquema LH}
+\label{evaluacionexperimental:esquemalh}
+
+\begin{figure}[th!]
+\centering
+\includegraphics[scale=.75]{images/ejecucion_topkmultithreadwandopLOCAL.eps}
+\caption{Esquema de ejecución enfoque LH}
+\label{fig:esquema_ejecucion_wandlh}
+\end{figure}
+
+
+
+\subsection{Esquema SH}
+\label{evaluacionexperimental:esquemash}
+
+\begin{figure}[th!]
+\centering
+\includegraphics[scale=.75]{images/ejecucion_topkmultithreadwandopCOMPARTIDO.eps}
+\caption{Esquema de ejecución enfoque SH}
+\label{fig:esquema_ejecucion_wandsh}
+\end{figure}
 
 
 
 
+
+
+
+
+
+
+
+
+\begin{comment}
 
 // Cómo se llevaron a cabo los experimentos
 // Datos
 // Máquina
 // Programación 
 
-
-
-\begin{comment}
 
 Recordar que en el esquema Wand LH cada uno de los hilos de ejecución computa el conjunto top-K local y luego la hebra maestra hace la mezcla de resultados escogiendo el mejor conjunto top-K global. Este enfoque tiene la ventaja de que es simple de implementar, puesto que no se requiere mecanismos para controlar el paralelismo entre los threads. Sin embargo, se requiere que cada uno de los (P - 1) threads envíe su conjunto solución a la hebra maestra (que también computó su propio conjunto solución), para que crear el resultado final de entre los P x K documentos, donde P es el número de threads encargadas de resolver la consulta y K se es el tamaño del conjunto que se quiere obtener. 
 
