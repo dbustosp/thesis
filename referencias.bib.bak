@@ -495,6 +495,45 @@
   Url                      = { http://dpavez.cl/incollection }
 }
 
+@PhdThesis{Hauff:2010,
+  Title                    = {Predicting the Effectiveness of Queries and Retrieval Systems},
+  Author                   = {C. {Hauff}},
+  School                   = {University of Twente},
+  Year                     = {2010},
+
+  Address                  = {Enschede},
+  Month                    = {January},
+
+  Abstract                 = {In this thesis we consider users' attempts to express their information needs through queries, or search requests and try to predict whether those requests will be of high or low quality. Intuitively, a query's quality is determined by the outcome of the query, that is, whether the retrieved search results meet the user's expectations. The second type of prediction methods under investigation are those which attempt to predict the quality of search systems themselves. Given a number of search systems to consider, these methods estimate how well or how poorly the systems will perform in comparison to each other. 
+
+The motivation for this research effort stems primarily from the enormous benefits originating from successfully predicting the quality of a query or a system. Accurate predictions enable the employment of adaptive retrieval components which would have a considerable positive effect on the user experience. Furthermore, if we would achieve sufficiently accurate predictions of the quality of retrieval systems, the cost of evaluation would be significantly reduced.
+
+In a first step, pre-retrieval predictors are investigated, which predict a query's effectiveness before the retrieval step and are thus independent of the ranked list of results. Such predictors base their predictions solely on query terms, collection statistics and possibly external sources such as WordNet or Wikipedia. A total of twenty-two prediction algorithms are categorized and their quality is assessed on three different TREC test collections, including two large Web collections. A number of newly applied methods for combining various predictors are examined to obtain a better prediction of a query's effectiveness. In order to adequately and appropriately compare such techniques the current evaluation methodology is critically examined. It is shown that the standard evaluation measure, namely the linear correlation coefficient, can provide a misleading indication of performance. To address this issue, the current evaluation methodology is extended to include cross validation and statistical testing to determine significant differences. 
+
+Building on the analysis of pre-retrieval predictors, post-retrieval approaches are then investigated, which estimate a query's effectiveness on the basis of the retrieved results. The thesis focuses in particular on the Clarity Score approach and provides an analysis of its sensitivity towards different variables such as the collection, the query set and the retrieval approach. Adaptations to Clarity Score are introduced which improve the estimation accuracy of the original algorithm on most evaluated test collections.
+
+The utility of query effectiveness prediction methods is commonly evaluated by reporting correlation coefficients, such as Kendall's Tau and the linear correlation coefficient, which denote how well the methods perform at predicting the retrieval effectiveness of a set of queries. Despite the significant amount of research dedicated to this important stage in the retrieval process, the following question has remained unexplored: what is the relationship of the current evaluation methodology for query effectiveness prediction and the change in effectiveness of retrieval systems that employ a predictor? We investigate this question with a large scale study for which predictors of arbitrary accuracy are generated in order to examine how the strength of their observed Kendall's Tau coefficient affects the retrieval effectiveness in two adaptive system settings: selective query expansion and meta-search. It is shown that the accuracy of currently existing query effectiveness prediction methods is not yet high enough to lead to consistent positive changes in retrieval performance in these particular settings.
+
+The last part of the thesis is concerned with the task of estimating the ranking of retrieval systems according to their retrieval effectiveness without relying on costly relevance judgments. Five different system ranking estimation approaches are evaluated on a wide range of data sets which cover a variety of retrieval tasks and a variety of test collections. The issue that has long prevented this line of automatic evaluation to be used in practice is the severe mis-ranking of the best systems. In the experiments reported in this work, however, we show this not to be an inherent problem of system ranking estimation approaches, it is rather data set dependent. Under certain conditions it is indeed possible to automatically identify the best systems correctly. Furthermore, our analysis reveals that the estimated ranking of systems is not equally accurate for all topics of a topic set, which motivates the investigation of relying on topic subsets to improve the accuracy of the estimate. A study to this effect indicates the validity of the approach.},
+  Assistant_supervisors    = {D. {Hiemstra}},
+  Eprintid                 = {17338},
+  HowPublished             = {http://eprints.eemcs.utwente.nl/17338/},
+  Id_number                = {10.3990/1.9789036529532},
+  Isbn_13                  = {978-90-365-2953-2},
+  ISSN                     = {1381-3617},
+  Keywords                 = {Information Retrieval, Query Performance Prediction},
+  Number                   = {CTIT Ph.D.-thesis series No. 09-161},
+  Official_url             = {http://dx.doi.org/10.3990/1.9789036529532},
+  Owner                    = {danilobustos},
+  Phd_type                 = {A},
+  Publisher                = {Centre for Telematics and Information Technology University of Twente},
+  Research_groups          = {EWI-HMI: Human Media Interaction},
+  Research_programs        = {CTIT-NICE: Natural Interaction in Computer-mediated Environments},
+  Research_projects        = {MultimediaN/N5: Semantic access},
+  Supervisors              = {F. M. G. {de Jong}},
+  Timestamp                = {2014.12.25}
+}
+
 @InCollection{He:2004,
   Title                    = {Inferring Query Performance Using Pre-retrieval Predictors},
   Author                   = {He, Ben and Ounis, Iadh},
