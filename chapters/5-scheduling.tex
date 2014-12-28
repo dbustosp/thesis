@@ -162,27 +162,6 @@ El procedimiento de la estrategias \textit{TimesRanges} se puede ver en el algor
 \end{algorithmic}
 \end{algorithm}
 
-\section{Estrategia unidades de trabajo}
-\label{scheduling:unidadestrabajo}
-Decir que aquí para planificar se necesita conocer las unidades de trabajos requeridas en vez de threads como en las estrategias por bloques.
-
-Con respecto a los esquemas explicados hasta ahora, el esquema 1TQ tiene la ventaja que no solo requiere menos control, sino que también permite a los hilos de ejecución trabajar sin pausa mientras un \textit{batch} de consultas está siendo procesado. En esta sección se propone un esquema híbrido basado en unidades de procesamiento (\textit{Processing Units}) que aproveche las ventajas de ambos enfoques. (se requiere ver el tema de bloques).
-En este nuevo esquema de planificación, las consultas pasan a través de una fase en la cual cada \textit{query} es evaluada y se determina un apropiado número de unidades de procesamiento (\textit{processing units}) para poder resolver dicha consulta. Este proceso es llevado a cabo de manera similar al proceso en donde se determina la cantidad de \textit{threads} apropiados para resolver una determina transacción de lectura. Este número de unidades de procesamiento es creado y asociado a cada consulta, finalmente se guarda en una cola de unidades de trabajo. Un conjunto de \textit{threads} consumidores extraen las unidades desde la cola y las procesa independientemente. Cuando un \textit{thread} finalice el procesamiento de la unidad de trabajo actual automáticamente leerá la siguiente unidad de trabajo desde la cola. 
-Generalmente lo que se hace habitualmente es estimar el número de \textit{threads} con el que se resolverá la consulta, como se muestra en la Figura \ref{fig:unit_process} en este nuevo enfoque se intenta estimar el número de unidades de trabajo con el que se resolverá cada consulta. Además, se debe controlar el acceso concurrente de los hilos de ejecución a la cola de unidades de trabajo, de tal manera que solo un thread tenga acceso exclusivo a la estructura de datos. 
-
-\begin{figure}[!th]
-\centering
-\includegraphics[scale=.75]{images/unit_process.eps}
-\caption{Procesamiento de consultas utilizando unidades de trabajo}
-\label{fig:unit_process}
-\end{figure}
-
-El procesamiento de cada hilo de ejecución es una versión de Wand con heap compartido (SH), adaptado de manera tal que cada unidad de trabajo es resuelta independientemente de si existen otras unidades siendo procesada al mismo tiempo o no. La única excepción es que la unidad que inicializa la consulta es siempre ejecutada antes del resto de las otras unidades de la misma consulta y la entrega de resultados se hace una vez que todas las unidades de trabajo de la \textit{query} han finalizado. Este enfoque híbrido permite reducir el tiempo perdido al final de cada \textit{batch} sin generar una importante pérdida de trabajo mientras las \textit{queries} del \textit{batch} están siendo procesadas.
-
-
-
-
-
 
 \section{Estrategia \textit{1TQ}}
 \label{scheduling:baseline}
@@ -199,7 +178,6 @@ Este esquema tiene la ventaja que es simple y fácil de implementar y controlar.
 Sin embargo, aunque cada hilo de ejecución está secuencialmente ejecutando una transacción de lectura diferente, algunas de estas operaciones puede tomar un tiempo cosiderable, de esta forma se produce una importante pérdida de eficiencia, aunque la intuición nos dice que esto se puede mitigar con \textit{queries} que requieran poca cantidad de tiempo para ser procesada (trabajos pequeños o \textit{small jobs}). 
 En la Figura \ref{fig:small_jobs} queda reflejado lo dicho en el párrafo anterior. Si los trabajos que cada \textit{thread} está ejecutando son pequeños, entonces probablemente la pérdida de trabajo al final de cada \textit{batch} de consultas será menor al trabajo que se pierde cuando los trabajos son grandes (ver Figura \ref{fig:large_jobs}).  
 
-
 \begin{figure}[H]
 \centering
 \includegraphics[scale=.75]{images/small_jobs.eps}
@@ -212,4 +190,62 @@ En la Figura \ref{fig:small_jobs} queda reflejado lo dicho en el párrafo anteri
 \includegraphics[scale=.75]{images/large_jobs.eps}
 \caption{Ejecución en paralelo de \textit{large jobs}}
 \label{fig:large_jobs}
+\end{figure}
+
+
+\section{Estrategia unidades de trabajo}
+\label{scheduling:unidadestrabajo}
+Con respecto a los esquemas explicados hasta ahora, el esquema 1TQ tiene la ventaja que no solo requiere menos control, sino que también permite a los hilos de ejecución trabajar sin pausa mientras se resuelven transacciones de lectura por lotes; sin embargo, no se garantiza una cota superior de tiempo para cada consulta. En esta sección se propone un esquema en donde la consulta es dividida en unidades de procesamiento o de trabajo, en el que a cada unidad se le asigna la parte del índice invertido con el cual se debe trabajar. Además existe un nivel de datos compartido entre las unidades de procesamiento, como por ejemplo, el heap en donde se guardará el conjunto top-K.
+
+En este nuevo esquema de planificación, las consultas pasan a través de una fase en la cual se predice sus tiempos de ejecución y se le asigna el mínimo número de hebras tal que se cumpla con la cota superior de tiempo establecida. Posteriormente se estima para cada consulta el número de unidades de procesamiento que se utilizará en su resolución, este número será igual al número de hilos de ejecución estimado (Ver Figura \ref{fig:unit_process}). Un conjunto de hilos consumidores extraen las unidades desde la cola y las procesa de forma independiente. Cuando una hebra finalice el procesamiento de la unidad de trabajo actual, automáticamente extraerá la siguiente unidad de trabajo desde la cola. De esta forma se forma una competencia entre los hilos de ejecución por las unidades de trabajo de la cola, por lo que se debe controlar el acceso concurrente de los hilos al nivel compartido de datos entre las unidades de procesamiento, de tal manera que solo una hebra tenga acceso exclusivo a este objeto para poder actualizar los datos a medida que cada una de las unidades de la transacción de lectura es resuelta.
+
+
+\begin{figure}[!th]
+\centering
+\includegraphics[scale=.75]{images/unit_process.eps}
+\caption{Procesamiento de consultas utilizando unidades de trabajo}
+\label{fig:unit_process}
+\end{figure}
+
+Se muestra un ejemplo en la Figura \ref{fig:queryunit_execution} en el que se resuelven cuatro consultas, en la que la consulta cero fue dividida en cuatro unidades de trabajo, por su parte la consulta uno y dos fueron divididas en dos unidades de trabajo, mientras que la consulta tres fue dividida en ocho unidades de trabajo. Los hilos de ejecución competirán por la extracción de unidades de trabajo desde la lista.
+
+\begin{figure}[!th]
+\centering
+\includegraphics[scale=.75]{images/QueryUnitExecution.eps}
+\caption{Esquema de ejecución estrategia unidades de procesamiento}
+\label{fig:queryunit_execution}
+\end{figure}
+
+El procesamiento de cada hilo de ejecución es una versión de Wand con heap compartido (SH), adaptado de manera tal que cada unidad de trabajo es resuelta independientemente de si existen otras unidades siendo procesada al mismo tiempo. La única excepción es que la unidad de procesamiento que inicializa la consulta es siempre ejecutada antes del resto de las otras unidades de la misma consulta, y también la entrega de resultados se hace una vez que todas las unidades de procesamiento de la consulta han finalizado. Este enfoque híbrido permite reducir el tiempo perdido al final de cada \textit{batch} de consultas sin generar una importante pérdida de trabajo mientras las consultas del \textit{batch} están siendo procesadas.
+
+En la Figura \ref{fig:queryunit_scheduler} se presenta el diagrama de clases del planificador de unidades de procesamiento:
+
+\begin{list}{}{}
+	\item \textbf{TopKMultiThreadWandOperatorLocal}. Clase encargada de devolver los mejores K documentos para una query dada. Si es que la query debe ser resuelta en forma paralela, esta clase además debe controlar el paralelismo que se produce en la resolución de ésta, inicializando las variables correspondientes para lanzar los hilos de ejecución y luego escogiendo los mejores documentos desde todos los heaps creados por los diferentes threads (proceso de merge). En esta clase se define un mapa que asocia cada término del índice invertido con el puntaje del mejor documento en esa lista invertida (upper bound de la lista invertida) y además se define cuántos documentos se van a retornar al final del proceso (atributo K). El método execute inicializa las variables locales para los diferentes threads, posteriormente hace el llamado al método \emph{thread-execute} (en el cual se llevará a cabo la resolución de la transacción de lectura en forma paralela), finalmente se toman los resultados parciales de cada uno de los hilos de ejecución y se ejecuta el proceso que mezcla los resultados, retornando solo los mejores K documentos. 
+	
+	\item \textbf{QueryObject}. Clase que representa las transacciones de lectura a las que se le asignará unidades de procesamiento.
+	
+	\item \textbf{QueryUnit}. Clase que representa las unidades de procesamiento de transacciones de lectura. Cada uno de estos objetos tiene asociado un nivel de datos compartido Q(ueryUnitShareData) con otras unidades de procesamiento que resolverán la misma consulta.
+			
+	\item \textbf{QueryUnitShareData}. Clase que permite la creación de datos compartidos entre las unidades de procesamiento. Todas las variables compartidas por las unidades de trabajo estarán albergadas en este objeto. 
+	
+	\item \textbf{QueryEstimator}. Clase que se encarga de estimar el número de unidades de procesamientos requeridas para una cierta consulta.
+	 
+	\item \textbf{QueryUnitScheduler}. Clase principal del planificador, esta se encarga de tomar las transacciones de lectura y asignarle a cada una de ellas el número de unidades de procesamiento adecuado. Finalmente, las unidades de trbaajo de planifican en una lista.
+\end{list}
+
+\begin{figure}[!th]
+\centering
+\includegraphics[scale=.75]{images/QueryUnitExecuter.eps}
+\caption{Diagrama de clases del ejecutador de unidades de procesamiento}
+\label{fig:queryunit_scheduler}
+\end{figure}
+
+Finalmente se diseña un diagrama de clases para el ejecutador de unidades de procesamiento (Ver Figura \ref{fig:queryunit_scheduler}). Aquí se puede observar los objetos involucrados en la resolución de cada consulta; cada objeto QueryProcessingOperator es el encargado de procesar una unidad, y habrán tantos objetos de este tipo como hilos de ejecución disponibles en el sistema. Cada vez que una unidad es procesada, si es que restan unidades por resolver, el hilo de ejecución toma inmediatamente la siguiente unidad de trabajo, de lo contrario debe retornar el conjunto final de documentos que se encuentra en el heap compartido. 
+
+\begin{figure}[!th]
+\centering
+\includegraphics[scale=.75]{images/QueryUnitScheduler.eps}
+\caption{Diagrama de clases del planificador de unidades de procesamiento}
+\label{fig:queryunit_scheduler}
 \end{figure}
