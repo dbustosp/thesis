@@ -1,13 +1,3 @@
-#ifndef _TOPK_MULTITHREAD_WAND_OPERATOR_LOCKS_H
-#define _TOPK_MULTITHREAD_WAND_OPERATOR_LOCKS_H
-
-#include "TopKMultithreadOperator.h"
-
-#include "Wand.h"
-#include "WandBM25.h"
-
-using namespace std;
-
 class TopKMultithreadWandOperatorLocks : public TopKMultithreadOperator{
 
 	protected:
@@ -50,14 +40,5 @@ class TopKMultithreadWandOperatorLocks : public TopKMultithreadOperator{
 		// Método que hara la resolución de la query
 		virtual void execute(QueryObject *query, vector<ResultObject*> &result);
 		virtual void executeSingleThread(QueryObject *query, vector<ResultObject*> &result);
-		virtual void reset();
-		
-		
+		virtual void reset();		
 };
-
-
-
-#endif //_TOPK_MULTITHREAD_WAND_OPERATOR_LOCKS_H
-
-
-
