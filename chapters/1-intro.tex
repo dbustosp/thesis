@@ -107,13 +107,36 @@ Antes de comenzar la investigación de las diferentes estrategias de planificaci
 Bajo dicha perespectiva de trabajo, el método científico es particularmente útil para guiar la totalidad del trabajo.
 Adicionalmente para las etapas del presente trabajo en donde se requiera la construcción de \textit{software}, se utilizará una metodología que consta de cuatro fases: (1) Concepción, en donde se estudian las variables involucradas y se establecen los requerimientos principales; (2) Elaboración, en la cual se diseña los modelos y componentes involucrados; (3) Construcción, en donde se implementa lo definido en la fase de elaboración; (3) Transición, etapa en la cual se reúne los resultados obtenidos y se haacen ajustes si es necesario.  
 
+\subsection{Herramientas a utilizar}
+\label{intro:herramientas}
+Las herramientas a utilizar se dividen en herramientas de \textit{software} y \textit{hardware}, a continuación se describe las utilizadas en el desarrollo del trabajo.
 
+\subsubsection{Herramientas de \textit{software}}
+Para la escritura de documento se utilizan las siguientes herramientas: 
 
+\begin{enumerate}
+  \item Sistema operatvo OS X Yosemite 10.10.
+  \item Texmaker.
+  \item Apache OpenOffice 4.0.1.
+  \item Gnuplot 4.2.  
+\end{enumerate}
 
+Para el desarrollo de los experimentos:
 
+\begin{enumerate}
+  \item Fedora 13 (goddard).
+  \item GCC 4.4.5.
+  \item Editor de texto VIM.
+\end{enumerate}
 
-% Para cada uno de la fase de construcción de algoritmo
-% 	Concepción
-% 	Elaboración
-%	Construcción
-%	Transición
+\subsubsection{Herramientas de \textit{hardware}}
+El desarrollo y ejecución se lleva a cabo en una máquina del laboratorio \textit{Yahoo!} \textit{Research} Santiago de Chile con las siguientes características: 
+
+\begin{enumerate}
+  \item Intel Xeon E5620 2.4 GHz, el cual consiste de 8 núcleos físicos y tecnología \textit{hyperthreading}. 
+  \item 90Gb de RAM.
+\end{enumerate}
+
+\section{Organización del documento}
+\label{intro:organizaciondocumento}
+El presente documento se divide en 7 capítulos. En el primer capítulo se presenta la problemática y la solución respectiva; además se muestran los objetivos y la metodología a utilizar. En el segundo capítulo se expone los conceptos teóricos involucrados. Durante el tercer capítulo se aborda los métodos de procesamiento de transacciones de lectura utilizados, explicando en detalle cómo funciona cada uno de ellos y presentando el diseño creado para su posterior implementación. En el cuarto capítulo se muestran los métodos predictores de eficiencia para transacciones de lectura implementados. En el quinto capítulo se presenta el diseño y esquemas de ejecución para cada una de las estrategias de planificación abordadas. En el capítulo seis se explica la fase de experimentación y se muestra los resultados obtenidos para las diferentes estrategias de planificación bajo diferentes métodos de procesamiento de consultas y diferentes conjunto de datos. Finalmente en el capítulo siete se exponen las respectivas conclusiones obtenidas a partir del presente trabajo.
