@@ -23,7 +23,6 @@ Hoy en día los motores de búsquedas junto con sus centros de datos consumen el
 
 Los desafíos expuestos anteriormente hace que exista una comunidad activa intentando encontrar soluciones eficientes para sistemas de recuperación de información como los motores de búsqueda.  
 
-
 \section{Descripci\'on del problema}
 \label{intro:problema}
 Para proporcionar un tiempo de respuesta adecuado a cada una de las consultas de los usuarios, los motores de búsquedas garantizan una cota superior de tiempo para la respuesta a una consulta \citep{Jeon:2014}. Para un motor de búsqueda es muy importante reducir el tiempo de ejecución de aquellas consultas que tomarán mucho tiempo en ser resueltas, esto es muchas veces más importante que reducir el tiempo medio de respuesta \citep{Dean:2013}. Por lo anteriormente descrito, se plantea la siguiente pregunta que guia el presente trabajo: ``¿Es posible diseñar un modelo de procesamiento y de planificación de transacciones de lectura que (1) asegure una cota superior de tiempo de respuesta para las consultas de los usuarios, y (2) minimice el tiempo en procesar lotes de consultas?".  
@@ -62,6 +61,12 @@ Finalmente, se espera proveer un modelo de procesamiento y planificación de tra
 
 \subsection{Alcances de la solución}
 \label{intro:alcancesdelasolucion}
+En la solución propuesta no se considera un sistema distribuído de procesamiento de consultas en donde existe un costo de comunicación entre las máquinas, sino que la resolución de consultas se llevará a cabo en una máquina distribuyendo la carga en sus unidades de procesamiento.
+
+% Las métricas a utilizar para medir el rendimiento es el número de transacciones resueltas por segundo
+% Estrategias diseñadas pensando en que las queries son resueltas por lotes y que al final de cada lote exite una sincronización 
+% 
+
 
 \section{Objetivos del proyecto}
 \label{intro:objetivosysolucion}
@@ -74,8 +79,9 @@ Finalmente, se espera proveer un modelo de procesamiento y planificación de tra
 % Dónde meto el 1T/Q? 
 \subsection{Objetivo general}
 \label{intro:objetivogeneral}
-Diseñar, analizar, implementar y evaluar estrategias de procesamiento y planificación de transacciones de lectura para motores de búsqueda verticales para la Web. Estas deben ser capaces de resolver de manera eficiente el problema de procesar decenas de miles de consultas, asegurando una cota superior de tiempo de respuesta de cada operación.
+Analizar, desarrollar, comparar y evaluar estrategias de procesamiento y planificación de transacciones de lectura para motores de búsqueda verticales para la Web. Estas deben ser capaces de resolver de manera eficiente el problema de procesar decenas de miles de consultas, asegurando una cota superior de tiempo de respuesta de cada operación.
 
+% La comparación es con estrategias de planificación del estado del arte
 
 \subsection{Objetivos específicos}
 \label{intro:objetivosespecificos}
@@ -88,3 +94,26 @@ Diseñar, analizar, implementar y evaluar estrategias de procesamiento y planifi
     
     \item Obtener un modelo de costo que permita analizar la eficiencia y escalabilidad de las estrategias diseñadas en motores de búsqueda verticales.
 \end{itemize}
+
+\section{Metodología y herramientas a utilizar}
+\label{intro:metodologiayherramientas}
+
+\subsection{Metodología}
+\label{intro:metodologia}
+El presente trabajo posee un enfoque investigativo, en donde en primera instancia se busca en la literatura las estrategias de planificación de carácter teórico que existen, se genera un diseño adaptado al entorno de un motor de búsqueda para ser implementado. Luego estas estrategias son evaluadas, y en base a observación y experimentación, se buscan oportunidades de mejora de ellas, para posteriormente compararlas bajo ciertos parámetros establecidos.
+
+Antes de comenzar la investigación de las diferentes estrategias de planificación, se construye el entorno de un motor de búsqueda, esto implica (1) el diseño, desarrollo y evaluación de diferentes métodos de procesamiento de transacciones de lectura, y (2) implementación y evaluación de métodos predictores de eficiencia para transacciones de lectura.
+
+Bajo dicha perespectiva de trabajo, el método científico es particularmente útil para guiar la totalidad del trabajo.
+Adicionalmente para las etapas del presente trabajo en donde se requiera la construcción de \textit{software}, se utilizará una metodología que consta de cuatro fases: (1) Concepción, en donde se estudian las variables involucradas y se establecen los requerimientos principales; (2) Elaboración, en la cual se diseña los modelos y componentes involucrados; (3) Construcción, en donde se implementa lo definido en la fase de elaboración; (3) Transición, etapa en la cual se reúne los resultados obtenidos y se haacen ajustes si es necesario.  
+
+
+
+
+
+
+% Para cada uno de la fase de construcción de algoritmo
+% 	Concepción
+% 	Elaboración
+%	Construcción
+%	Transición

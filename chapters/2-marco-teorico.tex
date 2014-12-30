@@ -40,10 +40,12 @@ El tamaño del índice invertido crece rápido y eventualmente la memoria RAM se
 \label{marco:eeq}
 Una de las tareas que un motor de búsqueda debe hacer para resolver una consulta es calcular el puntaje o \textit{score} para aquellos documentos relevantes en la consulta y así poder extraer los mejores $K$ documentos. Existen dos principales estrategias para recorrer las listas invertidas y calcular el puntaje de los documentos para una determinada consulta. Estas son (a) \textit{term-at-a-time} \citep{Buckley:1985, Turtle:1995} y (b) \textit{document-at-a-time} \citep{Broder:2003, Turtle:1995}.
 
-\subsection{Term at a time}
+\subsection{\textit{Term at a time}}
+\label{marco:TAAT}
 Abreviada TAAT, este tipo de estrategia procesa los términos de las consultas una a una y acumula el puntaje parcial de los documentos. Las listas invertidas asociadas a un término son procesadas secuencialmente, esto significa que todos los documentos presentes en la lista invertida del término $t_{i}$ obtienen un puntaje parcial antes de comenzar el procesamiento del término $t_{i+1}$. La secuencialidad en este caso es con respecto a los términos contenidos en la transacción de lectura.
 
-\subsection{Document at a time}
+\subsection{\textit{Document at a time}}
+\label{marco:DAAT}
 Abreviada DAAT, en este tipo de estrategias se evalúa la contribución de todos los términos de la transacción de lectura con respecto a un documento antes de evaluar el siguiente documento. Las listas invertidas de cada término de la consulta son procesadas en paralelo, de modo que el puntaje del documento $d_{j}$ se calcula considerando todos los términos de la transacción de lectura al mismo tiempo. Una vez que se obtiene el puntaje del documento $d_{j}$ para la consulta completa, se procede al procesamiento del documento $d_{j+1}$. Este tipo de estrategia posee dos grandes ventajas: (a) Requieren menor cantidad de memoria para su ejecución, ya que el puntaje parcial por documento no necesita ser guardado y (b) Explotan el paralismo de entrada y salida (I/O) más eficientemente procesando las listas invertidas en diferentes discos simultáneamente.
 
 \section{Funciones de \textit{Ranking}}
