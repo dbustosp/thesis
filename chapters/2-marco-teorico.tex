@@ -9,7 +9,7 @@ Un motor de búsqueda está construído por diversos componentes, su arquitectur
 \begin{figure}[!th]
 \centering
 \includegraphics[scale=.75]{images/searchenginearchitecture.eps}
-\caption{Arquitectura típica de un motor de búsqueda}
+\caption{Arquitectura típica de un motor de búsqueda.}
 \label{fig:searchenginearchitecture}
 \end{figure}
 
@@ -30,7 +30,7 @@ Para construir un índice invertido \citep{Baeza-Yates:2011, Salton:2003} se deb
 \begin{figure}[!th]
 \centering
 \includegraphics[scale=.75]{images/invertedindex.eps}
-\caption{\'Indice invertido}
+\caption{\'Indice invertido.}
 \label{fig:invertedindex}
 \end{figure}
 
@@ -52,18 +52,18 @@ Abreviada DAAT, en este tipo de estrategias se evalúa la contribución de todos
 \label{marco:ranking}
 Los sistemas de recuperación de información como los motores de búsqueda deben ejecutar un proceso el cual asigna puntaje a documentos con respecto a una determinada transacción de lectura, este proceso se denomina \textit{ranking} \citep{Baeza-Yates:2011}. Como se puede ver en la Figura \ref{fig:ranking_process}, este proceso toma como entrada la representación de las consultas y documentos, y asigna un \textit{score} a un documento $d_{j}$ dada una consulta $q_{i}$.
 
-Un motor de búsqueda guarda billones de documentos que están formados por términos o palabras, estos términos no todos poseen la misma utilidad para describir el contenido del documento. Determinar la importancia de una palabra en un documento no es tarea sencilla, para ello se asocia un peso positivo $w_{i,j}$ a cada término $t_{i}$ del documento $d_{j}$. De esta forma, para un término $t_{i}$ que no aparezca en el documento $d_{j}$ se tendrá $w_{i,j} = 0$. La asignación de pesos a los términos permite generar un \textit{ranking} numérico para cada documento en la colección.
+Un motor de búsqueda guarda billones de documentos que están formados por términos o palabras, dentro de estos términos no todos poseen la misma utilidad para describir el contenido del documento. Determinar la importancia de una palabra en un documento no es tarea sencilla, para ello se asocia un peso positivo $w_{i,j}$ a cada término $t_{i}$ del documento $d_{j}$. De esta forma, para un término $t_{i}$ que no aparezca en el documento $d_{j}$ se tendrá $w_{i,j} = 0$. La asignación de pesos a los términos permite generar un \textit{ranking} numérico para cada documento en la colección.
 
 \begin{figure}[!th]
 \centering
 \includegraphics[scale=.75]{images/ranking_process.eps}
-\caption{Proceso de \textit{scoring} de documento}
+\caption{Proceso de \textit{scoring} de documento.}
 \label{fig:ranking_process}
 \end{figure}
 
 \subsection{TF-IDF}
 \label{marco:tfi-df}
-$Tf-idf$ (\textit{term frequency - inverse document frequency}) es un estadístico que tiene por objetivo reflejar cuán importante es una palabra para un documento en una colección o corpus %. Este estadístico se divide en dos partes, el primero corresponde a la frecuencia del término en un documento ($tf$) y que en su versión más sencilla se utiliza la frecuencia bruta del término $t$ en el documento $d$ ($f(t,d)$) dividido por la frecuencia de la palabra que más se repite en el documento $d$.  
+$Tf-idf$ (\textit{term frequency - inverse document frequency}) es un estadístico que tiene por objetivo reflejar cuán importante es una palabra para un documento en una colección o corpus. Este estadístico se divide en dos partes, el primero corresponde a la frecuencia del término en un documento ($tf$) y que en su versión más sencilla se utiliza la frecuencia bruta del término $t$ en el documento $d$ ($f(t,d)$) dividido por la frecuencia de la palabra que más se repite en el documento $d$.  
 
 \begin{equation}
 \label{formula:tf}
@@ -89,7 +89,7 @@ Notar en \eqref{formula:tfi-df} que el estadístico incrementa proporcionalmente
 
 \subsection{BM25}
 \label{marco:bm25}
-Es una función de \textit{ranking} de documentos basada en los términos que aparecen en la consulta que llega al motor de búsqueda. \textit{BM25} pertenece a una amplia gama de funciones de puntuación y está basada en los modelos probabilísticos de recuperación de la información \citep{Baeza-Yates:2011}.
+Es una función de \textit{ranking} de documentos basada en los términos que aparecen en la consulta que llega al motor de búsqueda. \textit{BM25} pertenece a una amplia gama de funciones de puntuación y está basada en los modelos probabilísticos de recuperación de información \citep{Baeza-Yates:2011}.
 
 Dada una consulta $Q$ que contiene los términos $q_{1},...,q_{n}$, el \textit{ranking BM25} del documento D se calcula como: 
 
@@ -103,7 +103,7 @@ En donde: $f(q_{i}, D)$ es la frecuencia en que aparece el término $q_{i}$ en e
 
 \section{Operaciones sobre listas invertidas}
 \label{marco:osli}
-Cuando una consulta llega al motor de búsqueda, cada término tiene asociado una lista con todos los documentos en los cuales aparece. El sistema debe decidir qué documentos se analizarán para obtener la respuesta y entregar al usuario una respuesta. A continuación se presenta los modos de operar las listas invertidas para una cierta transacción de lectura.
+Cuando una consulta llega al motor de búsqueda, cada término tiene asociado una lista con todos los documentos en los cuales aparece. El sistema debe decidir qué documentos se analizarán para obtener la respuesta y entregársela al usuario. A continuación se presenta los modos de operar las listas invertidas para una cierta transacción de lectura.
 
 \subsection{\textit{OR}}
 \label{marco:or}
@@ -112,7 +112,7 @@ Este operador toma las listas invertidas de cada uno de los términos de la tran
 \begin{figure}[!th]
 \centering
 \includegraphics[scale=.75]{images/ORoperation.eps}
-\caption{Operaci\'on OR}
+\caption{Operaci\'on OR.}
 \label{fig:ORoperation}
 \end{figure}
 
@@ -123,7 +123,7 @@ Este operador ejecuta la conjunción entre las listas invertidas de los término
 \begin{figure}[!th]
 \centering
 \includegraphics[scale=.75]{images/ANDoperation.eps}
-\caption{Operaci\'on AND}
+\caption{Operaci\'on AND.}
 \label{fig:ANDoperation}
 \end{figure}
 
@@ -141,7 +141,7 @@ Este algoritmo es repetido hasta que no hayan más documentos a procesar o hasta
 \begin{figure}[!th]
 \centering
 \includegraphics[scale=.75]{images/proceso_wand.eps}
-\caption{Ejemplo de ejecución de algoritmo Wand}
+\caption{Ejemplo de ejecución de algoritmo Wand.}
 \label{fig:proceso_wand}
 \end{figure}
 
@@ -155,7 +155,7 @@ Este método utiliza una variación del algoritmo Wand tradicional para que trab
 \begin{figure}[!th]
 \centering
 \includegraphics[scale=.75]{images/block-max-wand.eps}
-\caption{Ejemplo del proceso \textit{Block-Max-Wand}}
+\caption{Ejemplo del proceso \textit{Block-Max-Wand}.}
 \label{fig:bmw}
 \end{figure}
 
@@ -182,7 +182,7 @@ En un sistema con arquitectura como el de la Figura \ref{fig:sistemaIR}, una tra
 \begin{figure}[tp]
 \centering
 \includegraphics[scale=.75]{images/sistemaIR.eps}
-\caption{Arquitectura de un sistema de recuperación de la información con réplicas}
+\caption{Arquitectura de un sistema de recuperación de información con réplicas.}
 \label{fig:sistemaIR}
 \end{figure}
 
@@ -190,4 +190,4 @@ En un sistema con arquitectura como el de la Figura \ref{fig:sistemaIR}, una tra
 \label{marco:tr}
 El estudio \citep{Broccolo:2013} analiza métodos de \textit{dropping} y \textit{stopping} para el procesamiento de consultas bajo altas cargas de trabajo en un sistema distribuído donde existen múltiples servidores en el que cada uno resuelve una parte de la consulta para luego enviar las consultas al \textit{broker} y éste hace el \textit{merge} de los resultados de acuerdo al \textit{score} de los documentos. Se define un tiempo \textit{T}, en el que la suma de el tiempo de espera de la consulta para ser procesada ($t_{w}$) y el tiempo de procesamiento de la misma ($t_{p}$) deben ser menor a \textit{T}. Si es que se sobrepasa este tiempo, se tienen dos opciones (1) la consulta es desechada y se envía al \textit{broker} una lista vacía, (2) se detiene el procesamiento de la transacción de lectura y se envían los resultados parciales hasta el momento. Finalmente se propone un método basado en la predicción de tiempo de respuesta ($\hat{pt}(q)$) de una consulta \citep{Macdonald:2012} de modo que si se cumple $ \hat{pt}(q) \leq T - wt(q) $, entonces la consuta es desechada antes de comenzar a procesarse y se toma la siguiente desde la cola de espera. Notar que en estos métodos existe una pérdida de efectividad, puesto que eventualmente los servidores muchas veces no enviarán sus mejores documentos al \textit{broker}, esto implica que el \textit{broker} responderá al usuario un conjunto de K documento que no necesariamente son los mejores dentro del corpus completo.
 
-En \citep{Freire:2012} se estudia el impacto que tiene la técnica de predicción de tiempos de respuestas para consultas, \citep{Tonellotto:2011} en sistemas de recuperación de la información con réplicas. En este estudio, se llega a la conclusión que usando una buena predicción, se puede reducir el tiempo que la consulta tiene que esperar para ser procesada ($t_{w}$), y también se puede reducir el tiempo total requerido para procesar el conjunto (\textit{log}) completo de transacciones de lectura (\textit{completion time}). En \citep{Freire:2013}, se propone un modelo híbrido de \textit{scheduling} de consultas a través de réplicas, en el que cuando el sistema se encuentre bajo altas cargas de trabajo, se utilice política de \textit{scheduling} basada en la predicción de tiempo de respuesta de las consultas \citep{Macdonald:2012} y cuando el sistema se encuentre con una baja carga de trabajo, se utilice una politica de \textit{scheduling} sencilla y de menor costo como \textit{Round Robin}.
+En \citep{Freire:2012} se estudia el impacto que tiene la técnica de predicción de tiempos de respuestas para consultas, \citep{Tonellotto:2011} en sistemas de recuperación de información con réplicas. En este estudio, se llega a la conclusión que usando una buena predicción, se puede reducir el tiempo que la consulta tiene que esperar para ser procesada ($t_{w}$), y también se puede reducir el tiempo total requerido para procesar el conjunto (\textit{log}) completo de transacciones de lectura (\textit{completion time}). En \citep{Freire:2013}, se propone un modelo híbrido de \textit{scheduling} de consultas a través de réplicas, en el que cuando el sistema se encuentre bajo altas cargas de trabajo, se utilice política de \textit{scheduling} basada en la predicción de tiempo de respuesta de las consultas \citep{Macdonald:2012} y cuando el sistema se encuentre con una baja carga de trabajo, se utilice una politica de \textit{scheduling} sencilla y de menor costo como \textit{Round Robin}.
