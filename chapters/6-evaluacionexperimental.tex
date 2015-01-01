@@ -68,7 +68,27 @@ Adicionalmente en la Figura \ref{fig:eficiencias_wand} se puede ver en forma gen
 
 \section{Predicción de tiempos}
 \label{evaluacionexperimental:predicciontiempos}
-
+% Demostrar que Regresión lineal es mejor
 
 \section{Estrategias de scheduling}
 \label{evaluacionexperimental:estrategiasscheduling}
+% mostrar que times ranges es mejor que los otros
+% Regresión lineal y perfect
+% Batches
+Se llevó a cabo variaciones de Wand multihilo con los enfoques de planificación por bloques usando el predictor multilineal y un predictor perfecto. Los resultados obtenidos se puede ver en la Figura X. Se puede observar que un mejor predictor puede conducir a mejores tiempos de ejecución. Para determinar el número de hebras a ser usado para resolver cada consulta, el sistema predice el tiempo que esta tomará y escoge el mínimo número de hebras cuyo tiempo predicho es mejor a una cota superior de tiempo. Se intentó diferentes valores de cota superior para determinar el número de hebras y los mejores resultados fueron obtenidos con el tiempo promedio de las consultas. Se analiza el comportamiendo que tiene las técnicas en responder a consultas divididas en conjuntos de diferentes tamaños (1000, 500, 200, 100 and 50). En cada caso las técnicas procesaron todas las consultas con una pausa entre lotes, el tiempo de ejecución total tomado corresponde a la suma de tiempos de ejecución de los lotes. El mejor resultado fue obtenido por la estrategia Times Ranges usando el predictor perfecto. 
+
+%%% FIGURA 6 PAPER PDP
+
+En base a experimentación se ha encontrado que en general Wand en el enfoque de bloques es mucho menos eficiente con respecto a otros enfoques. Es por esta razón que en las siguientes experimentaciones y comparaciones solo se utiliza la estrategia Times Ranges con predictor perfecto. 
+
+
+
+
+
+
+
+
+
+
+
+
