@@ -4,7 +4,7 @@
 
 \section{Antecedentes y motivaci\'on}
 \label{intro:motivacion}
-La \textit{World Wide Web} es conocida como una gran teleraña mundial en la que existen millones de computadores conectados y la que desde el año 1993 crece exponencialmente, a tal punto que es incapaz de detectar sus propios cambios. A medida que pasa el tiempo y la Web sigue creciendo, los motores de búsqueda se convierten en una herramienta cada vez más usada e importante para los usuarios. Estas máquinas ayudan a los usuarios a buscar contenido dentro de la Web, puesto que conocen en cuáles documentos de la ella aparecen qué palabras. Si estas máquinas no existieran, los usuarios estarían obligados a conocer los localizadores de recursos uniformes (\textit{URL}) de cada uno de los sitios a visitar. Además, los motores de búsquedas en cierto modo conectan la Web, ya que existe un gran número de páginas que no tienen referencia desde otras, siendo el único modo de acceder a ellas a través de un motor de búsqueda \citep{Baeza-Yates:2008}.  
+La \textit{World Wide Web} es conocida como una gran teleraña mundial en la que existen millones de computadores conectados y la que desde el año 1993 crece exponencialmente, a tal punto que es incapaz de detectar sus propios cambios. A medida que pasa el tiempo y la Web sigue creciendo, los motores de búsqueda se convierten en una herramienta cada vez más usada e importante para los usuarios. Estas máquinas ayudan a los usuarios a buscar contenido dentro de la Web, puesto que conocen en cuáles documentos de ella aparecen qué palabras. Si estas máquinas no existieran, los usuarios estarían obligados a conocer los localizadores de recursos uniformes (\textit{URL}) de cada uno de los sitios a visitar. Además, los motores de búsquedas en cierto modo conectan la Web, ya que existe un gran número de páginas que no tienen referencia desde otras, siendo el único modo de acceder a ellas a través de un motor de búsqueda \citep{Baeza-Yates:2008}.  
 
 La tendencia actual es incluir lo que han llamado búsqueda en tiempo real, que consiste en incluir en los resultados de las búsquedas documentos actualizados en el pasado muy reciente, por ejemplo, en una ventana de tiempo de minutos. Esto permite incluir en los resultados de las búsquedas a sistemas muy activos respecto de publicación de nuevos documentos, tales como \textit{Twitter}\footnote{http://www.twitter.com}. Esto presenta desafíos importantes para los motores de búsqueda puesto que no solo deben procesar eficientemente a decenas de miles de consultas por segundo, sino que también deben permitir que sus índices invertidos \citep{Zobel:2006} sean actualizados de manera concurrente con las consultas que llegan al sistema. Por lo tanto, es relevante diseñar estrategias que permitan administrar a decenas de miles de consultas de usuarios concurrentes por segundo y a la vez ser eficientes.
 
@@ -34,12 +34,12 @@ Decidir si utilizar una o todas las hebras de una máquina para resolver una tra
 
 \section{Solución propuesta}
 \label{intro:solucionpropuesta}
-La solución propuesta en este trabajo consta del diseño e implementación de estrategias de planificación de transacciones de lectura para motores de búsqueda vertical. A su vez, la estrategia generada como solución tiene como foco principal una sola máquina, en donde el procesamiento de consultras debe explotar el paralelismo liviano. 
+La solución propuesta en este trabajo consta del diseño e implementación de estrategias de planificación de transacciones de lectura para motores de búsqueda vertical. A su vez, la estrategia generada como solución tiene como foco principal una sola máquina, en donde el procesamiento de consultas debe explotar el paralelismo liviano. 
 
 
 \subsection{Caracter\'isticas de la solución}
 \label{intro:caracteristicassolucion}
-La solución propuesta incluye la implementación de un método de predicción de tiempo de respuesta a transacciones de lectura para la asignación eficiente de hilos de ejecucion, con el objetivo de reducir el tiempo de procesamiento de las consultas. 
+La solución propuesta incluye la implementación de un método de predicción de tiempo de respuesta a transacciones de lectura para la asignación eficiente de hilos de ejecución, con el objetivo de reducir el tiempo de procesamiento de las consultas. 
 
 Se implementaron dos modelos de procesamiento paralelo de consulta basado en el método Wand: Con \textit{heap} compartido y \textit{heaps} locales. De esta manera el sistema es flexible para trabajar con una o más hebras.
 

@@ -15,7 +15,7 @@ La ventaja de este diseño es que ambas opciones son flexibles a utilizar cualqu
 \end{figure}
 
 Existen dos formas de implementar Wand. Una de ellas es usando \textit{heaps} locales (LH), es decir, un \textit{heap} por hilo de ejecución y el otro es usando \textit{heaps} compartidos (SH). En el estudio \citep{Rojas:2013} se muestran indicios que el esquema SH es generalmente más eficiente, logrando rápidamente un óptimo valor para el \textit{threshold}. El esquema SH posee las siguientes ventajas: (1) Se puede reducir el número de cálculos de puntajes completos y (2) se ejecutan pocas operaciones de actualización del \textit{heap} (reduciendo el número de \textit{locks} que se hace a la estructura de dato). 
-A continuacion se muestra las dos formas en que se implementó Wand y también la implementación de Block Max Wand.
+A continuación se muestra las dos formas en que se implementó Wand y también la implementación de Block Max Wand.
 
 
 \section{Wand con \textit{heaps} locales}
@@ -45,7 +45,7 @@ El diseño aplicado para implementar el esquema LH se puede ver en la Figura \re
 	
 	\item \textbf{TopKWandOperator}.  Cada hilo tendrá su propio objeto TopKWandOperator encargado de obtener los mejores $K$ documentos. El cálculo de este conjunto se realiza en el método \textit{execute} con la ayuda de un objeto de tipo Wand asociado.
 	
-	\item \textbf{Wand}. Clase que controla la lógica del algoritmo wand. Lleva a cabo el proceso de inserción de documentos en el \textit{heap} y todo lo que esto conlleva. Existen diferentes tipos de objetos Wand que se pueden utilizar, entre ellos están WandBM25, WandFrec y WandTFIDF, donde la única diferencia entre ellos es el método con que se calcula el puntaje de cada documento. Por ejemplo, WandBM25 utiliza BM25 (citar) y WandTFIDF utiliza tf-idf. 
+	\item \textbf{Wand}. Clase que controla la lógica del algoritmo wand. Lleva a cabo el proceso de inserción de documentos en el \textit{heap} y todo lo que esto conlleva. Existen diferentes tipos de objetos Wand que se pueden utilizar, entre ellos están WandBM25, WandFrec y WandTFIDF, donde la única diferencia entre ellos es el método con que se calcula el puntaje de cada documento. Por ejemplo, WandBM25 utiliza BM25 y WandTFIDF utiliza tf-idf. 
 	
 	\item \textbf{ResultObject}. Clase que se utiliza para guardar los mejores $K$ documentos.
 	
