@@ -19,3 +19,7 @@ ok, entonces es mejor usar este enfoque de unidades
 se analizan los resultados de cada uno de los algoritmos
 
 Trabajo futuro, probar con diferentes K, probar reducir el modelo lineal, probar otras estrategias de planificación.
+
+En las estrategias por bloque, un predictor mejor tiene un impacto en el tiempo de procesamiento lotes de consultas.
+
+Mala técnica en la práctica del método teórico del estado del arte. La mejor estrategia por bloques es TimesRanges que es una modificación de la original, pero que de todas formas es muy ineficiente en contexto donde se requiere procesamiento por lotes de queries, ya que se pierde mucho tiempo al término de cada Room y Walls. 
