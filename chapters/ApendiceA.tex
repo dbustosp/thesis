@@ -1,5 +1,88 @@
-\chapter{Información complementaria}
+\chapter{Resultados del proceso de entrenamiento}
 \label{ape:apeA}
 
-\section{Script base de datos esquema 3-Ontology}
+\begin{table}[htbp]
+\caption{Resultados método ML utilizando el conjunto de datos Gov2 y método de procesamiento Block Max Wand.}
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+\multicolumn{ 6}{|c|}{Estimador ML – GOV2 – BMW} \\ \hline
+ & 1t & 2t & 4t & 8t & 16t \\ \hline
+r & \multicolumn{1}{r|}{0,8782952873} & \multicolumn{1}{r|}{0,8809618279} & \multicolumn{1}{r|}{0,8479348273} & \multicolumn{1}{r|}{0,7771884041} & \multicolumn{1}{r|}{0,7377811742} \\ \hline
+RMSE & 72,364708101 & 40,8927943754 & 20,1217578763 & 13,7608115407 & 12,4521027766 \\ \hline
+\end{tabular}
+\end{center}
+\label{ml_gov2_bmw}
+\end{table}
 
+\begin{table}[htbp]
+\caption{Resultados método ML utilizando el conjunto de datos ClueWeb y método de procesamiento Wand.}
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+\multicolumn{ 6}{|c|}{Estimador ML – ClueWeb – WAND} \\ \hline
+ & 1t & 2t & 4t & 8t & 16t \\ \hline
+r & 0,8613156155 & 0,8726350536 & 0,8646059611 & 0,8598639269 & 0,8497258186 \\ \hline
+RMSE & 91,9765237227 & 48,1189862101 & 21,9652740764 & 12,1717738001 & 9,3846426006 \\ \hline
+\end{tabular}
+\end{center}
+\label{ml_clueweb_wand}
+\end{table}
+
+\begin{table}[htbp]
+\caption{Resultados método ML utilizando el conjunto de datos ClueWeb y método de procesamiento Block Max Wand.}
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+\multicolumn{ 6}{|c|}{Estimador ML - ClueWeb – BMW} \\ \hline
+ & 1t & 2t & 4t & 8t & 16t \\ \hline
+r & 0,8828211665 & 0,8891976969 & 0,808606576 & 0,823249926 & 0,7451258225 \\ \hline
+RMSE & 64,7039723565 & 35,281001295 & 25,7540777939 & 15,8306946733 & 17,9398672123 \\ \hline
+\end{tabular}
+\end{center}
+\label{ml_clueweb_bmw}
+\end{table}
+
+% ----------------- Redes neuronales -------------------
+
+\begin{table}[htbp]
+\caption{Resultados método RN utilizando el conjunto de datos Gov2 y método de procesamiento Block Max Wand.}
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+\multicolumn{ 6}{|c|}{Estimador RN – GOV2 – BMW} \\ \hline
+ & 1t & 2t & 4t & 8t & 16t \\ \hline
+r & 0,932476451 & 0,9360700621 & 0,8966995703 & 0,827613008 & 0,7880014511 \\ \hline
+RMSE & 54,7912225707 & 82,2905244753 & 60,3315527261 & 21,882569362 & 5,7758056986 \\ \hline
+\end{tabular}
+\end{center}
+\label{rn_gov2_bmw}
+\end{table}
+
+\begin{table}[htbp]
+\caption{Resultados método RN utilizando el conjunto de datos Clueweb y método de procesamiento Wand.}
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+\multicolumn{ 6}{|c|}{Estimador RN – ClueWeb – Wand} \\ \hline
+ & 1t & 2t & 4t & 8t & 16t \\ \hline
+r & 0,9214415134 & 0,928326314 & 0,9547375955 & 0,9520042927 & 0,9498575917 \\ \hline
+RMSE & 70,5610058313 & 98,6489306355 & 65,1112021339 & 24,172402818 & 8,4319553251 \\ \hline
+\end{tabular}
+\end{center}
+\label{rn_clueweb_wand}
+\end{table}
+
+\begin{table}[htbp]
+\caption{Resultados método RN utilizando el conjunto de datos Clueweb y método de procesamiento Block Max Wand.}
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+\multicolumn{ 6}{|c|}{Estimador RN – ClueWeb – BMW} \\ \hline
+ & 1t & 2t & 4t & 8t & 16t \\ \hline
+r & 0,9583572968 & 0,9581178412 & 0,8717897021 & 0,9019796766 & 0,8192397311 \\ \hline
+RMSE & 39,546150466 & 75,4843974473 & 48,4467865615 & 24,9504558614 & 17,0429025714 \\ \hline
+\end{tabular}
+\end{center}
+\label{rn_clueweb_bmw}
+\end{table}

@@ -70,6 +70,8 @@ Adicionalmente en la Figura \ref{fig:eficiencias_wand} se puede ver en forma gen
 \label{evaluacionexperimental:predicciontiempos}
 En esta sección se muestran los resultados obtenidos de las implementaciones hechas para el método basado en regresión lineal múltiple (ML) y red neuronal (RN). El proceso de entrenamiento para ambos casos se llevó a cabo con 10000 instancias, cada instancia es una transaccion de lectura real desde la cual se precalcularon los 42 descriptores definidos en el Capítulo \ref{cap:prediccion}. 
 
+
+% Se debe elegir cuáles métodos se comentarán y cuáles se mandarán al apéndice (gov2 para wand y bmw es buen candidato)
 Las Tablas \ref{ml_gov2_wand}, \ref{ml_gov2_bmw}, \ref{ml_clueweb_wand} y \ref{ml_clueweb_bmw} muestran los valores obtenidos en el proceso de entrenamiento del modelo ML para los conjuntos de datos Gov2 y ClueWeb utilizando los métodos Wand y Block Max Wand. A pesar de que son 42 variables independiente, en forma general se pueden observar buenos valores de los coeficientes de regresión de \textit{pearson} para cada uno de los modelos, lo que significa que existe una relación lineal entre el tiempo de las consultas y el modelo.  
 
 
@@ -85,50 +87,6 @@ RMSE & 89,8191624638 & 49,0317178648 & 22,0735989696 & 12,5486639038 & 9,1536416
 \end{tabular}
 \end{center}
 \label{ml_gov2_wand}
-\end{table}
-
-
-\begin{table}[htbp]
-\caption{Resultados método ML utilizando el conjunto de datos Gov2 y método de procesamiento Block Max Wand.}
-\begin{center}
-\begin{tabular}{|c|c|c|c|c|c|}
-\hline
-\multicolumn{ 6}{|c|}{Estimador ML – GOV2 – BMW} \\ \hline
- & 1t & 2t & 4t & 8t & 16t \\ \hline
-r & \multicolumn{1}{r|}{0,8782952873} & \multicolumn{1}{r|}{0,8809618279} & \multicolumn{1}{r|}{0,8479348273} & \multicolumn{1}{r|}{0,7771884041} & \multicolumn{1}{r|}{0,7377811742} \\ \hline
-RMSE & 72,364708101 & 40,8927943754 & 20,1217578763 & 13,7608115407 & 12,4521027766 \\ \hline
-\end{tabular}
-\end{center}
-\label{ml_gov2_bmw}
-\end{table}
-
-\begin{table}[htbp]
-\caption{Resultados método ML utilizando el conjunto de datos ClueWeb y método de procesamiento Wand.}
-\begin{center}
-\begin{tabular}{|c|c|c|c|c|c|}
-\hline
-\multicolumn{ 6}{|c|}{Estimador ML – ClueWeb – WAND} \\ \hline
- & 1t & 2t & 4t & 8t & 16t \\ \hline
-r & 0,8613156155 & 0,8726350536 & 0,8646059611 & 0,8598639269 & 0,8497258186 \\ \hline
-RMSE & 91,9765237227 & 48,1189862101 & 21,9652740764 & 12,1717738001 & 9,3846426006 \\ \hline
-\end{tabular}
-\end{center}
-\label{ml_clueweb_wand}
-\end{table}
-
-
-\begin{table}[htbp]
-\caption{Resultados método ML utilizando el conjunto de datos ClueWeb y método de procesamiento Block Max Wand.}
-\begin{center}
-\begin{tabular}{|c|c|c|c|c|c|}
-\hline
-\multicolumn{ 6}{|c|}{Estimador ML - ClueWeb – BMW} \\ \hline
- & 1t & 2t & 4t & 8t & 16t \\ \hline
-r & 0,8828211665 & 0,8891976969 & 0,808606576 & 0,823249926 & 0,7451258225 \\ \hline
-RMSE & 64,7039723565 & 35,281001295 & 25,7540777939 & 15,8306946733 & 17,9398672123 \\ \hline
-\end{tabular}
-\end{center}
-\label{ml_clueweb_bmw}
 \end{table}
 
 %-----------------------------------------------------------------------------------------------------------------------------------%
@@ -147,48 +105,7 @@ RMSE & 67,7757284521 & 90,4311959153 & 66,5232866794 & 23,6964743214 & 7,6274795
 \label{rn_gov2_wand}
 \end{table}
 
-
-\begin{table}[htbp]
-\caption{Resultados método RN utilizando el conjunto de datos Gov2 y método de procesamiento Block Max Wand.}
-\begin{center}
-\begin{tabular}{|c|c|c|c|c|c|}
-\hline
-\multicolumn{ 6}{|c|}{Estimador RN – GOV2 – BMW} \\ \hline
- & 1t & 2t & 4t & 8t & 16t \\ \hline
-r & 0,932476451 & 0,9360700621 & 0,8966995703 & 0,827613008 & 0,7880014511 \\ \hline
-RMSE & 54,7912225707 & 82,2905244753 & 60,3315527261 & 21,882569362 & 5,7758056986 \\ \hline
-\end{tabular}
-\end{center}
-\label{rn_gov2_bmw}
-\end{table}
-
-\begin{table}[htbp]
-\caption{Resultados método RN utilizando el conjunto de datos Clueweb y método de procesamiento Wand.}
-\begin{center}
-\begin{tabular}{|c|c|c|c|c|c|}
-\hline
-\multicolumn{ 6}{|c|}{Estimador RN – ClueWeb – Wand} \\ \hline
- & 1t & 2t & 4t & 8t & 16t \\ \hline
-r & 0,9214415134 & 0,928326314 & 0,9547375955 & 0,9520042927 & 0,9498575917 \\ \hline
-RMSE & 70,5610058313 & 98,6489306355 & 65,1112021339 & 24,172402818 & 8,4319553251 \\ \hline
-\end{tabular}
-\end{center}
-\label{rn_clueweb_wand}
-\end{table}
-
-\begin{table}[htbp]
-\caption{Resultados método RN utilizando el conjunto de datos Clueweb y método de procesamiento Block Max Wand.}
-\begin{center}
-\begin{tabular}{|c|c|c|c|c|c|}
-\hline
-\multicolumn{ 6}{|c|}{Estimador RN – ClueWeb – BMW} \\ \hline
- & 1t & 2t & 4t & 8t & 16t \\ \hline
-r & 0,9583572968 & 0,9581178412 & 0,8717897021 & 0,9019796766 & 0,8192397311 \\ \hline
-RMSE & 39,546150466 & 75,4843974473 & 48,4467865615 & 24,9504558614 & 17,0429025714 \\ \hline
-\end{tabular}
-\end{center}
-\label{rn_clueweb_bmw}
-\end{table}
+%---------------------------------------------
 
 
 A continuación se muestran los resultados obtenidos en la etapa de evaluación de modelo.
@@ -196,7 +113,8 @@ A continuación se muestran los resultados obtenidos en la etapa de evaluación 
 % Explicar el error que se utilizó y por qué no se utilizó error relativo
 % Hacer conclusiones acerca de Wand y BMW
 % Hacer la conclusión de dependencia de datos
-
+% Apendice
+% Se debe elegir cuáles métodos se comentarán y cuáles se mandarán al apéndice (gov2 para wand y bmw es buen candidato)
 \begin{table}[htbp]
 \caption{Errores obtenidos método ML utilizando Gov2 y Wand}
 \begin{center}
@@ -211,61 +129,13 @@ Error ML (\%) & 46,7679492043 & 48,3620334358 & 49,158464109 & 54,3328274289 & 5
 \label{ml_gov2test_wand}
 \end{table}
 
-
 \begin{table}[htbp]
-\caption{Errores obtenidos método ML utilizando Gov2 y Block Max Wand.}
-\begin{center}
-\begin{tabular}{|l|c|r|r|r|r|}
-\hline
- & \multicolumn{ 5}{c|}{Estimador ML - Gov2 Test – BMW} \\ \hline
- & 1t & \multicolumn{1}{c|}{2t} & \multicolumn{1}{c|}{4t} & \multicolumn{1}{c|}{8t} & \multicolumn{1}{c|}{16t} \\ \hline
-RMSE ML & \multicolumn{1}{r|}{88,5781924513} & 50,2281785684 & 65,3589630276 & 85,0273335875 & 104,9557422762 \\ \hline
-Error (\%) & \multicolumn{1}{r|}{40,9396043829} & 43,5946339982 & 57,8712066627 & 73,6999382771 & 80,2156076147 \\ \hline
-\end{tabular}
-\end{center}
-\label{ml_gov2test_bmw}
-\end{table}
-
-\begin{table}[htbp]
-\caption{Errores obtenidos método ML utilizando Clueweb y Block Max Wand.}
-\begin{center}
-\begin{tabular}{|l|c|r|r|r|r|}
-\hline
- & \multicolumn{ 5}{c|}{Estimador ML – Clueweb – Wand} \\ \hline
- & 1t & \multicolumn{1}{c|}{2t} & \multicolumn{1}{c|}{4t} & \multicolumn{1}{c|}{8t} & \multicolumn{1}{c|}{16t} \\ \hline
-RMSE ML & \multicolumn{1}{r|}{105,0379461837} & 55,108354518 & 32,3000081798 & 24,7425815335 & 29,7917310828 \\ \hline
-Error ML (\%) & \multicolumn{1}{r|}{38,2730089817} & 37,9789108856 & 39,2179670254 & 40,2465224632 & 47,8721024955 \\ \hline
-\end{tabular}
-\end{center}
-\label{ml_cluewebtest_wand}
-\end{table}
-
-\begin{table}[htbp]
-\caption{Errores obtenidos método ML utilizando Clueweb y Block Max Block Max Wand.}
-\begin{center}
-\begin{tabular}{|l|c|r|r|r|r|}
-\hline
- & \multicolumn{ 5}{c|}{Esimador ML – Clueweb – BMW} \\ \hline
- & 1t & \multicolumn{1}{c|}{2t} & \multicolumn{1}{c|}{4t} & \multicolumn{1}{c|}{8t} & \multicolumn{1}{c|}{16t} \\ \hline
-RMSE ML & \multicolumn{1}{r|}{63,2614531088} & 35,318259738 & 19,7612998424 & 18,0902452623 & 21,9105063561 \\ \hline
-Error ML (\%) & \multicolumn{1}{r|}{31,3197074579} & 32,8018021931 & 34,9491116301 & 33,1906288908 & 36,8597795426 \\ \hline
-\end{tabular}
-\end{center}
-\label{ml_cluewebtest_bmw}
-\end{table}
-
-%---------- redes neuronales ahora
-
-\begin{table}[htbp]
-\caption{Errores obtenidos método RN utilizando Gov2 y Wand.}
+\caption{Errores obtenidos método RN utilizando Gov2 Test y Wand.}
 \begin{center}
 \begin{tabular}{|c|c|c|c|c|c|}
 \hline
  & \multicolumn{ 5}{c|}{Estimador RN - Gov2 - Wand} \\ \hline
  & 1t & 2t & 4t & 8t & 16t \\ \hline
-RMSE ML & 93,4213321631 & 55,2226746394 & 35,8065152454 & 31,5809909101 & 30,9943417318 \\ \hline
-Error ML (\%) & 46,7679492043 & 48,3620334358 & 49,158464109 & 54,3328274289 & 54,4780442408 \\ \hline
-Coef R ML & 0,8248769407 & 0,815721376 & 0,6794971318 & 0,4953338347 & 0,4152306815 \\ \hline
 RMSE RN & 83,3427688489 & 127,7971510158 & 78,5508679211 & 44,0078238263 & 32,5958111096 \\ \hline
 Error RN (\%) & 39,6467173103 & 109,5123072913 & 141,1360887399 & 123,600300482 & 62,1680304214 \\ \hline
 \end{tabular}
@@ -273,58 +143,8 @@ Error RN (\%) & 39,6467173103 & 109,5123072913 & 141,1360887399 & 123,600300482 
 \label{rn_gov2test_wand}
 \end{table}
 
-\begin{table}[htbp]
-\caption{Errores obtenidos método RN utilizando Gov2 y Block Max Wand.}
-\begin{center}
-\begin{tabular}{|r|r|r|r|r|}
-\hline
-\multicolumn{ 5}{|c|}{Estimador RN - Gov2 - Block Max Wand} \\ \hline
-\multicolumn{1}{|c|}{1t} & \multicolumn{1}{c|}{2t} & \multicolumn{1}{c|}{4t} & \multicolumn{1}{c|}{8t} & \multicolumn{1}{c|}{16t} \\ \hline
-88,5781924513 & 50,2281785684 & 65,3589630276 & 85,0273335875 & 104,9557422762 \\ \hline
-40,9396043829 & 43,5946339982 & 57,8712066627 & 73,6999382771 & 80,2156076147 \\ \hline
-0,8450423139 & 0,843871951 & 0,6590483124 & 0,6526462108 & 0,7140106886 \\ \hline
-75,2655924609 & 104,8966721749 & 64,0202898703 & 79,2415135861 & 100,5199807231 \\ \hline
-33,2886231241 & 93,0690850804 & 70,2284168389 & 68,6799700357 & 77,8690931682 \\ \hline
-\end{tabular}
-\end{center}
-\label{rn_gov2test_bmw}
-\end{table}
 
 
-\begin{table}[htbp]
-\caption{Errores obtenidos método RN utilizando Clueweb y Wand.}
-\begin{center}
-\begin{tabular}{|l|r|r|r|r|r|}
-\hline
- & \multicolumn{ 5}{c|}{Estimador RN - Clueweb - Wand} \\ \hline
- & \multicolumn{1}{c|}{1t} & \multicolumn{1}{c|}{2t} & \multicolumn{1}{c|}{4t} & \multicolumn{1}{c|}{8t} & \multicolumn{1}{c|}{16t} \\ \hline
-RMSE ML & 105,0379461837 & 55,108354518 & 32,3000081798 & 24,7425815335 & 29,7917310828 \\ \hline
-Error (\%) & 38,2730089817 & 37,9789108856 & 39,2179670254 & 40,2465224632 & 47,8721024955 \\ \hline
-Coef R ML & 0,8209084709 & 0,8369715825 & 0,8042157089 & 0,7944688581 & 0,6935506651 \\ \hline
-RMSE RN & 89,9512834646 & 117,3863878347 & 62,5147780537 & 24,6101410147 & 23,1199566895 \\ \hline
-Error RN (\%) & 35,065691535 & 108,6941782636 & 93,9594017925 & 52,8321098876 & 30,1810159761 \\ \hline
-\end{tabular}
-\end{center}
-\label{rn_cluewebtest_wand}
-\end{table}
-
-
-\begin{table}[htbp]
-\caption{Errores obtenidos método RN utilizando Clueweb y Block Max Wand.}
-\begin{center}
-\begin{tabular}{|l|r|r|r|r|r|}
-\hline
- & \multicolumn{ 5}{c|}{Estimador RN - Clueweb - Block Max Wand} \\ \hline
- & \multicolumn{1}{c|}{1t} & \multicolumn{1}{c|}{2t} & \multicolumn{1}{c|}{4t} & \multicolumn{1}{c|}{8t} & \multicolumn{1}{c|}{16t} \\ \hline
-RMSE ML & 63,2614531088 & 35,318259738 & 19,7612998424 & 18,0902452623 & 21,9105063561 \\ \hline
-Error (\%) & 31,3197074579 & 32,8018021931 & 34,9491116301 & 33,1906288908 & 36,8597795426 \\ \hline
-Coef R ML & 0,8785706119 & 0,8836647756 & 0,8512932485 & 0,7809186368 & 0,6675673233 \\ \hline
-RMSE RN & 42,167317322 & 86,715284809 & 21,4293356118 & 49,3822498013 & 22,255611322 \\ \hline
-Error RN (\%) & 22,1467849369 & 96,6915623431 & 40,6604395593 & 148,9848225291 & 40,2814151336 \\ \hline
-\end{tabular}
-\end{center}
-\label{rn_cluewebtest_bmw}
-\end{table}
 
 
 \section{Estrategias de scheduling}
