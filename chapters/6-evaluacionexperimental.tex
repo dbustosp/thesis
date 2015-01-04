@@ -1,13 +1,13 @@
 \chapter{Evaluación experimental}
 \label{cap:evaluacionexperimental}
-En el presente capítulo se presentan los resultados obtenidos de las diferentes implementaciones para los métodos propuestos en la secciones anteriores. Se comienza por la implementación de los métodos de procesamiento de transacciones de lectura, posteriormente se muestra los resultados obtenidos para los diferentes métodos de predicción de tiempos de respuestas para consultas y el comportamiento que tienen para diferentes conjuntos de datos. Finalmente se presenta el comportamiento de las estrategias de planificación presentadas para diferentes tipos de escenarios.
+En el presente capítulo se presentan los resultados obtenidos de las diferentes implementaciones para los métodos propuestos en la secciones anteriores. Se comienza por la implementación de los métodos de procesamiento de transacciones de lectura, posteriormente se muestra los resultados obtenidos para los diferentes métodos de predicción de tiempos de respuestas para consultas y el comportamiento que tienen para diferentes conjuntos de datos. Finalmente se presenta los tiempos de ejecución de las estrategias de planificación presentadas para diferentes tipos de escenarios.
 
 \section{Hardware y conjunto de datos}
 \label{evaluacionexperimental:hardwareydatos}
-Los experimentos fueron ejecutados en un Intel Xeon E5620 2.4 \textit{Ghz.} con 8 núcleos físicos, tecnología \textit{hyper-threading} y 90 gigabytes de memoria de acceso aleatorio (\textit{RAM}). Se utilizaron dos conjuntos de datos para llevar a cabo los experimentos, estos son frecuentemente usados por la comunidad del área de recuperación de información. El primero de ellos es \textit{GOV2}, este conjunto es una colección de aproximadamente 25 millones de páginas \textit{Web} obtenida desde los dominios \textit{.gov} y que pesa 426 \textit{GB}. La otra colección de datos utilizada es la \textit{ClueWeb09}, la cual fue creada para apoyar la investigación en recuperación de la información y las tecnologías relacioanadas con el lenguaje humano, consiste en alrededor de un billón de páginas en diez lenguajes diferentes y 50 millones en inglés. \textit{ClueWeb09} pesa alrededor de 5 \textit{TB} en forma comprimidad y 25 \textit{TB} descomprimida. 
+Los experimentos fueron ejecutados en un Intel Xeon E5620 2.4 \textit{Ghz.} con 8 núcleos físicos, tecnología \textit{hyperthreading} y 90 gigabytes de memoria de acceso aleatorio (\textit{RAM}). Se utilizaron dos conjuntos de datos para llevar a cabo los experimentos, estos son frecuentemente usados por la comunidad del área de recuperación de información. El primero de ellos es \textit{GOV2}, este conjunto es una colección de aproximadamente 25 millones de páginas Web obtenida desde los dominios \textit{.gov} y que pesa 426 \textit{GB}. El segundo conjunto de datos utilizado es \textit{ClueWeb09}, el cual fue creado para apoyar la investigación en recuperación de información y las tecnologías relacioanadas con el lenguaje humano, consiste en alrededor de un billón de páginas en 10 lenguajes diferentes y 50 millones en inglés. \textit{ClueWeb09} pesa alrededor de 5 \textit{TB} en forma comprimidad y 25 \textit{TB} descomprimida. 
 % Las consultas (queries)
 
-\section{Wand multithreaded}
+\section{Wand multithreaded}d
 \label{evaluacionexperimental:wm}
 En esta sección se muestra la implementación de dos enfoques para el procesamiento de consultas a través del algoritmo Wand \citep{Broder:2003}. El primer enfoque es el esquema de \textit{heap} locales (LH), en el que cada hebra obtiene sus mejores documentos para una consulta dada y luego una hebra maestra se encarga de mezclar todos los resultados de cada uno de los hilos de ejecución para construir el conjunto \textit{top-K} final; el segundo enfoque es el enfoque de \textit{heap} compartido (SH), en el que se tiene un \textit{heap} visible a todos los hilos de ejecución y en donde ellos compiten por el acceso a esta estructura de datos. El detalle del diseño de los enfoques LH y SH están disponibles en \ref{scheduling:wlh} y \ref{scheduling:whc}. 
 
@@ -68,35 +68,293 @@ Adicionalmente en la Figura \ref{fig:eficiencias_wand} se puede ver en forma gen
 
 \section{Predicción de tiempos}
 \label{evaluacionexperimental:predicciontiempos}
-% Demostrar que Regresión lineal es mejor
+En esta sección se muestran los resultados obtenidos de las implementaciones hechas para el método basado en regresión lineal múltiple (ML) y red neuronal (RN). El proceso de entrenamiento para ambos casos se llevó a cabo con 10000 instancias, cada instancia es una transaccion de lectura real desde la cual se precalcularon los 42 descriptores definidos en el Capítulo \ref{cap:prediccion}. 
+
+Las Tablas \ref{ml_gov2_wand}, \ref{ml_gov2_bmw}, \ref{ml_clueweb_wand} y \ref{ml_clueweb_bmw} muestran los valores obtenidos en el proceso de entrenamiento del modelo ML para los conjuntos de datos Gov2 y ClueWeb utilizando los métodos Wand y Block Max Wand. A pesar de que son 42 variables independiente, en forma general se pueden observar buenos valores de los coeficientes de regresión de \textit{pearson} para cada uno de los modelos, lo que significa que existe una relación lineal entre el tiempo de las consultas y el modelo.  
+
+
+\begin{table}[htbp]
+\caption{Resultados método ML utilizando el conjunto de datos Gov2 y método de procesamiento Wand.}
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+\multicolumn{ 6}{|c|}{Estimador ML – GOV2 – WAND} \\ \hline
+ & 1t & 2t & 4t & 8t & 16t \\ \hline
+r & 0,8395167242 & 0,8487027167 & 0,8363882022 & 0,8220135644 & 0,8189326373 \\ \hline
+RMSE & 89,8191624638 & 49,0317178648 & 22,0735989696 & 12,5486639038 & 9,1536416766 \\ \hline
+\end{tabular}
+\end{center}
+\label{ml_gov2_wand}
+\end{table}
+
+
+\begin{table}[htbp]
+\caption{Resultados método ML utilizando el conjunto de datos Gov2 y método de procesamiento Block Max Wand.}
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+\multicolumn{ 6}{|c|}{Estimador ML – GOV2 – BMW} \\ \hline
+ & 1t & 2t & 4t & 8t & 16t \\ \hline
+r & \multicolumn{1}{r|}{0,8782952873} & \multicolumn{1}{r|}{0,8809618279} & \multicolumn{1}{r|}{0,8479348273} & \multicolumn{1}{r|}{0,7771884041} & \multicolumn{1}{r|}{0,7377811742} \\ \hline
+RMSE & 72,364708101 & 40,8927943754 & 20,1217578763 & 13,7608115407 & 12,4521027766 \\ \hline
+\end{tabular}
+\end{center}
+\label{ml_gov2_bmw}
+\end{table}
+
+\begin{table}[htbp]
+\caption{Resultados método ML utilizando el conjunto de datos ClueWeb y método de procesamiento Wand.}
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+\multicolumn{ 6}{|c|}{Estimador ML – ClueWeb – WAND} \\ \hline
+ & 1t & 2t & 4t & 8t & 16t \\ \hline
+r & 0,8613156155 & 0,8726350536 & 0,8646059611 & 0,8598639269 & 0,8497258186 \\ \hline
+RMSE & 91,9765237227 & 48,1189862101 & 21,9652740764 & 12,1717738001 & 9,3846426006 \\ \hline
+\end{tabular}
+\end{center}
+\label{ml_clueweb_wand}
+\end{table}
+
+
+\begin{table}[htbp]
+\caption{Resultados método ML utilizando el conjunto de datos ClueWeb y método de procesamiento Block Max Wand.}
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+\multicolumn{ 6}{|c|}{Estimador ML - ClueWeb – BMW} \\ \hline
+ & 1t & 2t & 4t & 8t & 16t \\ \hline
+r & 0,8828211665 & 0,8891976969 & 0,808606576 & 0,823249926 & 0,7451258225 \\ \hline
+RMSE & 64,7039723565 & 35,281001295 & 25,7540777939 & 15,8306946733 & 17,9398672123 \\ \hline
+\end{tabular}
+\end{center}
+\label{ml_clueweb_bmw}
+\end{table}
+
+%-----------------------------------------------------------------------------------------------------------------------------------%
+
+\begin{table}[htbp]
+\caption{Resultados método RN utilizando el conjunto de datos Gov2 y método de procesamiento Wand.}
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+\multicolumn{ 6}{|c|}{Estimador RN – GOV2 – WAND} \\ \hline
+ & 1t & 2t & 4t & 8t & 16t \\ \hline
+r & 0,9090139343 & 0,9081674727 & 0,8937170981 & 0,8920354081 & 0,8945066549 \\ \hline
+RMSE & 67,7757284521 & 90,4311959153 & 66,5232866794 & 23,6964743214 & 7,6274795547 \\ \hline
+\end{tabular}
+\end{center}
+\label{rn_gov2_wand}
+\end{table}
+
+
+\begin{table}[htbp]
+\caption{Resultados método RN utilizando el conjunto de datos Gov2 y método de procesamiento Block Max Wand.}
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+\multicolumn{ 6}{|c|}{Estimador RN – GOV2 – BMW} \\ \hline
+ & 1t & 2t & 4t & 8t & 16t \\ \hline
+r & 0,932476451 & 0,9360700621 & 0,8966995703 & 0,827613008 & 0,7880014511 \\ \hline
+RMSE & 54,7912225707 & 82,2905244753 & 60,3315527261 & 21,882569362 & 5,7758056986 \\ \hline
+\end{tabular}
+\end{center}
+\label{rn_gov2_bmw}
+\end{table}
+
+\begin{table}[htbp]
+\caption{Resultados método RN utilizando el conjunto de datos Clueweb y método de procesamiento Wand.}
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+\multicolumn{ 6}{|c|}{Estimador RN – ClueWeb – Wand} \\ \hline
+ & 1t & 2t & 4t & 8t & 16t \\ \hline
+r & 0,9214415134 & 0,928326314 & 0,9547375955 & 0,9520042927 & 0,9498575917 \\ \hline
+RMSE & 70,5610058313 & 98,6489306355 & 65,1112021339 & 24,172402818 & 8,4319553251 \\ \hline
+\end{tabular}
+\end{center}
+\label{rn_clueweb_wand}
+\end{table}
+
+\begin{table}[htbp]
+\caption{Resultados método RN utilizando el conjunto de datos Clueweb y método de procesamiento Block Max Wand.}
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+\multicolumn{ 6}{|c|}{Estimador RN – ClueWeb – BMW} \\ \hline
+ & 1t & 2t & 4t & 8t & 16t \\ \hline
+r & 0,9583572968 & 0,9581178412 & 0,8717897021 & 0,9019796766 & 0,8192397311 \\ \hline
+RMSE & 39,546150466 & 75,4843974473 & 48,4467865615 & 24,9504558614 & 17,0429025714 \\ \hline
+\end{tabular}
+\end{center}
+\label{rn_clueweb_bmw}
+\end{table}
+
+
+A continuación se muestran los resultados obtenidos en la etapa de evaluación de modelo.
+% ----------------------------------------- Proceso de validación con 20.000 datos más ------------------------------------------%
+% Explicar el error que se utilizó y por qué no se utilizó error relativo
+% Hacer conclusiones acerca de Wand y BMW
+% Hacer la conclusión de dependencia de datos
+
+\begin{table}[htbp]
+\caption{Errores obtenidos método ML utilizando Gov2 y Wand}
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+ & \multicolumn{ 5}{c|}{Estimador ML - Gov2 Test – Wand} \\ \hline
+ & 1t & 2t & 4t & 8t & 16t \\ \hline
+RMSE ML & 93,4213321631 & 55,2226746394 & 35,8065152454 & 31,5809909101 & 30,9943417318 \\ \hline
+Error ML (\%) & 46,7679492043 & 48,3620334358 & 49,158464109 & 54,3328274289 & 54,4780442408 \\ \hline
+\end{tabular}
+\end{center}
+\label{ml_gov2test_wand}
+\end{table}
+
+
+\begin{table}[htbp]
+\caption{Errores obtenidos método ML utilizando Gov2 y Block Max Wand.}
+\begin{center}
+\begin{tabular}{|l|c|r|r|r|r|}
+\hline
+ & \multicolumn{ 5}{c|}{Estimador ML - Gov2 Test – BMW} \\ \hline
+ & 1t & \multicolumn{1}{c|}{2t} & \multicolumn{1}{c|}{4t} & \multicolumn{1}{c|}{8t} & \multicolumn{1}{c|}{16t} \\ \hline
+RMSE ML & \multicolumn{1}{r|}{88,5781924513} & 50,2281785684 & 65,3589630276 & 85,0273335875 & 104,9557422762 \\ \hline
+Error (\%) & \multicolumn{1}{r|}{40,9396043829} & 43,5946339982 & 57,8712066627 & 73,6999382771 & 80,2156076147 \\ \hline
+\end{tabular}
+\end{center}
+\label{ml_gov2test_bmw}
+\end{table}
+
+\begin{table}[htbp]
+\caption{Errores obtenidos método ML utilizando Clueweb y Block Max Wand.}
+\begin{center}
+\begin{tabular}{|l|c|r|r|r|r|}
+\hline
+ & \multicolumn{ 5}{c|}{Estimador ML – Clueweb – Wand} \\ \hline
+ & 1t & \multicolumn{1}{c|}{2t} & \multicolumn{1}{c|}{4t} & \multicolumn{1}{c|}{8t} & \multicolumn{1}{c|}{16t} \\ \hline
+RMSE ML & \multicolumn{1}{r|}{105,0379461837} & 55,108354518 & 32,3000081798 & 24,7425815335 & 29,7917310828 \\ \hline
+Error ML (\%) & \multicolumn{1}{r|}{38,2730089817} & 37,9789108856 & 39,2179670254 & 40,2465224632 & 47,8721024955 \\ \hline
+\end{tabular}
+\end{center}
+\label{ml_cluewebtest_wand}
+\end{table}
+
+\begin{table}[htbp]
+\caption{Errores obtenidos método ML utilizando Clueweb y Block Max Block Max Wand.}
+\begin{center}
+\begin{tabular}{|l|c|r|r|r|r|}
+\hline
+ & \multicolumn{ 5}{c|}{Esimador ML – Clueweb – BMW} \\ \hline
+ & 1t & \multicolumn{1}{c|}{2t} & \multicolumn{1}{c|}{4t} & \multicolumn{1}{c|}{8t} & \multicolumn{1}{c|}{16t} \\ \hline
+RMSE ML & \multicolumn{1}{r|}{63,2614531088} & 35,318259738 & 19,7612998424 & 18,0902452623 & 21,9105063561 \\ \hline
+Error ML (\%) & \multicolumn{1}{r|}{31,3197074579} & 32,8018021931 & 34,9491116301 & 33,1906288908 & 36,8597795426 \\ \hline
+\end{tabular}
+\end{center}
+\label{ml_cluewebtest_bmw}
+\end{table}
+
+%---------- redes neuronales ahora
+
+\begin{table}[htbp]
+\caption{Errores obtenidos método RN utilizando Gov2 y Wand.}
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+ & \multicolumn{ 5}{c|}{Estimador RN - Gov2 - Wand} \\ \hline
+ & 1t & 2t & 4t & 8t & 16t \\ \hline
+RMSE ML & 93,4213321631 & 55,2226746394 & 35,8065152454 & 31,5809909101 & 30,9943417318 \\ \hline
+Error ML (\%) & 46,7679492043 & 48,3620334358 & 49,158464109 & 54,3328274289 & 54,4780442408 \\ \hline
+Coef R ML & 0,8248769407 & 0,815721376 & 0,6794971318 & 0,4953338347 & 0,4152306815 \\ \hline
+RMSE RN & 83,3427688489 & 127,7971510158 & 78,5508679211 & 44,0078238263 & 32,5958111096 \\ \hline
+Error RN (\%) & 39,6467173103 & 109,5123072913 & 141,1360887399 & 123,600300482 & 62,1680304214 \\ \hline
+\end{tabular}
+\end{center}
+\label{rn_gov2test_wand}
+\end{table}
+
+\begin{table}[htbp]
+\caption{Errores obtenidos método RN utilizando Gov2 y Block Max Wand.}
+\begin{center}
+\begin{tabular}{|r|r|r|r|r|}
+\hline
+\multicolumn{ 5}{|c|}{Estimador RN - Gov2 - Block Max Wand} \\ \hline
+\multicolumn{1}{|c|}{1t} & \multicolumn{1}{c|}{2t} & \multicolumn{1}{c|}{4t} & \multicolumn{1}{c|}{8t} & \multicolumn{1}{c|}{16t} \\ \hline
+88,5781924513 & 50,2281785684 & 65,3589630276 & 85,0273335875 & 104,9557422762 \\ \hline
+40,9396043829 & 43,5946339982 & 57,8712066627 & 73,6999382771 & 80,2156076147 \\ \hline
+0,8450423139 & 0,843871951 & 0,6590483124 & 0,6526462108 & 0,7140106886 \\ \hline
+75,2655924609 & 104,8966721749 & 64,0202898703 & 79,2415135861 & 100,5199807231 \\ \hline
+33,2886231241 & 93,0690850804 & 70,2284168389 & 68,6799700357 & 77,8690931682 \\ \hline
+\end{tabular}
+\end{center}
+\label{rn_gov2test_bmw}
+\end{table}
+
+
+\begin{table}[htbp]
+\caption{Errores obtenidos método RN utilizando Clueweb y Wand.}
+\begin{center}
+\begin{tabular}{|l|r|r|r|r|r|}
+\hline
+ & \multicolumn{ 5}{c|}{Estimador RN - Clueweb - Wand} \\ \hline
+ & \multicolumn{1}{c|}{1t} & \multicolumn{1}{c|}{2t} & \multicolumn{1}{c|}{4t} & \multicolumn{1}{c|}{8t} & \multicolumn{1}{c|}{16t} \\ \hline
+RMSE ML & 105,0379461837 & 55,108354518 & 32,3000081798 & 24,7425815335 & 29,7917310828 \\ \hline
+Error (\%) & 38,2730089817 & 37,9789108856 & 39,2179670254 & 40,2465224632 & 47,8721024955 \\ \hline
+Coef R ML & 0,8209084709 & 0,8369715825 & 0,8042157089 & 0,7944688581 & 0,6935506651 \\ \hline
+RMSE RN & 89,9512834646 & 117,3863878347 & 62,5147780537 & 24,6101410147 & 23,1199566895 \\ \hline
+Error RN (\%) & 35,065691535 & 108,6941782636 & 93,9594017925 & 52,8321098876 & 30,1810159761 \\ \hline
+\end{tabular}
+\end{center}
+\label{rn_cluewebtest_wand}
+\end{table}
+
+
+\begin{table}[htbp]
+\caption{Errores obtenidos método RN utilizando Clueweb y Block Max Wand.}
+\begin{center}
+\begin{tabular}{|l|r|r|r|r|r|}
+\hline
+ & \multicolumn{ 5}{c|}{Estimador RN - Clueweb - Block Max Wand} \\ \hline
+ & \multicolumn{1}{c|}{1t} & \multicolumn{1}{c|}{2t} & \multicolumn{1}{c|}{4t} & \multicolumn{1}{c|}{8t} & \multicolumn{1}{c|}{16t} \\ \hline
+RMSE ML & 63,2614531088 & 35,318259738 & 19,7612998424 & 18,0902452623 & 21,9105063561 \\ \hline
+Error (\%) & 31,3197074579 & 32,8018021931 & 34,9491116301 & 33,1906288908 & 36,8597795426 \\ \hline
+Coef R ML & 0,8785706119 & 0,8836647756 & 0,8512932485 & 0,7809186368 & 0,6675673233 \\ \hline
+RMSE RN & 42,167317322 & 86,715284809 & 21,4293356118 & 49,3822498013 & 22,255611322 \\ \hline
+Error RN (\%) & 22,1467849369 & 96,6915623431 & 40,6604395593 & 148,9848225291 & 40,2814151336 \\ \hline
+\end{tabular}
+\end{center}
+\label{rn_cluewebtest_bmw}
+\end{table}
+
 
 \section{Estrategias de scheduling}
 \label{evaluacionexperimental:estrategiasscheduling}
-Se compararon las estrategias de planificación por bloques \citep{Ye:2007} usando el predictor multilineal y además un predictor perfecto, el cual sabe de antemano el tiempo real de las consultas. Para determinar el número de hebras a ser usado para resolver cada consulta, el sistema predice el tiempo que esta tomará, y escoge el mínimo número de hebras necesarias con el que el tiempo predicho es menor o igual a la cota superior de tiempo establecida. Se experimentó con diferentes valores para fijar la cota superior y los mejores resultados fueron obtenidos con el tiempo promedio de las consultas. Se puede observar en la Figura X que un mejor predictor puede conducir a mejores tiempos de ejecución. Adicionalmente se analiza el comportamiendo que tienen estas estrategias al responder consultas divididas en conjuntos de diferentes tamaños (1000, 500, 200, 100 and 50). En cada caso las técnicas procesaron todas las consultas con una pausa entre lotes, el tiempo de ejecución total tomado corresponde a la suma de tiempos de ejecución de los lotes. El mejor resultado fue obtenido por la estrategia Times Ranges usando el predictor perfecto. 
-% Hacer un análisis del tiempo y el tamaño de los bloques
+Se compararon las estrategias de planificación por bloques \citep{Ye:2007} usando el predictor multilineal descrito en la sección \ref{scheduling:glasgow} y además un predictor perfecto, el cual sabe de antemano el tiempo real de las consultas. Para determinar el número de hebras a ser usado en resolver cada consulta, el sistema predice el tiempo que esta tomará, y escoge el mínimo número de hebras necesarias con el que el tiempo predicho es menor o igual a la cota superior de tiempo establecida. Se experimentó con diferentes valores de cota superior y los mejores resultados fueron obtenidos con el tiempo promedio de las consultas. Para la resolución de consultas se utilizó el método Wand.
 
-%%% FIGURA 6 PAPER PDP
+En la Figura \ref{fig:scheduler_all_16threads} se puede observar el comportamiendo que tienen estas estrategias al resolver consultas divididas en conjuntos de diferentes tamaños (1000, 500, 200, 100 and 50). En cada caso las estrategias resolvieron un total de 10000 consultas con una pausa entre lotes, es decir, en el primer caso se resuelven 200 lotes de 50 consultas cada uno; en el segundo caso se resuelven 100 lotes de 100 consultas cada uno; así sucesivamente hasta llegar a procesar 10 lotes de 1000 consultas cada uno. El tiempo de ejecución total tomado corresponde a la suma de tiempos de ejecución de los lotes. El mejor resultado fue obtenido por la estrategia \textit{Times Ranges} usando el predictor perfecto, ya que al crear bloques de consultas que poseen rangos de tiempos similares, se disminiuye el tiempo pérdido por las hebras al final de cada uno de ellos.
 
-En base a experimentación se ha encontrado que en general procesar transacciones de lectura utilizando Wand bajo un enfoque de bloques \citep{Ye:2007} es menos eficiente con respecto a otros enfoques. Es por esta razón que en las siguientes experimentaciones y comparaciones solo se utiliza la estrategia \textit{Times Ranges} con predictor perfecto.
+Notar que en estrategias bajo el enfoque de bloques, un predictor con mayor precisión puede conducir a la reducción del tiempo de procesamiento de las consultas, por lo que el rendimiento de estas estrategias está supeditado a la calidad del predictor. 
 
-% Se dejan afuera todas las otras estrategias de planificación por bloques, exepto Times Ranges.
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale=.75]{images/scheduler_all_16threads.eps}
+\caption{Tiempos de estrategias de planificación por bloques.}
+\label{fig:scheduler_all_16threads}
+\end{figure}
+
+En base a experimentación se ha encontrado que en general procesar transacciones de lectura bajo un enfoque de bloques \citep{Ye:2007} es mucho menos eficiente que con el enfoque de 1 hebra por consulta (1TQ) y unidades de trabajos (Query Units). Es por esta razón que en las siguientes experimentaciones y comparaciones, solo se utiliza aquella que arrojó mejores resultados: \textit{Times Ranges} con predictor perfecto.
 
 % Se Compara el mejor de bloques: Times Ranges con estrategia de 1TQ y QueryUnits
+%Para observar el comportamiento de la estrategia 1TQ se utiliza una versión de la estrategia unidades de trabajo haciendo uso de una sola unidad de procesamiento por cada consulta, de esta manera las hebras trabajan de forma independiente sobre diferentes transacciones de lectura y es equivalente a la estrategia 1TQ mostrada en la sección %\ref{scheduling:baseline} mostrar como \textit{baseline}. 
 
-Para observar el comportamiento de la estrategia 1TQ se utiliza una versión de la estrategia unidades de trabajo haciendo uso de una sola unidad de procesamiento por cada consulta, de esta manera las hebras trabajan de forma independiente sobre diferentes transacciones de lectura y es equivalente a la estrategia 1TQ mostrada en la sección \ref{scheduling:baseline}. Adicionalmente se observa el comportamiento que tiene el enfoque de unidades de trabajo en diferentes versiones (1) Se asigna a las consultas que llegan al sistema un número fijo de unidades de trabajo, y (2) Utilizando el predictor multilineal perfecto para predecir el número de unidades de trabajo. 
+Posteriormente se hace una comparación \textit{Times Ranges} con las estrategias de unidades de trabajo y 1TQ. Los resultados de dicha comparación se muestran en la Figura \ref{fig:units_vs_multithread}, aquí se ve claramente que bajo un contexto de un predictor perfecto, la estrategia de unidades de trabajo posee un mejor rendimiento que \textit{Times Ranges}, ya que para todos los escenarios (lotes de diferentes tamaños), se requiere de menos tiempo para el procesamiento del conjunto total de 10000 consultas.
+Es importante notar que a medida que el tamaño de los lotes de consultas crece, la estrategia 1TQ se acerca al rendimiento de unidades de trabajo; esto se debe principalmente porque la estrategia 1TQ no posee un método inteligente de asignación de hebras a consultas, esto implica que eventualmente al final de cada lote, algunas hebras procesen consultas costosas en tiempo, retrasando al conjunto completo de hebras en la sincronización para comenzar el procesamiento del siguiente bloque. De esta forma, mientras mayor sea la cantidad de consultas por lotes, menor será el número de lotes a procesar y por ende menor el tiempo perdido por la estrategia 1TQ.  
 
-Los resultados obtenidos se pueden ver en la Figura Y, en donde...
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale=.75]{images/units_vs_multithread.eps}
+\caption{Tiempos de estrategias de planificación por bloques.}
+\label{fig:units_vs_multithread}
+\end{figure}
 
-
-% Mostrados que Times Ranges es mejor que todos los demás bloques y que TimesRanges es malo
-
-
-% Comparación de diferentes técnicas con respecto al número de threads disponibles para el caso de batches de 50 queries
-
-
-
-
-
-
-
-
+% Análisis de 1TQ
