@@ -11,7 +11,7 @@ Los experimentos fueron ejecutados en un Intel Xeon E5620 2.4 \textit{Ghz.} con 
 \label{evaluacionexperimental:wm}
 En esta sección se muestra la implementación de dos enfoques para el procesamiento de consultas a través del algoritmo Wand \citep{Broder:2003}. El primer enfoque es el esquema de \textit{heap} locales (LH), en el que cada hebra obtiene sus mejores documentos para una consulta dada y luego una hebra maestra se encarga de mezclar todos los resultados de cada uno de los hilos de ejecución para construir el conjunto \textit{top-K} final; el segundo enfoque es el enfoque de \textit{heap} compartido (SH), en el que se tiene un \textit{heap} visible a todos los hilos de ejecución y en donde ellos compiten por el acceso a esta estructura de datos. El detalle del diseño de los enfoques LH y SH están disponibles en \ref{scheduling:wlh} y \ref{scheduling:whc}. 
 
-\subsection{Esquema LH}
+\subsection{Esquema \textit{heaps} locales }
 \label{evaluacionexperimental:esquemalh}
 En el esquema LH todos los hilos de ejecución tienen sus propias estructuras de datos y variables que soportan la resolución de una transacción de lectura. La clase \textit{TopKMultithreadWandOperatorLocal} es la encargada de administrar la lógica de ejecución, además prepara las variables e inicia los hilos de ejecución. El Código \ref{code:topkmultithreadwandoperatorlocal} muestra la implementación, en el que existe un método llamado \textit{execute}, este método es el encargado de llevar a cabo la resolución de la consulta, recibe como entrada la consulta a ser resuelta y un vector en el que se almacenará los resultados obtenidos. Adicionalmente, este método es el encargado de lanzar las hebras con que se resolverá cada consulta y a cada una de ellas le asigna un objeto de tipo \textit{TopKWandOperator} ($arr\_ops[pid\_thread]$) para obtener los resultados. Todo este proceso es llevado a cabo usando $K$ como tamaño del conjunto que se quiere obtener. Además se definen variables como \textit{$mapas\_ubs$}, el cual asocia a cada término los \textit{upper bounds} con los que el método Wand trabajará y \textit{$query\_partes$}, variable que define en cuántas partes la consulta debe ser dividida y está supeditada al número de hebras con que esta será resuelta.
 
@@ -26,7 +26,7 @@ En la Figura \ref{fig:esquema_ejecucion_wandlh} se ejemplifica la resolución de
 \label{fig:esquema_ejecucion_wandlh}
 \end{figure}
 
-\subsection{Esquema SH}
+\subsection{Esquema \textit{heap} compartido}
 \label{evaluacionexperimental:esquemash}
 En el esquema SH los hilos de ejecución trabajan con variables compartidas, incluído el \textit{heap} en donde se almacenan los resultados. La ejecución de este enfoque es llevada a cabo por la clase \textit{TopKMultithreadWandOperatorLocks}, lo cual se puede ver en el Código \ref{code:topkmultithreadwandoperatorlocks}; en esta implementación se puede observar la declaración de una clase anidada, la cual contiene las variables que serán compartidas por los hilos de ejecución. Dentro de las variables más importantes está el \textit{heap}, el umbral utilizado para decidir si un documento debe estar dentro del \textit{heap} y la variable de tipo \textit{mutex} que permite el acceso exclusivo a las variables compartidas. 
 
@@ -163,9 +163,7 @@ Finalmente con el objetivo de entender el por qué del valor de los errores obte
 \end{figure}
 
 
-
-
-\section{Estrategias de scheduling}
+\section{Estrategias de procesamiento y planificación}
 \label{evaluacionexperimental:estrategiasscheduling}
 Se compararon las estrategias de planificación por bloques \citep{Ye:2007} usando el predictor multilineal descrito en la sección \ref{scheduling:glasgow} y además un predictor perfecto, el cual sabe de antemano el tiempo real de las consultas. Para determinar el número de hebras a ser usado en resolver cada consulta, el sistema predice el tiempo que esta tomará, y escoge el mínimo número de hebras necesarias con el que el tiempo predicho es menor o igual a la cota superior de tiempo establecida. Se experimentó con diferentes valores de cota superior y los mejores resultados fueron obtenidos con el tiempo promedio de las consultas. Para la resolución de consultas se utilizó el método Wand.
 
