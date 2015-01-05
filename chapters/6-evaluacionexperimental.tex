@@ -68,12 +68,13 @@ Adicionalmente en la Figura \ref{fig:eficiencias_wand} se puede ver en forma gen
 
 \section{Predicción de tiempos}
 \label{evaluacionexperimental:predicciontiempos}
-En esta sección se muestran los resultados obtenidos de las implementaciones hechas para el método basado en regresión lineal múltiple (ML) y red neuronal (RN). El proceso de entrenamiento para ambos casos se llevó a cabo con 10000 instancias, cada instancia es una transaccion de lectura real desde la cual se precalcularon los 42 descriptores definidos en el Capítulo \ref{cap:prediccion}. 
-
+En esta sección se muestran los resultados obtenidos de las implementaciones hechas para los métodos de predicción basados en regresión lineal múltiple (ML) y red neuronal (RN). El proceso de entrenamiento para ambos casos se llevó a cabo con 10000 instancias, cada instancia es una transaccion de lectura real desde la cual se precalcularon los 42 descriptores definidos en el Capítulo \ref{cap:prediccion}. 
 
 % Se debe elegir cuáles métodos se comentarán y cuáles se mandarán al apéndice (gov2 para wand y bmw es buen candidato)
-Las Tablas \ref{ml_gov2_wand}, \ref{ml_gov2_bmw}, \ref{ml_clueweb_wand} y \ref{ml_clueweb_bmw} muestran los valores obtenidos en el proceso de entrenamiento del modelo ML para los conjuntos de datos Gov2 y ClueWeb utilizando los métodos Wand y Block Max Wand. A pesar de que son 42 variables independiente, en forma general se pueden observar buenos valores de los coeficientes de regresión de \textit{pearson} para cada uno de los modelos, lo que significa que existe una relación lineal entre el tiempo de las consultas y el modelo.  
+Las Tablas \ref{ml_gov2_wand} y \ref{rn_gov2_wand} muestran los valores obtenidos en el proceso de construcción de los modelos ML y RN en términos del coeficiente de Pearson y la raíz del error cuadrático medio (RMSE) en milisegundos; en ambos procesos mostrados en las tablas anteriores se utilizó el \textit{dataset} Gov2 y el método Wand. Los resultados para los modelos restantes son presentados en el Anexo \ref{ape:apeA}. 
 
+A pesar de que son 42 variables independiente, en forma general se pueden observar buenos valores de los coeficientes de regresión de \textit{Pearson} para cada uno de los modelos, lo que significa que existe una relación lineal entre el tiempo de las consultas y el modelo. Adicionalmente calculando el coeficiente de determinación, se puede notar que en el peor caso del modelo ML el porcentaje de variabilidad del tiempo explicado por el modelo alcanza un $67\%$ ($(0.819^2) * 100$) y en el caso del modelo RN alcanza un $79.5\%$ ($(0.892^2) * 100$) . Con el conjunto de datos Clueweb se obtienen mejores coeficientes de correlación (ver Anexo \ref{ape:apeA}).
+% Omitiendo análisis del RMSE
 
 \begin{table}[htbp]
 \caption{Resultados método ML utilizando el conjunto de datos Gov2 y método de procesamiento Wand.}
@@ -89,8 +90,6 @@ RMSE & 89,8191624638 & 49,0317178648 & 22,0735989696 & 12,5486639038 & 9,1536416
 \label{ml_gov2_wand}
 \end{table}
 
-%-----------------------------------------------------------------------------------------------------------------------------------%
-
 \begin{table}[htbp]
 \caption{Resultados método RN utilizando el conjunto de datos Gov2 y método de procesamiento Wand.}
 \begin{center}
@@ -105,44 +104,63 @@ RMSE & 67,7757284521 & 90,4311959153 & 66,5232866794 & 23,6964743214 & 7,6274795
 \label{rn_gov2_wand}
 \end{table}
 
-%---------------------------------------------
+A pesar de que los resultados mostrados anteriormente muestran que ambos modelos explican un porcentaje aceptable del fenómeno, la manera de evaluar estos métodos será mediante el porcentaje de error que se arroja para un segundo conjunto de consultas, usado exclusivamente para la evaluación. Se utilizaron dos conjuntos diferentes de 1000 consultas tanto de los \textit{datasets} Gov2 como de Clueweb. Los parámetros utilizados para la evaluación fueron el RMSE (en milisegundos) y también el error relativo promedio porcentual (ERP) definido como ($\frac{Error Absoluto Medio}{Tiempo Real Promedio}) * 100$. La Tabla \ref{validacion_modelos_gov2_wand} muestra un resumen de los resultados obtenidos, aquí se muestra que tanto el RMSE como el ERP son menores para el modelo ML; lo que indica que el modelo multilineal generaliza de mejor manera para el conjunto de datos Gov2.
 
-
-A continuación se muestran los resultados obtenidos en la etapa de evaluación de modelo.
-% ----------------------------------------- Proceso de validación con 20.000 datos más ------------------------------------------%
-% Explicar el error que se utilizó y por qué no se utilizó error relativo
-% Hacer conclusiones acerca de Wand y BMW
-% Hacer la conclusión de dependencia de datos
-% Apendice
-% Se debe elegir cuáles métodos se comentarán y cuáles se mandarán al apéndice (gov2 para wand y bmw es buen candidato)
-\begin{table}[htbp]
-\caption{Errores obtenidos método ML utilizando Gov2 y Wand}
-\begin{center}
-\begin{tabular}{|c|c|c|c|c|c|}
-\hline
- & \multicolumn{ 5}{c|}{Estimador ML - Gov2 Test – Wand} \\ \hline
- & 1t & 2t & 4t & 8t & 16t \\ \hline
-RMSE ML & 93,4213321631 & 55,2226746394 & 35,8065152454 & 31,5809909101 & 30,9943417318 \\ \hline
-Error ML (\%) & 46,7679492043 & 48,3620334358 & 49,158464109 & 54,3328274289 & 54,4780442408 \\ \hline
-\end{tabular}
-\end{center}
-\label{ml_gov2test_wand}
-\end{table}
+El detalle de los resultados obtenidos en el proceso de evaluación de ambos métodos de aprendizaje para los diferentes escenarios son mostrados en el Anexo ref{ape:apeB}.
 
 \begin{table}[htbp]
-\caption{Errores obtenidos método RN utilizando Gov2 Test y Wand.}
+\caption{Comparación de proceso entrenamiento versus proceso de validación}
 \begin{center}
-\begin{tabular}{|c|c|c|c|c|c|}
+\begin{tabular}{|c|c|c|c|c|}
 \hline
- & \multicolumn{ 5}{c|}{Estimador RN - Gov2 - Wand} \\ \hline
- & 1t & 2t & 4t & 8t & 16t \\ \hline
-RMSE RN & 83,3427688489 & 127,7971510158 & 78,5508679211 & 44,0078238263 & 32,5958111096 \\ \hline
-Error RN (\%) & 39,6467173103 & 109,5123072913 & 141,1360887399 & 123,600300482 & 62,1680304214 \\ \hline
+ & \multicolumn{ 2}{c|}{Modelo ML conjunto GOV2 método Wand} & \multicolumn{ 2}{c|}{Modelo RN   conjunto GOV2 método Wand} \\ \hline
+ & Entrenamiento & Validación & Entrenamiento & Validación \\ \hline
+RMSE & 36,5253569757 & 49,405170938 & 51,2108329846 & 73,2588845444 \\ \hline
+ERP (\%) & 40,7309501561 & 48,528654817 & 75,1585277033 & 78,7569645709 \\ \hline
 \end{tabular}
 \end{center}
-\label{rn_gov2test_wand}
+\label{validacion_modelos_gov2_wand}
 \end{table}
 
+Finalmente con el objetivo de entender el por qué del valor de los errores obtenidos anteriormente para el modelo RN, se hizo un análisis exclusivo del coeficiente de correlación de este modelo con las dos muestras de la Web disponibles (Gov2 y Clueweb). Se tomó este estadístico para el proceso de entrenamiento y evaluación para distintos números de neuronas en la capa oculta (2, 10 y 20). Los valores obtenidos para la Clueweb se muestran en la Figura \ref{fig:cluewebRN}, en donde se puede apreciar que la diferencia entre el coeficiente de correlación de entrenamiento y el calculado desde el conjunto de evaluación no parece ser muy importante; sin embargo, cuando se observa los resultados para la Gov2 (Figura \ref{fig:gov2RN}), se puede apreciar una gran diferencia entre sus coeficientes de correlación de entrenamiento y evaluación, por ejemplo, para 20 neuronas se observa un coeficiente de entrenamiento de $0.96$, mientras que el de evaluación es $0.61$. Lo explicado anteriormente muestra que el modelo RN es realmente dependiente de los datos, por lo que no es confiable utilizarlo en todos los escenarios. Además se puede observar que al aumentar significativamente el número de neuronas en la capa oculta los resultados no son muy diferentes e incluso son peores cuando se ocupa los datos de Gov2, lo que podría ser muestra de un sobreentrenamiento del modelo. Sin embargo, esto no descarta una solución basada en redes neuronales, sino que es necesario encontrar un conjunto más preciso de descriptores.
+
+\begin{figure}
+  \begin{minipage}[][][b]{0.5\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{images/cluewebRN.eps}
+  \end{minipage}%
+  \begin{minipage}[b]{0.30\linewidth}
+    		\centering
+		\begin{tabular}{|r|r|r|}
+		\hline
+		\multicolumn{ 3}{|c|}{Clueweb} \\ \hline
+		\multicolumn{1}{|l|}{\# neuromas} & \multicolumn{1}{l|}{r entrenamiento} & \multicolumn{1}{l|}{r evaluación} \\ \hline
+		2 & 0,9413 & 0,8589 \\ \hline
+		10 & 0,9669 & 0,9052 \\ \hline
+		20 & 0,9738 & 0,9004 \\ \hline
+		\end{tabular}
+   \end{minipage}
+\caption{Valores del coeficientes de correlación para el \textit{dataset} Clueweb.}
+\label{fig:cluewebRN}
+\end{figure}
+
+\begin{figure}
+  \begin{minipage}[][][b]{0.5\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{images/gov2RN.eps}
+  \end{minipage}%
+\begin{tabular}{|r|r|r|}
+\hline
+\multicolumn{ 3}{|c|}{Gov2} \\ \hline
+\multicolumn{1}{|l|}{\# neuronas} & \multicolumn{1}{l|}{r training} & \multicolumn{1}{l|}{r evaluation} \\ \hline
+2 & 0,8995 & 0,6803 \\ \hline
+10 & 0,9563 & 0,6502 \\ \hline
+20 & 0,9623 & 0,6080 \\ \hline
+\end{tabular}
+
+\caption{Valores del coeficientes de correlación para el \textit{dataset} Gov2.}
+\label{fig:gov2RN}
+\end{figure}
 
 
 

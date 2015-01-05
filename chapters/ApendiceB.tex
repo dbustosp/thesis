@@ -1,5 +1,19 @@
 \chapter{Resultado del proceso de evaluación de los modelos de aprendizaje}
-\label{ape:apeA}
+\label{ape:apeB}
+
+\begin{table}[htbp]
+\caption{Errores obtenidos método ML utilizando Gov2 y Wand}
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+ & \multicolumn{ 5}{c|}{Estimador ML - Gov2 Test – Wand} \\ \hline
+ & 1t & 2t & 4t & 8t & 16t \\ \hlin
+RMSE ML & 93,4213321631 & 55,2226746394 & 35,8065152454 & 31,5809909101 & 30,9943417318 \\ \hline
+ERP ML (\%) & 46,7679492043 & 48,3620334358 & 49,158464109 & 54,3328274289 & 54,4780442408 \\ \hline
+\end{tabular}
+\end{center}
+\label{ml_gov2test_wand}
+\end{table}
 
 \begin{table}[htbp]
 \caption{Errores obtenidos método ML utilizando Gov2 y Block Max Wand.}
@@ -44,6 +58,19 @@ Error ML (\%) & \multicolumn{1}{r|}{31,3197074579} & 32,8018021931 & 34,94911163
 \end{table}
 
 %---------- redes neuronales ahora
+\begin{table}[htbp]
+\caption{Errores obtenidos método RN utilizando Gov2 Test y Wand.}
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+ & \multicolumn{ 5}{c|}{Estimador RN - Gov2 - Wand} \\ \hline
+ & 1t & 2t & 4t & 8t & 16t \\ \hline
+RMSE RN & 83,3427688489 & 127,7971510158 & 78,5508679211 & 44,0078238263 & 32,5958111096 \\ \hline
+ERP RN (\%) & 39,6467173103 & 109,5123072913 & 141,1360887399 & 123,600300482 & 62,1680304214 \\ \hline
+\end{tabular}
+\end{center}
+\label{rn_gov2test_wand}
+\end{table}
 
 \begin{table}[htbp]
 \caption{Errores obtenidos método RN utilizando Gov2 Test y Block Max Wand.}
