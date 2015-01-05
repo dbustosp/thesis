@@ -1,29 +1,65 @@
 \chapter{Conclusiones}
 \label{cap:conclu}
+% Intro general
+% Capítulo de Wand multithreading
+% Conclusión 
+% Capítulo de predicción de tiempos
+% Conclusión
+% Capítulo de estrategias de planificación
+% Conclusión
+% Conclusión objetivos específicos
+% Conclusión general
+% Aportes al área
+% Trabajo futuro
 
-Utilizando Wand y Gov2 Heap compartido > Heap global.
+Por medio del presente trabajo se ha llevado a cabo un estudio del procesamiento y planificación de transacciones de lectura que llegan a un motor de búsqueda haciendo uso de una máquina multinúcleo, en el que se adaptaron diferentes estrategias de planificación del estado del arte al contexto de un motor de búsqueda y se evaluaron los rendimientos de cada una de ellas mediante el procesamiento de consultas por lotes. Adicionalmente se propone una estrategia de procesamiento de consultas basada en unidades de trabajo, en el que cada consulta es dividida en unidades de procesamiento y los diferentes hilos de ejecución compiten por procesar cada unidad.
 
-¿Comportamiento según Wand y Conjunto De Datos? 
+El sistema implementado para resolver una transacción de lectura que llega al sistema es flexible a hacer uso de diferentes números de hilos de ejecución; esta capacidad se logra ya que se implementó dos versiones paralelas del algoritmo Wand, la primera es una versión con \textit{heaps} locales y la otra hace uso de un solo \textit{heap} compartido. Los resultados arrojan que utilizando la muestra de la Web Gov2 y obteniendo el conjunto de los \textit{top-100} mejores documentos, el enfoque con \textit{heap} compartido posee mejor rendimiento. 
+% BMW
 
-El beneficio de la predicción de tiempo en el esquema de un solo procesador parece no ser beneficioso. 
-El impacto que toma predecir el tiempo...
+Con respecto a los predictores de rendimiento de transacciones de lectura, el método ML basado en una regresión lineal múltiple obtiene mejor rendimiento en la predicción que el método RN basado en redes neuronales, esto utilizando el mismo conjunto de 42 descriptores para ambos métodos. Esto no descarta que exista una mejor solución para el método RN que incluso pueda mejorar en rendimiento al método ML, para esto se debe hacer una mejor clasificación de descriptores utilizados para la creación del modelo.
+% sobreentranda
+ 
+% Planificación
 
-Las estrategias diseñadas fueron pensadas en el contexto en que al final de cada lote de consultas se produce una sincronización.
 
-Se analizó algunas de las estrategias de planificaicón que hay en el estado del arte, se llevó al contexto practicó desarrollando tb un estimador de threads, pero al final del día se dio cuenta que el costo de predecir y el beneficio que entrega la planificación no son muy buenos.
 
-Se traen estrategias del estado del arte, se adaptan, se comparan y se concluye algo.
 
-ok, entonces es mejor usar este enfoque de unidades
+% Trabajo futuro
 
-se analizan los resultados de cada uno de los algoritmos
 
-Trabajo futuro, probar con diferentes K, probar reducir el modelo lineal, probar otras estrategias de planificación.
+
+
+% Aportes al área
+
+
+
+
+
+
+//Comportamiento según Wand, BMW y Conjunto De Datos 
+
+Trabajo futuro, mejorar predictore
 
 En las estrategias por bloque, un predictor mejor tiene un impacto en el tiempo de procesamiento lotes de consultas.
 
 Mala técnica en la práctica del método teórico del estado del arte. La mejor estrategia por bloques es TimesRanges que es una modificación de la original, pero que de todas formas es muy ineficiente en contexto donde se requiere procesamiento por lotes de queries, ya que se pierde mucho tiempo al término de cada Room y Walls. 
 
+El beneficio de la predicción de tiempo en el esquema de un solo procesador parece no ser beneficioso. 
+El impacto que toma predecir el tiempo...
+Las estrategias diseñadas fueron pensadas en el contexto en que al final de cada lote de consultas se produce una sincronización.
+
+Se analizó algunas de las estrategias de planificaicón que hay en el estado del arte, se llevó al contexto practicó desarrollando tb un estimador de threads, pero al final del día se dio cuenta que el costo de predecir y el beneficio que entrega la planificación no son muy buenos.
+
+se analizan los resultados de cada uno de los algoritmos
+
+
+ok, entonces es mejor usar este enfoque de unidades
+
+
+Trabajo futuro, probar con diferentes K, probar reducir el modelo lineal, probar otras estrategias de planificación.
+
+
+
 Decir que en vez de perder tiempo planificando, es mejor usar una estrategia de procesamiento simple. 
 
-Las estrategias por bloque están supeditadas a la calidad del predictor.
