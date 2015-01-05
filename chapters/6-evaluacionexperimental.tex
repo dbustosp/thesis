@@ -15,11 +15,11 @@ En esta sección se muestra la implementación de dos enfoques para el procesami
 \label{evaluacionexperimental:esquemalh}
 En el esquema LH todos los hilos de ejecución tienen sus propias estructuras de datos y variables que soportan la resolución de una transacción de lectura. La clase \textit{TopKMultithreadWandOperatorLocal} es la encargada de administrar la lógica de ejecución, además prepara las variables e inicia los hilos de ejecución. El Código \ref{code:topkmultithreadwandoperatorlocal} muestra la implementación, en el que existe un método llamado \textit{execute}, este método es el encargado de llevar a cabo la resolución de la consulta, recibe como entrada la consulta a ser resuelta y un vector en el que se almacenará los resultados obtenidos. Adicionalmente, este método es el encargado de lanzar las hebras con que se resolverá cada consulta y a cada una de ellas le asigna un objeto de tipo \textit{TopKWandOperator} ($arr\_ops[pid\_thread]$) para obtener los resultados. Todo este proceso es llevado a cabo usando $K$ como tamaño del conjunto que se quiere obtener. Además se definen variables como \textit{$mapas\_ubs$}, el cual asocia a cada término los \textit{upper bounds} con los que el método Wand trabajará y \textit{$query\_partes$}, variable que define en cuántas partes la consulta debe ser dividida y está supeditada al número de hebras con que esta será resuelta.
 
-\lstinputlisting[label=code:topkmultithreadwandoperatorlocal, caption=Implementación de la clase TopKMultithreadWandOperatorLocal.h, language=C++]{code/TopKMultithreadWandOperatorLocal.h}
+\lstinputlisting[label=code:topkmultithreadwandoperatorlocal, caption=Implementación de la clase TopKMultithreadWandOperatorLocal.h, language=C++, float]{code/TopKMultithreadWandOperatorLocal.h}
 
 En la Figura \ref{fig:esquema_ejecucion_wandlh} se ejemplifica la resolución de una consulta con cuatro hilos de ejecución. Una vez que el sistema asigna el número de hebras que se utilizará para la resolución de la consulta, esta es tomada por el objeto \textit{TopKMultithreadWandOperatorLocal} y hace un llamado al método \textit{execute}, en el que se hace una preparación de variables y se lanzan los hilos de ejecución; cada uno de ellos tiene asignado dos objetos: (1) \textit{TopKWandOperator}, el cual se encarga de que cada hilo de ejecución solo resuelva la parte de la consulta que se le asignó, y (2) \textit{Wand}, el cual se encarga de obtener los mejores $K$ documentos guardándolos en un \textit{heap}.
 
-\begin{figure}[th!]
+\begin{figure}[tp]
 \centering
 \includegraphics[scale=.75]{images/ejecucion_topkmultithreadwandopLOCAL.eps}
 \caption{Esquema de ejecución enfoque LH.}
@@ -30,11 +30,11 @@ En la Figura \ref{fig:esquema_ejecucion_wandlh} se ejemplifica la resolución de
 \label{evaluacionexperimental:esquemash}
 En el esquema SH los hilos de ejecución trabajan con variables compartidas, incluído el \textit{heap} en donde se almacenan los resultados. La ejecución de este enfoque es llevada a cabo por la clase \textit{TopKMultithreadWandOperatorLocks}, lo cual se puede ver en el Código \ref{code:topkmultithreadwandoperatorlocks}; en esta implementación se puede observar la declaración de una clase anidada, la cual contiene las variables que serán compartidas por los hilos de ejecución. Dentro de las variables más importantes está el \textit{heap}, el umbral utilizado para decidir si un documento debe estar dentro del \textit{heap} y la variable de tipo \textit{mutex} que permite el acceso exclusivo a las variables compartidas. 
 
-\lstinputlisting[label=code:topkmultithreadwandoperatorlocks, caption=Implementación de la clase TopKMultithreadWandOperatorLocks.h, language=C++]{code/TopKMultithreadWandOperatorLocks.h}
+\lstinputlisting[label=code:topkmultithreadwandoperatorlocks, caption=Implementación de la clase TopKMultithreadWandOperatorLocks.h, language=C++, float]{code/TopKMultithreadWandOperatorLocks.h}
 
 La Figura \ref{fig:esquema_ejecucion_wandsh} muestra un ejemplo de resolución de consulta utilizando cuatro hilos de ejecución y el enfoque SH. Al igual que en el esquema anterior, la clase principal inicializa variables e inicia los hilos de ejecución; el objeto \textit{TopKWandOperator} asignará a cada hebra la parte del índice invertido con la que cada hebra resolverá la consulta. Cada vez que un hilo de ejecución utilizando el objeto Wand encuentre un documento candidato para estar en el conjunto \textit{top-K} final, debe pedir acceso exclusivo a las estructuras de datos involucradas (\textit{heap} y umbral), de esta forma se evita resultados erróneos en el conjunto final producto del paralelismo entre los hilos de ejecución.  
 
-\begin{figure}[th!]
+\begin{figure}[tp]
 \centering
 \includegraphics[scale=.75]{images/ejecucion_topkmultithreadwandopCOMPARTIDO.eps}
 \caption{Esquema de ejecución enfoque SH.}
@@ -48,7 +48,7 @@ En la Figura \ref{fig:tiempos_wand} se puede observar el tiempo promedio del enf
 El esquema LH puede estar muy supeditado a la distribución de documentos en las listas del índice invertido, ya que si un hilo de ejecución procesa su corrrespondiente parte del índice invertido en donde los mejores puntajes se encuentran al final, entonces el \textit{heap} tendrá un umbral bajo al comienzo del proceso, eso implica un proceso de descarte de documentos menos eficiente y el tiempo de ejecución requerido será mayor, retrasando el proceso que mezcla los resultados para obtener el conjunto \textit{top-K} final. 
 Como el esquema SH ocupa un solo \textit{heap} para obtener los mejores $K$ documentos, el \textit{heap} tiende a llenarse rápidamente con los mejores documentos globales, esto implica que el puntaje mínimo del \textit{heap} (umbral) tiende a crecer rápidamente, permitiendo un mejor descarte de documentos y menor tiempo de ejecución para las hebras. 
 
-\begin{figure}[!ht]
+\begin{figure}[tp]
 \centering
 \includegraphics[scale=.75]{images/tiempos_wand.eps}
 \caption{Tiempos promedios de las consultas.}
@@ -59,7 +59,7 @@ Adicionalmente en la Figura \ref{fig:eficiencias_wand} se puede ver en forma gen
                      
 %Para los siguientes experimentos del presente trabajo se ocupará el enfoque SH para resolver las transacciones de lectura.
 
-\begin{figure}[!ht]
+\begin{figure}[tp]
 \centering
 \includegraphics[scale=.75]{images/eficiencias_wand.eps}
 \caption{Eficiencias para Wand con heaps compartido y locales.}
@@ -76,7 +76,7 @@ Las Tablas \ref{ml_gov2_wand} y \ref{rn_gov2_wand} muestran los valores obtenido
 A pesar de que son 42 variables independiente, en forma general se pueden observar buenos valores de los coeficientes de regresión de \textit{Pearson} para cada uno de los modelos, lo que significa que existe una relación lineal entre el tiempo de las consultas y el modelo. Adicionalmente calculando el coeficiente de determinación, se puede notar que en el peor caso del modelo ML el porcentaje de variabilidad del tiempo explicado por el modelo alcanza un $67\%$ ($(0.819^2) * 100$) y en el caso del modelo RN alcanza un $79.5\%$ ($(0.892^2) * 100$) . Con el conjunto de datos Clueweb se obtienen mejores coeficientes de correlación (ver Anexo \ref{ape:apeA}).
 % Omitiendo análisis del RMSE
 
-\begin{table}[htbp]
+\begin{table}[tp]
 \caption{Resultados método ML utilizando el conjunto de datos Gov2 y método de procesamiento Wand.}
 \begin{center}
 \begin{tabular}{|c|c|c|c|c|c|}
@@ -90,7 +90,7 @@ RMSE & 89,8191624638 & 49,0317178648 & 22,0735989696 & 12,5486639038 & 9,1536416
 \label{ml_gov2_wand}
 \end{table}
 
-\begin{table}[htbp]
+\begin{table}[tp]
 \caption{Resultados método RN utilizando el conjunto de datos Gov2 y método de procesamiento Wand.}
 \begin{center}
 \begin{tabular}{|c|c|c|c|c|c|}
@@ -108,7 +108,7 @@ A pesar de que los resultados mostrados anteriormente muestran que ambos modelos
 
 El detalle de los resultados obtenidos en el proceso de evaluación de ambos métodos de aprendizaje para los diferentes escenarios son mostrados en el Anexo ref{ape:apeB}.
 
-\begin{table}[htbp]
+\begin{table}[tp]
 \caption{Comparación de proceso entrenamiento versus proceso de validación}
 \begin{center}
 \begin{tabular}{|c|c|c|c|c|}
@@ -124,7 +124,7 @@ ERP (\%) & 40,7309501561 & 48,528654817 & 75,1585277033 & 78,7569645709 \\ \hlin
 
 Finalmente con el objetivo de entender el por qué del valor de los errores obtenidos anteriormente para el modelo RN, se hizo un análisis exclusivo del coeficiente de correlación de este modelo con las dos muestras de la Web disponibles (Gov2 y Clueweb). Se tomó este estadístico para el proceso de entrenamiento y evaluación para distintos números de neuronas en la capa oculta (2, 10 y 20). Los valores obtenidos para la Clueweb se muestran en la Figura \ref{fig:cluewebRN}, en donde se puede apreciar que la diferencia entre el coeficiente de correlación de entrenamiento y el calculado desde el conjunto de evaluación no parece ser muy importante; sin embargo, cuando se observa los resultados para la Gov2 (Figura \ref{fig:gov2RN}), se puede apreciar una gran diferencia entre sus coeficientes de correlación de entrenamiento y evaluación, por ejemplo, para 20 neuronas se observa un coeficiente de entrenamiento de $0.96$, mientras que el de evaluación es $0.61$. Lo explicado anteriormente muestra que el modelo RN es realmente dependiente de los datos, por lo que no es confiable utilizarlo en todos los escenarios. Además se puede observar que al aumentar significativamente el número de neuronas en la capa oculta los resultados no son muy diferentes e incluso son peores cuando se ocupa los datos de Gov2, lo que podría ser muestra de un sobreentrenamiento del modelo. Sin embargo, esto no descarta una solución basada en redes neuronales, sino que es necesario encontrar un conjunto más preciso de descriptores.
 
-\begin{figure}
+\begin{figure}[tp]
   \begin{minipage}[][][b]{0.5\linewidth}
     \centering
     \includegraphics[width=\linewidth]{images/cluewebRN.eps}
@@ -144,7 +144,7 @@ Finalmente con el objetivo de entender el por qué del valor de los errores obte
 \label{fig:cluewebRN}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[tp]
   \begin{minipage}[][][b]{0.5\linewidth}
     \centering
     \includegraphics[width=\linewidth]{images/gov2RN.eps}
@@ -167,11 +167,11 @@ Finalmente con el objetivo de entender el por qué del valor de los errores obte
 \label{evaluacionexperimental:estrategiasscheduling}
 Se compararon las estrategias de planificación por bloques \citep{Ye:2007} usando el predictor multilineal descrito en la sección \ref{scheduling:glasgow} y además un predictor perfecto, el cual sabe de antemano el tiempo real de las consultas. Para determinar el número de hebras a ser usado en resolver cada consulta, el sistema predice el tiempo que esta tomará, y escoge el mínimo número de hebras necesarias con el que el tiempo predicho es menor o igual a la cota superior de tiempo establecida. Se experimentó con diferentes valores de cota superior y los mejores resultados fueron obtenidos con el tiempo promedio de las consultas. Para la resolución de consultas se utilizó el método Wand.
 
-En la Figura \ref{fig:scheduler_all_16threads} se puede observar el comportamiendo que tienen estas estrategias al resolver consultas divididas en conjuntos de diferentes tamaños (1000, 500, 200, 100 and 50). En cada caso las estrategias resolvieron un total de 10000 consultas con una pausa entre lotes, es decir, en el primer caso se resuelven 200 lotes de 50 consultas cada uno; en el segundo caso se resuelven 100 lotes de 100 consultas cada uno; así sucesivamente hasta llegar a procesar 10 lotes de 1000 consultas cada uno. El tiempo de ejecución total tomado corresponde a la suma de tiempos de ejecución de los lotes. El mejor resultado fue obtenido por la estrategia \textit{Times Ranges} usando el predictor perfecto, ya que al crear bloques de consultas que poseen rangos de tiempos similares, se disminiuye el tiempo pérdido por las hebras al final de cada uno de ellos.
+En la Figura \ref{fig:scheduler_all_16threads} se puede observar el comportamiendo que tienen estas estrategias al resolver consultas divididas en conjuntos de diferentes tamaños (1000, 500, 200, 100 y 50). En cada caso las estrategias resolvieron un total de 10000 consultas con una pausa entre lotes, es decir, en el primer caso se resuelven 200 lotes de 50 consultas cada uno; en el segundo caso se resuelven 100 lotes de 100 consultas cada uno; así sucesivamente hasta llegar a procesar 10 lotes de 1000 consultas cada uno. El tiempo de ejecución total tomado corresponde a la suma de tiempos de ejecución de los lotes. El mejor resultado fue obtenido por la estrategia \textit{Times Ranges} usando el predictor perfecto, ya que al crear bloques de consultas que poseen rangos de tiempos similares, se disminiuye el tiempo pérdido por las hebras al final de cada uno de ellos.
 
 Notar que en estrategias bajo el enfoque de bloques, un predictor con mayor precisión puede conducir a la reducción del tiempo de procesamiento de las consultas, por lo que el rendimiento de estas estrategias está supeditado a la calidad del predictor. 
 
-\begin{figure}[!ht]
+\begin{figure}[tp]
 \centering
 \includegraphics[scale=.75]{images/scheduler_all_16threads.eps}
 \caption{Tiempos de estrategias de planificación por bloques.}
@@ -186,11 +186,9 @@ En base a experimentación se ha encontrado que en general procesar transaccione
 Posteriormente se hace una comparación \textit{Times Ranges} con las estrategias de unidades de trabajo y 1TQ. Los resultados de dicha comparación se muestran en la Figura \ref{fig:units_vs_multithread}, aquí se ve claramente que bajo un contexto de un predictor perfecto, la estrategia de unidades de trabajo posee un mejor rendimiento que \textit{Times Ranges}, ya que para todos los escenarios (lotes de diferentes tamaños), se requiere de menos tiempo para el procesamiento del conjunto total de 10000 consultas.
 Es importante notar que a medida que el tamaño de los lotes de consultas crece, la estrategia 1TQ se acerca al rendimiento de unidades de trabajo; esto se debe principalmente porque la estrategia 1TQ no posee un método inteligente de asignación de hebras a consultas, esto implica que eventualmente al final de cada lote, algunas hebras procesen consultas costosas en tiempo, retrasando al conjunto completo de hebras en la sincronización para comenzar el procesamiento del siguiente bloque. De esta forma, mientras mayor sea la cantidad de consultas por lotes, menor será el número de lotes a procesar y por ende menor el tiempo perdido por la estrategia 1TQ.  
 
-\begin{figure}[!ht]
+\begin{figure}[tp]
 \centering
 \includegraphics[scale=.75]{images/units_vs_multithread.eps}
 \caption{Tiempos de estrategias de planificación por bloques.}
 \label{fig:units_vs_multithread}
 \end{figure}
-
-% Análisis de 1TQ

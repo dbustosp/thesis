@@ -15,7 +15,8 @@
 
 \ProcessOptions\relax
 
-\LoadClass[twoside,12pt,letterpaper]{book}
+%\LoadClass[twoside,12pt,letterpaper]{book}
+\LoadClass[oneside,12pt,letterpaper]{book}
 
 %SUPLEMENTARIOS----------------------------------------------------------------
 \RequirePackage[spanish]{babel}

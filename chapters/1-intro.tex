@@ -19,7 +19,7 @@ Los motores de búsquedas verticales hacen distinciones de tópicos específicos
 
 Por otra parte, los procesadores actuales tienden a aumentar cada vez más la cantidad de núcleos, lo cual permite incrementar la cantidad de hilos o hebras de ejecución disponibles para procesar consultas. Un enfoque tradicional para realizar el procesamiento de consultas es asignar una hebra para resolver una consulta individual, aquí el paralelismo se logra procesando muchas consultas individuales en diferentes núcleos, una por cada hebra y se maximiza el número de consultas resolviéndose al mismo tiempo; sin embargo, esto hace que eventualmente una consulta se demore mucho tiempo en ser resuelta. Un enfoque alternativo es utilizar todos los hilos de ejecución disponibles en una máquina para resolver cada transacción de lectura que llega al sistema, de esta forma se minimizaría el tiempo de resolución por consulta, sin embargo, esta resolución es secuencial. Quizás sea mejor un punto intermedio en que se pueda resolver consultas a un tiempo considerable y a la vez paralelizar el procesamiento de transacciones de lectura.
 
-Hoy en día los motores de búsquedas junto con sus centros de datos consumen el 2\% de la energía mundial, y se espera que en los próximos años esta cifra aumente alrededor del 30\%, puesto que la Web se duplica cada ocho meses y el número de nuevos usuarios que se conectan a esta crece año a año, para lo cual se hace casi inevitable el aumento de máquinas (\textit{hardware}) en los centros de procesamiento de datos. Es por esto que se hace imprescindible diseñar e implementar algoritmos que trabajen en paralelo, para de esta forma mejorar el \textit{throughput} de los motores de búsqueda, así se podrá resolver transacciones de manera más rápida en períodos de altas cargas de trabajo y apagar aquellos servidores que fueron prendidos durante estos períodos. Llegar a soluciones que aporten a mejorar el tiempo de respuesta de una transacción de lectura y el \textit{throughput} de un motor de búsqueda, requiere conocimientos de diferentes áreas de la ciencia de la computación como por ejemplo: Recuperación de información, computación paralela, compresión de datos, \textit{scheduling}, entre otras. 
+Hoy en día los motores de búsquedas junto con sus centros de datos consumen el 2\% de la energía mundial, y se espera que en los próximos años esta cifra aumente alrededor del 30\%, puesto que la Web se duplica cada ocho meses y el número de nuevos usuarios que se conectan a esta crece año a año, para lo cual se hace casi inevitable el aumento de máquinas (\textit{hardware}) en los centros de procesamiento de datos. Es por esto que se hace imprescindible diseñar e implementar algoritmos que trabajen en paralelo, para de esta forma mejorar el \textit{throughput} de los motores de búsqueda, así se podrá resolver transacciones de manera más rápida en períodos de altas cargas de trabajo y apagar aquellos servidores que fueron prendidos durante estos períodos. Llegar a soluciones que aporten a mejorar el tiempo de respuesta de una transacción de lectura y el \textit{throughput} de un motor de búsqueda, requiere conocimientos de diferentes áreas de la ciencia de la computación como por ejemplo: recuperación de información, computación paralela, compresión de datos, \textit{scheduling}, entre otras. 
 
 Los desafíos expuestos anteriormente hace que exista una comunidad activa intentando encontrar soluciones eficientes para sistemas de recuperación de información como los motores de búsqueda.  
 
@@ -27,21 +27,21 @@ Los desafíos expuestos anteriormente hace que exista una comunidad activa inten
 \label{intro:problema}
 Para proporcionar un tiempo de respuesta adecuado a cada una de las consultas de los usuarios, los motores de búsquedas garantizan una cota superior de tiempo para la respuesta a una consulta \citep{Jeon:2014}. Para un motor de búsqueda es muy importante reducir el tiempo de ejecución de aquellas consultas que tomarán mucho tiempo en ser resueltas, esto es muchas veces más importante que reducir el tiempo medio de respuesta \citep{Dean:2013}. Por lo anteriormente descrito, se plantea la siguiente pregunta que guía el presente trabajo: ``¿Es posible diseñar un modelo de procesamiento y de planificación de transacciones de lectura que (1) asegure una cota superior de tiempo de respuesta para las consultas de los usuarios, y (2) minimice el tiempo en procesar lotes de consultas?".  
 
-Los motores de búsqueda utilizan un método multihilo llamado Wand para obtener el conjunto de los mejores documentos (conjunto \textit{top-K}) para una transacción de lectura, el cual posee dos enfoques: (1) Con \textit{heap} locales, en el que cada hebra procesa una parte del índice invertido y obtiene su propio conjunto \textit{top-K}, posteriormente la hebra maestra hace la combinación de resultatos para obtener el conjunto final; (2) Con \textit{heap} compartido, en el que cada hebra procesa una parte del índice invertido y cada vez que ella encuentra un documento que debe estar dentro del conjunto \textit{top-K} final, se pide acceso exclusivo al \textit{heap} compartido y se inserta. Existen trabajos en donde se estudia ambos enfoques \citep{Rojas:2013}, sin embargo, aún no es posible ser categórico en decir cuál enfoque es mejor que otro. Por lo tanto, para poder crear un modelo eficiente de procesamiento y de planificación de transacciones de lectura, primero se debe analizar ambos enfoques y decidir cuál se ajusta de mejor forma al presente contexto.
+Los motores de búsqueda utilizan un método multihilo llamado Wand para obtener el conjunto de los mejores documentos (conjunto \textit{top-K}) para una transacción de lectura, el cual posee dos enfoques: (1) con \textit{heap} locales, en el que cada hebra procesa una parte del índice invertido y obtiene su propio conjunto \textit{top-K}, posteriormente la hebra maestra hace la combinación de resultatos para obtener el conjunto final; (2) con \textit{heap} compartido, en el que cada hebra procesa una parte del índice invertido y cada vez que ella encuentra un documento que debe estar dentro del conjunto \textit{top-K} final, se pide acceso exclusivo al \textit{heap} compartido y se inserta. Existen trabajos en donde se estudia ambos enfoques \citep{Rojas:2013}, sin embargo, aún no es posible ser categórico en decir cuál enfoque es mejor que otro. Por lo tanto, para poder crear un modelo eficiente de procesamiento y de planificación de transacciones de lectura, primero se debe analizar ambos enfoques y decidir cuál se ajusta de mejor forma al presente contexto.
 
 Decidir si utilizar una o todas las hebras de una máquina para resolver una transacción de lectura dependerá de los objetivos del sistema de recuperación de información, generalmente estos dos enfoques son limitados. Encontrar un punto medio en donde se pueda cumplir con (1) una cota superior aceptable de tiempo para responder a cada consulta y (2) tener un buen \textit{throughput}, es un desafío importante para un motor de búsqueda. Por lo tanto, a través del presente trabajo se intenta encontrar una forma de asignación eficiente de hebras a consultas de manera tal que se cumplan los dos requerimientos mencionados anteriormente. 
 
 
 \section{Solución propuesta}
 \label{intro:solucionpropuesta}
-La solución propuesta en este trabajo consta del diseño e implementación de estrategias de planificación de transacciones de lectura para motores de búsqueda vertical. A su vez, la estrategia generada como solución tiene como foco principal una sola máquina, en donde el procesamiento de consultas debe explotar el paralelismo liviano. 
+La solución propuesta en este trabajo consta del diseño e implementación de estrategias de planificación de transacciones de lectura para motores de búsqueda vertical. A su vez, la estrategia generada como solución tiene como foco principal una sola máquina, en donde el procesamiento de consultas debe explotar el paralelismo. 
 
 
 \subsection{Caracter\'isticas de la solución}
 \label{intro:caracteristicassolucion}
 La solución propuesta incluye la implementación de un método de predicción de tiempo de respuesta a transacciones de lectura para la asignación eficiente de hilos de ejecución, con el objetivo de reducir el tiempo de procesamiento de las consultas. 
 
-Se implementaron dos modelos de procesamiento paralelo de consulta basado en el método Wand: Con \textit{heap} compartido y \textit{heaps} locales. De esta manera el sistema es flexible para trabajar con una o más hebras.
+Se implementaron dos modelos de procesamiento paralelo de consulta basado en el método Wand: con \textit{heap} compartido y \textit{heaps} locales. De esta manera el sistema es flexible para trabajar con una o más hebras.
 
 Se diseñó una estrategia capaz de reordenar dinámicamente las transacciones que llegan al procesador. 
 
@@ -63,20 +63,17 @@ Finalmente, se espera proveer un modelo de procesamiento y planificación de tra
 \label{intro:alcancesdelasolucion}
 En la solución propuesta no se considera un sistema distribuído de procesamiento de consultas en donde existe un costo de comunicación entre las máquinas, sino que la resolución de consultas se llevará a cabo en una máquina distribuyendo la carga en sus unidades de procesamiento.
 
-% Las métricas a utilizar para medir el rendimiento es el número de transacciones resueltas por segundo
-% Estrategias diseñadas pensando en que las queries son resueltas por lotes y que al final de cada lote exite una sincronización 
-% 
+La solución propuesta solo considera la planificación y procesamiento de transacciones de lectura, debido a que las transacciones de escritura requieren un tratamiento diferente.
 
+Las técnicas ocupadas para la extracción de documentos ocupan una cantidad fija $K = 100$. 
 
 \section{Objetivos del proyecto}
 \label{intro:objetivosysolucion}
 % Wand de heap compartido y Wand de heaps locales
-
 % Predicción de tiempos de respuestas a queries
-
 % Desarrollar estrategia de planificación por bloques y por unidades de trabajo. 
-
 % Dónde meto el 1T/Q? 
+
 \subsection{Objetivo general}
 \label{intro:objetivogeneral}
 Analizar, desarrollar, comparar y evaluar estrategias de procesamiento y planificación de transacciones de lectura para motores de búsqueda verticales para la Web. Estas deben ser capaces de resolver de manera eficiente el problema de procesar decenas de miles de consultas, asegurando una cota superior de tiempo de respuesta en cada operación.
@@ -85,7 +82,7 @@ Analizar, desarrollar, comparar y evaluar estrategias de procesamiento y planifi
 
 \subsection{Objetivos específicos}
 \label{intro:objetivosespecificos}
-\begin{itemize}	
+\begin{enumerate}	
 	\item Desarrollar algoritmos paralelos de procesamiento de transacciones de lectura que sean eficientes.
 	
 	\item Obtener estrategias \textit{online} que permitan realizar la gestión eficiente de hebras a través de algoritmos que se ajusten a los tamaños de las estructuras de datos involucrados en el procesamiento de las transacciones de lectura.
@@ -93,7 +90,7 @@ Analizar, desarrollar, comparar y evaluar estrategias de procesamiento y planifi
     \item Obtener estrategias de reordenamiento dinámico de transacciones de lectura que llegan a un procesador con múltiples núcleos.
     
     \item Obtener un modelo de costo que permita analizar la eficiencia y escalabilidad de las estrategias diseñadas en motores de búsqueda verticales.
-\end{itemize}
+\end{enumerate}
 
 \section{Metodología y herramientas a utilizar}
 \label{intro:metodologiayherramientas}
@@ -105,7 +102,7 @@ El presente trabajo posee un enfoque investigativo, en donde en primera instanci
 Antes de comenzar la investigación de las diferentes estrategias de planificación, se construye el entorno de un motor de búsqueda, esto implica (1) el diseño, desarrollo y evaluación de diferentes métodos de procesamiento de transacciones de lectura, y (2) implementación y evaluación de métodos predictores de eficiencia para transacciones de lectura.
 
 Bajo dicha perespectiva de trabajo, el método científico es particularmente útil para guiar la totalidad del trabajo.
-Adicionalmente para las etapas del presente trabajo en donde se requiera la construcción de \textit{software}, se utilizará una metodología que consta de cuatro fases: (1) Concepción, en donde se estudian las variables involucradas y se establecen los requerimientos principales; (2) Elaboración, en la cual se diseña los modelos y componentes involucrados; (3) Construcción, en donde se implementa lo definido en la fase de elaboración; (3) Transición, etapa en la cual se reúne los resultados obtenidos y se haacen ajustes si es necesario.  
+Adicionalmente para las etapas del presente trabajo en donde se requiera la construcción de \textit{software}, se utilizará una metodología que consta de cuatro fases: (1) concepción, en donde se estudian las variables involucradas y se establecen los requerimientos principales; (2) elaboración, en la cual se diseña los modelos y componentes involucrados; (3) construcción, en donde se implementa lo definido en la fase de elaboración; (3) transición, etapa en la cual se reúne los resultados obtenidos y se haacen ajustes si es necesario.  
 
 \subsection{Herramientas a utilizar}
 \label{intro:herramientas}
