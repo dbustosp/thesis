@@ -15,7 +15,7 @@ Bajo el contexto de un motor de búsqueda en el que se debe planificar transacci
 
 En la Figura \ref{fig:schedulerbloques} se muestra el proceso completo de este enfoque; las consultas que llegan al sistema las recibe el planificador (\textit{scheduler}) y las envía al estimador (\textit{estimator}), que calcula el número adecuado de hilos de ejecución para la consulta tal que ésta sea resuelta en un tiempo inferior al tiempo límite $t_{limite}$. Una vez que a la transacción de lectura se le predice el tiempo de ejecución y el número de hebras a utilizar, este planifica la consulta en algún bloque correspondiente depenediendo de la política que se este utilizando. A continuación se muestran las diferentes estrategias propuestas. 
 
-\begin{figure}[!th]
+\begin{figure}[tp]
 \centering
 \includegraphics[scale=.75]{images/scheduler_bloques.eps}
 \caption{Enfoque de planificación para estrategias por bloques.}
@@ -31,7 +31,7 @@ Por lo explicado anteriormente, el algoritmo RW asume que cada consulta que lleg
 
 Como se puede ver en el Algoritmo \ref{alg:fr}, cuando una nueva transacción de lectura llega al sistema, esta se analiza si es de tipo \textit{Big} o \textit{Small}; esto se hace en el método \textit{isBig()}, que retorna verdadero si es que el número de máquinas requeridas para procesar la consulta es igual al máximo de máquinas disponibles en el sistema, de lo contrario retorna falso y la transacción es clasificada como \textit{Small}. Si la consulta es \textit{Big}, entonces se crea una estructura de dato \textit{Wall}, se planifica la consulta en el bloque y esta se inserta en la lista de planificación \textit{SchedulingList} que contendrá todos los bloques con las consultas ya planificadas. Si se está en presencia de una transacción de lectura de tipo \textit{Small}, se busca algún bloque de tipo \textit{Room} para planificar esta consulta; para realizar lo anterior, el bloque debe satisfacer dos condiciones: (1) no debe estar completo, es decir, debe tener hebras disponibles, y (2) no debe haber sido procesado aún. Por último, si eventualmente no se encuentra algún bloque disponible para planificar la consulta, entonces se crea un nuevo bloque \textit{Room}, se planifica la consulta al bloque y este bloque es insertado en lista de \textit{scheduling}. Cabe destacar que se dice que un bloque está abierto (\textit{isOpen()}) cuando las consultas presentes en el bloque no han ocupado todos los hilos de ejecución disponibles o cuando el proceso de ejecución ya ha procesado el bloque. Es importante también notar que las estructuras de datos de tipo \textit{Wall} estarán formadas solo por una transacción de lectura de tamaño máximo.
 
-\begin{algorithm}[!th]
+\begin{algorithm}[tp]
 \caption{\em $schedulerRW::assignQuery(L, Q)$: Planificación de consulta}
 \label{alg:fr}
 \begin{algorithmic}[1]
@@ -68,7 +68,7 @@ Como se puede ver en el Algoritmo \ref{alg:fr}, cuando una nueva transacción de
 
 En la Figura \ref{alg:fr} se presenta un ejemplo de ejecución la estrategia RW. Han llegado al sistema consultas: $q_{0}$ (2 hebras), $q_1$ (16 hebras), $q_2$ (4 hebras), $q_3$ (2 hebras), $q_4$ (2 hebras), $q_5$ (8 hebras) y $q_6$ (16 hebras). Se puede ver cómo se van formando las estructuras de datos llamadas \textit{Rooms} y \textit{Walls}. Suponer que eventualmente arriba al sistema una nueva consulta ($q_7$) que será resuelta con 8 hebras, entonces el algoritmo verifica en primera instancia la $Room_0$, sin embargo, en esta estructura no hay suficientes hilos de ejecución disponibles para procesar la consulta (posee solo 6 disponibles). Finalmente la planifica en la $Room_1$.
 
-\begin{figure}[!th]
+\begin{figure}[tp]
 \centering
 \includegraphics[scale=.75]{images/proceso_FR.eps}
 \caption{Ejemplo de procesamiento de la estrategia RW.}
@@ -83,7 +83,7 @@ Cada consulta $q$ tiene asociado un número de hilos de ejecución $NT_q$ y un t
 
 El Algoritmo \ref{alg:times} muestra el funcionamiento de la estrategia \textit{Times}, esta recibe como entrada la consulta a planificar y la lista de bloques (\textit{SchedulingList}). El algoritmo \textit{Times} trabaja de manera similar a la estrategia RW, la diferencia es que en esta estrategia una consulta puede ser planificada en un bloque siempre y cuando este tenga hebras disponibles suficientes para procesarla y que el tiempo de la consulta no doble al tiempo mínimo dentro del bloque perteneciente a alguna consulta ya planificada; si esta no puede ser planificada, entonces el bloque se desecha y se busca por otro bloque. Existirá un número limitado de bloques que se pueden desechar (\textit{$MAX\_BLOCKS\_CHECKED$}), si eventualmente se llega a este valor, se escoge aquel bloque con la mínima diferencia de tiempo con la consulta. En el peor de los casos, ningún bloque tendrá espacio suficiente para planificar la consulta y se deberá crear uno nuevo. Notar que en esta estrategia ya no se clasifican las consultas de acuerdo al número de hilos de ejecución que utilizan. 
 
-\begin{algorithm}[!th]
+\begin{algorithm}[tp]
 \caption{\em $schedulerTimes::assignQuery(L, Q)$: Planificación de consulta}
 \label{alg:times}
 \begin{algorithmic}[1]
@@ -117,7 +117,7 @@ El Algoritmo \ref{alg:times} muestra el funcionamiento de la estrategia \textit{
 
 En la Figura \ref{fig:proceso_Times} se muestra un ejemplo de la estrategia \textit{Times}, en el que una consulta llega al sistema y debe ser planificada. El estimador utilizado predijo que la transacción de lectura entrante se demorará 135 ms. con 8 hebras; en otras palabras, 8 hilos de ejecución es el número mínimo con el que se cumple que el tiempo de la consulta (135 ms.) es menor que la cota superior de tiempo (140 ms.). El algoritmo intenta planificar la consulta en primera instancia en el bloque $B_0$, sin embargo, el tiempo de la consulta (135 ms.) es el doble del mínimo tiempo en el bloque (55 ms.). Posteriormente, el bloque $B_1$ no posee hebras disponibles. Finalmente la transacción de lectura $q_7$ es planificada en el bloque $B_2$, ya que reúne todas las condiciones necesarias explicadas anteriormente en el algoritmo \ref{alg:times}. 
 
-\begin{figure}[!th]
+\begin{figure}[tp]
 \centering
 \includegraphics[scale=.75]{images/proceso_Times.eps}
 \caption{Ejemplo de procesamiento de la estrategia Times.}
@@ -130,7 +130,7 @@ Esta estrategia también intenta disminuir la posible pérdida de eficiencia de 
 
 El procedimiento de la estrategia \textit{TimesRanges} se puede ver en el algoritmo \ref{alg:timesranges}. Para que una transacción de lectura sea planificada bajo la presente estrategia, lo primero es obtener el rango de tiempo en que se encuentra la consulta entrante; posteriormente, se busca algún bloque que no haya sido procesado y que además posea un número de hebras disponibles suficiente para procesarla, y se planifica la consulta. Si no se encuentra un bloque que satisfaga las condiciones de la consulta entrante, entonces se crea uno nuevo para planificarla. 
 
-\begin{algorithm}[!th]
+\begin{algorithm}[tp]
 \caption{\em $schedulerTimesRanges::assignQuery(L, Q)$: Planificación de consulta}
 \label{alg:timesranges}
 \begin{algorithmic}[1]
@@ -159,7 +159,7 @@ El procedimiento de la estrategia \textit{TimesRanges} se puede ver en el algori
 \label{scheduling:baseline}
 Un simple camino para construir un sistema que responda a múltiples consultas simultáneamente usando múltiples hilos de ejecución, es usando estos hilos de manera independiente. Para hacer esto se debe mantener un conjunto de hilos de ejecución consumidores que trabajarán en paralelo y se encargarán de resolver las transacciones de lectura secuencialmente (una a una) desde una misma cola, esto es lo que en este trabajo se denomina estrategia de un \textit{thread} por \textit{query} (1TQ). En la Figura \ref{fig:1TQ} se puede apreciar el esquema de ejecución en donde cada uno de los procesos genera una petición de alguna consulta en la cola, si quedan consultas por procesar entonces se le asigna al proceso una consulta que tendrá que resolver de manera secuencial. Se debe tener en cuenta que cada vez que un proceso genera una solicitud de consulta, se bloquea la estructura de datos que contiene las consultas a procesar y luego se procesa la solicitud, de esta forma se asegura un acceso seguro por parte de los distintos hilos de ejecución. 
 
-\begin{figure}[H]
+\begin{figure}[tp]
 \centering
 \includegraphics[scale=.75]{images/1TQ.eps}
 \caption{Ejemplo de procesamiento estrategia 1TQ.}
@@ -170,7 +170,7 @@ Este esquema tiene la ventaja que es simple y fácil de implementar y controlar.
 Sin embargo, aunque cada hilo de ejecución está secuencialmente ejecutando una transacción de lectura diferente, algunas de estas operaciones puede tomar un tiempo cosiderable, de esta forma se produce una importante pérdida de eficiencia, aunque la intuición nos dice que esto se puede mitigar con transacciones de lectura que requieran poca cantidad de tiempo para ser procesadas (trabajos pequeños o \textit{small jobs}). 
 En la Figura \ref{fig:small_jobs} queda reflejado lo dicho en el párrafo anterior. Si los trabajos que cada \textit{thread} está ejecutando son pequeños, entonces probablemente la pérdida de trabajo al final de cada \textit{batch} de consultas será menor al trabajo que se pierde cuando los trabajos son grandes (ver Figura \ref{fig:large_jobs}).  
 
-\begin{figure}[H]
+\begin{figure}[tp]
 \centering
 \includegraphics[scale=.75]{images/small_jobs.eps}
 \caption{Ejecución en paralelo de \textit{small jobs}.}
@@ -190,7 +190,7 @@ Con respecto a los esquemas explicados hasta ahora, el esquema 1TQ tiene la vent
 
 En este nuevo esquema de planificación, las consultas pasan a través de una fase en la cual se predicen sus tiempos de ejecución y se les asigna el mínimo número de hebras tal que se cumpla con la cota superior de tiempo establecida. Posteriormente se estima para cada consulta el número de unidades de procesamiento que se utilizará en su resolución, este número será igual al número de hilos de ejecución estimado (Ver Figura \ref{fig:unit_process}). Un conjunto de hilos consumidores extraen las unidades desde la cola y las procesan de forma independiente. Cuando una hebra finalice el procesamiento de la unidad de trabajo actual, automáticamente extraerá la siguiente unidad de trabajo desde la cola. De esta manera se forma una competencia entre los hilos de ejecución por las unidades de trabajo de la cola, por lo que se debe controlar el acceso concurrente de los hilos al nivel compartido de datos entre las unidades de procesamiento, de tal manera que solo una hebra tenga acceso exclusivo a este objeto para poder actualizar los datos a medida que cada una de las unidades de la transacción de lectura es resuelta.
 
-\begin{figure}[!th]
+\begin{figure}[tp]
 \centering
 \includegraphics[scale=.75]{images/unit_process.eps}
 \caption{Procesamiento de consultas utilizando unidades de trabajo.}
@@ -199,7 +199,7 @@ En este nuevo esquema de planificación, las consultas pasan a través de una fa
 
 Se muestra un ejemplo en la Figura \ref{fig:queryunit_execution} en el que se resuelven cuatro consultas. La consulta 0 fue dividida en cuatro unidades de trabajo; la consulta 1 y 2 en dos unidades de trabajo; y finalmente la consulta 3, en ocho unidades de trabajo. Los hilos de ejecución competirán por la extracción de unidades de trabajo desde la lista.
 
-\begin{figure}[!th]
+\begin{figure}[tp]
 \centering
 \includegraphics[scale=.75]{images/QueryUnitExecution.eps}
 \caption{Esquema de ejecución estrategia unidades de procesamiento.}
@@ -224,7 +224,7 @@ En la Figura \ref{fig:queryunit_scheduler} se presenta el diagrama de clases del
 	\item \textbf{QueryUnitScheduler}. Clase principal del planificador, esta se encarga de tomar las transacciones de lectura y asignarle a cada una de ellas el número de unidades de procesamiento adecuado. Finalmente, las unidades de trabajo de planifican en una lista.
 \end{list}
 
-\begin{figure}[!th]
+\begin{figure}[tp]
 \centering
 \includegraphics[scale=.75]{images/QueryUnitScheduler.eps}
 \caption{Diagrama de clases del planificador de unidades de procesamiento.}
@@ -234,7 +234,7 @@ En la Figura \ref{fig:queryunit_scheduler} se presenta el diagrama de clases del
 
 Finalmente se diseña un diagrama de clases para el ejecutador de unidades de procesamiento (Ver Figura \ref{fig:queryunit_executer}). Aquí se pueden observar los objetos involucrados en la resolución de cada consulta; cada objeto QueryProcessingOperator es el encargado de procesar una unidad, y habrán tantos objetos de este tipo como hilos de ejecución disponibles en el sistema. Cada vez que una unidad es procesada, si es que restan unidades por resolver, el hilo de ejecución toma inmediatamente la siguiente unidad de trabajo, de lo contrario debe retornar el conjunto final de documentos que se encuentra en el \textit{heap} compartido. 
 
-\begin{figure}[!th]
+\begin{figure}[tp]
 \centering
 \includegraphics[scale=.75]{images/QueryUnitExecuter.eps}
 \caption{Diagrama de clases del ejecutador de unidades de procesamiento.}

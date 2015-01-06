@@ -47,7 +47,7 @@ Si bien es cierto que la regresión lineal posee 42 variables independientes, de
 Los 14 estadísticos descritos anteriormente son la base para la implementación del predictor y estos son calculados por cada término del índice invertido. Adicionalmente se definen tres funciones de agregación que se usarán por cada consulta: máximo, varianza y suma. El proceso es el siguiente, para cada consulta que llega al sistema, se toman los 14 estadísticos de cada uno de los términos que la conforman, luego se aplican las funciones de agregación a los estadísticos de los términos. Por ejemplo, suponga que llegan dos consultas al sistema $q_1$ y $q_2$, ambas tendrán asociadas un vector de 14 estadísticos $E_{q_1}$ y $E_{q_2}$ respectivamente, las funciones de agregación para el estadístico de la media aritmética será calculado como sigue: $e_1 = max\{E_{q_1}(0), E_{q_2}(0)\}$, $e_2 = var\{E_{q_1}(0), E_{q_2}(0)\}$, $e_3 = sum\{E_{q_1}(0), E_{q_2}(0)\}$. De esta forma, con solo el primer estadístico (la media aritmética) se obtienen tres variables independientes ($e_1$, $e_2$, $e_3$). Si esto se extrapola a cada estadístico, se obtienen los 42 requeridos por el método. 
 La Tabla \ref{tabla:estadisticosGlasgow} muestra un resumen de lo escrito anteriormente en donde se muestra cada uno de los estadísticos y los agregadores a utilizar. 
 
-\begin{table}[!ht]
+\begin{table}[tp]
 \centering
 \caption{Resumen de los estadísticos para la predicción multilineal}
 \begin{tabular}{|l|}

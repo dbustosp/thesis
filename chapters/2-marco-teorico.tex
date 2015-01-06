@@ -6,7 +6,7 @@ En este capítulo se exponen los conceptos teóricos del presente trabajo de tes
 \label{marco:mbv}
 Un motor de búsqueda está construído por diversos componentes, su arquitectura típica se puede ver en la Figura \ref{fig:searchenginearchitecture}. Existe un proceso denominado \textit{crawling}, éste posee una tabla con los documentos iniciales en los que se extrae el contenido de cada uno de ellos. A medida que el \textit{crawler} comienza a encontrar enlaces a otros documentos, la tabla de documentos a visitar crece. El contenido que se extrae en el procedimiento de \textit{crawling} es enviado al proceso de indexamiento, este se encarga de crear un índice de los documentos ya visitados por el \textit{crawler} \citep{Croft:2009}.
 
-\begin{figure}[!th]
+\begin{figure}[tp]
 \centering
 \includegraphics[scale=.75]{images/searchenginearchitecture.eps}
 \caption{Arquitectura típica de un motor de búsqueda.}
@@ -27,7 +27,7 @@ Es una estructura de datos que contiene todos los términos (palabras) encontrad
 
 Para construir un índice invertido \citep{Baeza-Yates:2011, Salton:2003} se debe procesar cada palabra que existe en un documento, registrando su posición y la cantidad de veces que éste se repite. Cuando se procesa el término con la información asociada correspondiente, se almacena en el índice invertido (ver Figura \ref{fig:invertedindex}).
 
-\begin{figure}[!th]
+\begin{figure}[tp]
 \centering
 \includegraphics[scale=.75]{images/invertedindex.eps}
 \caption{\'Indice invertido.}
@@ -54,7 +54,7 @@ Los sistemas de recuperación de información como los motores de búsqueda debe
 
 Un motor de búsqueda guarda billones de documentos que están formados por términos o palabras, dentro de estos términos no todos poseen la misma utilidad para describir el contenido del documento. Determinar la importancia de una palabra en un documento no es tarea sencilla, para ello se asocia un peso positivo $w_{i,j}$ a cada término $t_{i}$ del documento $d_{j}$. De esta forma, para un término $t_{i}$ que no aparezca en el documento $d_{j}$ se tendrá $w_{i,j} = 0$. La asignación de pesos a los términos permite generar un \textit{ranking} numérico para cada documento en la colección.
 
-\begin{figure}[!th]
+\begin{figure}[tp]
 \centering
 \includegraphics[scale=.75]{images/ranking_process.eps}
 \caption{Proceso de \textit{scoring} de documento.}
@@ -109,7 +109,7 @@ Cuando una consulta llega al motor de búsqueda, cada término tiene asociado un
 \label{marco:or}
 Este operador toma las listas invertidas de cada uno de los términos de la transacción de lectura y ejecuta la disyunción entre ellas. El resultado de este operador es una lista invertida con todos los documentos que contengan al menos un término de la consulta. Finalmente, esta lista invertida se ocupará para obtener los mejores K documentos. Un simple ejemplo se muestra en la Figura \ref{fig:ORoperation}.
 
-\begin{figure}[!th]
+\begin{figure}[tp]
 \centering
 \includegraphics[scale=.75]{images/ORoperation.eps}
 \caption{Operaci\'on OR.}
@@ -120,7 +120,7 @@ Este operador toma las listas invertidas de cada uno de los términos de la tran
 \label{marco:and}
 Este operador ejecuta la conjunción entre las listas invertidas de los términos de una transacción de lectura. Se obtiene una lista invertida con los documentos que contengan todos los términos de la consulta. Se debe notar que aquí se obtiene una lista resultante de menor tamaño que la obtenida en el operador OR (Ver Figura \ref{fig:ANDoperation}).
 
-\begin{figure}[!th]
+\begin{figure}[tp]
 \centering
 \includegraphics[scale=.75]{images/ANDoperation.eps}
 \caption{Operaci\'on AND.}
@@ -138,7 +138,7 @@ WAND usa un índice invertido ordenado por los identificadores de documentos. En
 En la Figura \ref{fig:proceso_wand} se puede ver un ejemplo sencillo de cómo el algoritmo Wand trabaja en la resolución de una transacción de lectura de tres términos: 'casa', 'perro' y 'gato'. Como la consulta está compuesta por tres términos, existen tres punteros que recorren cada una de las listas invertidas (notar que cada puntero recorre una lista invertida diferente). Lo primero que se hace es ordenar las listas invertidas de acuerdo a los identificadores de documentos que se están apuntando, razón por la cual en la Figura \ref{fig:proceso_wand} la lista invertida de 'casa' (puntero referenciando al documento con identificador 125), aparece primero que la lista invertida de 'perro' (puntero haciendo referencia al documento con identificador 503). Luego se suma los \textit{uppers bounds} de los términos en orden hasta que se obtiene un valor mayor o igual al \textit{threshold}. De esta manera el término 'perro' es escogido como término pivote ($2.0 + 4.4 \geq 5.7$) y el actual documento al cual se está apuntando es escogido como documento pivote (documento con identificador 503). Si las dos primeras listas invertidas no contienen el documento 503 entonces se procede a seleccionar el siguiente pivote, en otro caso se calcula el puntaje completo del documento. Finalmente, si el puntaje es mayor o igual al \textit{threshold}, se actualiza el \textit{heap} eliminando el elemento superior y se añade el nuevo documento. 
 Este algoritmo es repetido hasta que no hayan más documentos a procesar o hasta que no exista un documento que supere el actual \textit{threshold}. De esta manera se evita procesar las listas completas \citep{Blanco:2010}.
 
-\begin{figure}[!th]
+\begin{figure}[tp]
 \centering
 \includegraphics[scale=.75]{images/proceso_wand.eps}
 \caption{Ejemplo de ejecución de algoritmo Wand.}
@@ -152,7 +152,7 @@ Bajo la premisa que Wand tradicional es limitado por el hecho que usa los máxim
 
 Este método utiliza una variación del algoritmo Wand tradicional para que trabaje correctamente con la nueva estructura \textit{Block-Max-Wand}. Remplazar el uso de los \textit{upper bounds} de cada bloque por el \textit{upper bound} global no garantiza la correctitud del algoritmo. En la Figura \ref{fig:bmw} se muestra un ejemplo de por qué mirar solo los \textit{upper bounds} locales no garantiza obtener los resultados correctos, aquí no se puede concluir que el documento 4868 es el documento más pequeño que puede estar dentro del conjunto \textit{top-K}, ya que $2.5 + 2.0 + 3.5 \geq 7.0$ (conclusión que sí es válida utilizando Wand tradicional y \textit{upper bounds} globales), porque es posible que el bloque siguiente al bloque del docID 275 (en la primera lista), tenga un \textit{upper bound} local mayor. Por lo tanto, aplicar solo las máximas contribuciones por bloque no permite al algoritmo omitir documentos de forma segura.  
 
-\begin{figure}[!th]
+\begin{figure}[tp]
 \centering
 \includegraphics[scale=.75]{images/block-max-wand.eps}
 \caption{Ejemplo del proceso \textit{Block-Max-Wand}.}

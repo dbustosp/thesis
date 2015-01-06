@@ -7,7 +7,7 @@ Existe una variación al método Wand tradicional que intenta hacer una poda má
 Wand y Block Max Wand son métodos lógicamente parecidos en el sentido que trabajan con \textit{upper bounds} para poder descartar documentos, es por esto que el diseño de la implementación es como lo muestra la Figura \ref{fig:diagramawand}; aquí se puede apreciar dos tipos de Wand: WandScorer y WandMaxBlock. WandScorer implementa el método tradicional utilizando el método \textit{next}, que retornará algún documento que merezca estar en el conjunto \textit{top-K} en ese momento. Por su parte, WandMaxBlock además de utilizar la función \textit{$next()$}, usa la función \textit{$nextShallow()$}, que moverá el puntero del documento actual de la lista a la posición inicial del bloque en donde debería encontrarse el documento que se le entrega como parámetro. 
 La ventaja de este diseño es que ambas opciones son flexibles a utilizar cualquier función de \textit{ranking} que se desee, en el diagrama se observa que se utilizará BM25.
 
-\begin{figure}[!th]
+\begin{figure}[tp]
 \centering
 \includegraphics[scale=.75]{images/WAND.eps}
 \caption{Diseño de clases para Wand y Block Max Wand.}
@@ -22,7 +22,7 @@ A continuación se muestra las dos formas en que se implementó Wand y también 
 \label{scheduling:wlh}
 En el esquema LH, cada hebra procesa una parte del índice invertido mientras mantiene un \textit{heap} local con los mejores $K$ documentos. Al finalizar este proceso, los resultados se unen en un solo conjunto final global. Los resultados en \citep{Rojas:2013} muestran que el esquema LH es más eficiente para aquellas transacciones que toman poco tiempo en ser resueltas. En la Figura \ref{fig:wand-heap-local} se muestra el esquema de ejecución para \textit{heaps} locales explicado anteriormente. 
 
-\begin{figure}[!ht]
+\begin{figure}[tp]
 \centering
 \includegraphics[scale=.75]{images/wand_heaps_locales.eps}
 \caption{Esquema de ejecución de algoritmo WAND con \textit{heaps} locales.}
@@ -31,7 +31,7 @@ En el esquema LH, cada hebra procesa una parte del índice invertido mientras ma
 
 El diseño aplicado para implementar el esquema LH se puede ver en la Figura \ref{fig:TopKMultiThreadWandOperatorLocal}. La clase principal es la TopKMultiThreadWandOperatorLocal, que es la encargada de controlar el paralelismo en la resolución de las transacciones. Para explicar de mejor manera cada una de las clases involucradas en la implementación, se presenta el siguiente diccionario de datos.
 
-\begin{figure}[!ht]
+\begin{figure}[tp]
 \centering
 \includegraphics[scale=.75]{images/TopKMultiThreadWandOperatorLocal.eps}
 \caption{Diagrama de clases para el esquema LH.}
@@ -60,7 +60,7 @@ En el esquema SH cada hebra procesa una parte del índice. Sin embargo, ahora un
 
 El diseño implementado para este esquema posee como clase principal a TopKMultiThreadWandOperatorLocks y difiere del modelo implementado para el esquema LH en el sentido que ahora se debe controlar el acceso concurrente a los datos compartidos como el \textit{heap} y el \textit{threshold}. A continuación se presenta el diccionario de datos del esquema SH mostrado en la Figura \ref{fig:TopKMultiThreadWandOperatorLocks}.
 
-\begin{figure}[!ht]
+\begin{figure}[tp]
 \centering
 \includegraphics[scale=.75]{images/wand_heaps_compartido.eps}
 \caption{Esquema de ejecución de algoritmo WAND con \textit{heap} compartido.}
@@ -78,7 +78,7 @@ El diseño implementado para este esquema posee como clase principal a TopKMulti
 
 \end{list}
 
-\begin{figure}[!ht]
+\begin{figure}[tp]
 \centering
 \includegraphics[scale=.75]{images/TopKMultiThreadWandOperatorLocks.eps}
 \caption{Diagrama de clases para el esquema SH.}
@@ -96,14 +96,14 @@ En el Algoritmo \ref{alg:bmw} se puede apreciar cómo el método \textit{Block-M
 
 Cuando el método se da cuenta que $p$ no es un pivote real, lo que se hace es buscar un nuevo candidato a través de la función \textit{getNewCandidate()}, la cual hace avanzar los punteros de las listas invertidas hasta el bloque siguiente que contenga el mínimo $docID$. Para explicar de mejor manera esta idea se presenta la Figura \ref{fig:getNewCandidate}, aquí se puede ver que el documento $4868$ es el pivote, cuando este documento no es un pivote real (la función \textit{isRealPivote} retorna falso), lo que se hará es escoger un documento $d'$ tal que $d = min(d1,d2,d3,d4)$ en donde $d1,d2,d3$ son la frontera del bloque actual más uno (inicio del bloque siguiente) y $d4$ es el \textit{currentDoc} de la cuarta lista. Notar que para hacer un descarte seguro de documentos, siempre se debe incluir a la elección del nuevo candidato el \textit{currentDoc} de la lista inmediatamente siguiente a la lista pivote (en este caso 9009).  
 
-\begin{figure}[!th]
+\begin{figure}[tp]
 \centering
 \includegraphics[scale=.75]{images/get_new_candidate.eps}
 \caption{Ejemplo de cómo opera la functión getNewCandidate().}
 \label{fig:getNewCandidate}
 \end{figure}
 
-\begin{algorithm}[!th]
+\begin{algorithm}[tp]
 \caption{\em $BMW(\theta, L, docID): Block Max Wand$}
 \label{alg:bmw}
 \begin{algorithmic}[1]

@@ -81,7 +81,7 @@ A pesar de que son 42 variables independientes, en forma general se pueden obser
 \begin{tabular}{|c|c|c|c|c|c|}
 \hline
 \multicolumn{ 6}{|c|}{Estimador ML – GOV2 – WAND} \\ \hline
- & 1t & 2t & 4t & 8t & 16t \\ \hline
+ & 1 hebra & 2 hebras & 4 hebras & 8 hebras & 16 hebras \\ \hline
 r & 0,8395167242 & 0,8487027167 & 0,8363882022 & 0,8220135644 & 0,8189326373 \\ \hline
 RMSE & 89,8191624638 & 49,0317178648 & 22,0735989696 & 12,5486639038 & 9,1536416766 \\ \hline
 \end{tabular}
@@ -95,7 +95,7 @@ RMSE & 89,8191624638 & 49,0317178648 & 22,0735989696 & 12,5486639038 & 9,1536416
 \begin{tabular}{|c|c|c|c|c|c|}
 \hline
 \multicolumn{ 6}{|c|}{Estimador RN – GOV2 – WAND} \\ \hline
- & 1t & 2t & 4t & 8t & 16t \\ \hline
+ & 1 hebra & 2 hebras & 4 hebras & 8 hebras & 16 hebras \\ \hline
 r & 0,9090139343 & 0,9081674727 & 0,8937170981 & 0,8920354081 & 0,8945066549 \\ \hline
 RMSE & 67,7757284521 & 90,4311959153 & 66,5232866794 & 23,6964743214 & 7,6274795547 \\ \hline
 \end{tabular}
@@ -133,7 +133,7 @@ Finalmente con el objetivo de entender el por qué del valor de los errores obte
 		\begin{tabular}{|r|r|r|}
 		\hline
 		\multicolumn{ 3}{|c|}{Clueweb} \\ \hline
-		\multicolumn{1}{|l|}{\# neuromas} & \multicolumn{1}{l|}{r entrenamiento} & \multicolumn{1}{l|}{r evaluación} \\ \hline
+		\multicolumn{1}{|l|}{\ Nro. neuronas} & \multicolumn{1}{l|}{r entrenamiento} & \multicolumn{1}{l|}{r evaluación} \\ \hline
 		2 & 0,9413 & 0,8589 \\ \hline
 		10 & 0,9669 & 0,9052 \\ \hline
 		20 & 0,9738 & 0,9004 \\ \hline
@@ -151,7 +151,7 @@ Finalmente con el objetivo de entender el por qué del valor de los errores obte
 \begin{tabular}{|r|r|r|}
 \hline
 \multicolumn{ 3}{|c|}{Gov2} \\ \hline
-\multicolumn{1}{|l|}{\# neuronas} & \multicolumn{1}{l|}{r training} & \multicolumn{1}{l|}{r evaluation} \\ \hline
+\multicolumn{1}{|l|}{\ Nro. neuronas} & \multicolumn{1}{l|}{r entrenamiento} & \multicolumn{1}{l|}{r evaluación} \\ \hline
 2 & 0,8995 & 0,6803 \\ \hline
 10 & 0,9563 & 0,6502 \\ \hline
 20 & 0,9623 & 0,6080 \\ \hline
