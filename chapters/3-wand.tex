@@ -43,7 +43,7 @@ El diseño aplicado para implementar el esquema LH se puede ver en la Figura \re
 	
 	\item \textbf{PartitionedInvertedIndex}. Clase que tiene la tarea de almacenar el índice invertido y extraer desde aquí las listas invertidas de documentos para cada uno de los términos de las transacciones de lectura. El almacenamiento del índice se lleva a cabo mediante un mapa, en donde cada término tiene asociado su lista invertida correspondiente y para la extracción de estas listas se usa el método getList.
 	
-	\item \textbf{TopKWandOperator}.  Cada hilo tendrá su propio objeto TopKWandOperator encargado de obtener los mejores $K$ documentos. El cálculo de este conjunto se realiza en el método \textit{execute} con la ayuda de un objeto de tipo Wand asociado.
+	\item \textbf{TopKWandOperator}. Cada hilo tendrá su propio objeto TopKWandOperator encargado de obtener los mejores $K$ documentos. El cálculo de este conjunto se realiza en el método \textit{execute} con la ayuda de un objeto de tipo Wand asociado.
 	
 	\item \textbf{Wand}. Clase que controla la lógica del algoritmo wand. Lleva a cabo el proceso de inserción de documentos en el \textit{heap} y todo lo que esto conlleva. Existen diferentes tipos de objetos Wand que se pueden utilizar, entre ellos están WandBM25, WandFrec y WandTFIDF, donde la única diferencia entre ellos es el método con que se calcula el puntaje de cada documento. Por ejemplo, WandBM25 utiliza BM25 y WandTFIDF utiliza tf-idf. 
 	

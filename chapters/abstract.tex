@@ -1,10 +1,10 @@
 \resumenCastellano{
-% Introducción
-El procesamiento de transacciones de lecturas en motores de búsqueda demanda el uso eficiente de recursos de hardware para hacer frente a altas y dinámicas cargas de trabajo por parte de los usuarios. Estos sistemas son generalmente desplegados en grupos de procesadores. A medida que la Web crece, los motores de búsqueda toman mayor importancia en la búsqueda de información dentro de grandes cantidades de datos.
+El procesamiento de transacciones de lecturas en motores de búsqueda demanda el uso eficiente de recursos de \textit{hardware} para hacer frente a altas y dinámicas cargas de trabajo por parte de los usuarios. Estos sistemas son generalmente desplegados en grupos de máquinas con múltiples procesadores cada una, de modo que puedan responder múltiples consultas simultáneamente. A medida que la Web crece, los motores de búsqueda toman mayor importancia en la búsqueda de información dentro de grandes cantidades de datos.
 
-En el presente trabajo se abordan diferentes estrategias de procesamiento y de planificación de transacciones de lectura enfocados principalmente en (1) el acceso a grandes índices invertidos para obtener el conjunto de los mejores $K$ documentos para una consulta utilizando el algoritmo Wand, y (2) el uso de predictores de eficiencia para transacciones de lectura con el objetivo de reducir el tiempo de procesar lotes de consultas.  
+En el presente trabajo se abordan diferentes estrategias de procesamiento y planificación de transacciones de lectura, así como también técnicas de asignación de recursos para resolverlas, enfocadas principalmente en (1) el acceso a grandes índices invertidos para obtener el conjunto de los mejores $K$ documentos para una consulta utilizando el algoritmo Wand, y (2) el uso de predictores de eficiencia para transacciones de lectura con el objetivo de reducir el tiempo de procesar lotes de consultas.
 
-Los resultados obtenidos muestran...
+Los resultados obtenidos muestran que se puede reducir el tiempo de procesamiento de grandes conjuntos de consultas utilizando métodos que predigan el costo en tiempo de estas y que algunos métodos de aprendizaje pueden llegar a ser dependiente de los datos. Además se obtiene que en el contexto de un motor de búsqueda, las técnicas de planificación disponibles en el estado del arte son muy dependientes de la precisión del predictor, por lo cual se propone un enfoque de procesamiento de consultas basado en unidades de trabajo con el que se obtienen mejoras significativas en los tiempos totales de procesamiento. 
+
 
 \vspace*{0.5cm}
 \KeywordsES{recuperación de información, motores de búsqueda, Wand}.
@@ -13,12 +13,11 @@ Los resultados obtenidos muestran...
 \newpage
 
 \resumenIngles{
-Abstract—Processing queries in Web search engines demands the efficient use of hardware resources to cope with the scale and dynamics of user traffic. These systems are usually deployed on dedicated clusters of processors. As the Web becomes bigger, search engines are becoming increasingly important  to find information in large amounts of data. 
+Processing queries in Web search engines demands the efficient use of hardware resources to cope with high and dynamics workload of the users traffic. These systems are usually deployed on dedicated clusters of servers with multiprocessors each one, so that they can respond multi-queries simultaneously. As the Web becomes bigger, search engines are becoming increasingly important to find information in large amounts of data. 
 
-This work discusses different query processing and scheduling strategies, focused mainly on (1) access to large inverted index data structure to obtain the top $K$ most pertinent results for any query, using Wand algorithm, and (2) the use of different efficiency predictors for queries in order to process batches of queries.
+This work discusses different query processing and scheduling strategies, also it studies resources allocation techniques to resolve them, focused mainly on (1) access to large inverted index data structure to obtain the top-K most pertinent results for any query using Wand algorithm, and (2) the use of different query efficiency predictors in order to process batches of queries.
  
-The results show...
-
+The results show that query efficiency predictors can lead to reduce the processing time of large query batches and them also show that some query predictors may become data dependents. This work also shows that, in the context of search engine, state of the art algorithms for query scheduling are very dependents of the predictor accuracy, whereby this work presents a query processing technique based on work units which obtains significant improvements in total processing times.
 
 
 \vspace*{0.5cm}

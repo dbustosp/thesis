@@ -63,7 +63,7 @@ Un motor de búsqueda guarda billones de documentos que están formados por tér
 
 \subsection{TF-IDF}
 \label{marco:tfi-df}
-$Tf-idf$ (\textit{term frequency - inverse document frequency}) es un estadístico que tiene por objetivo reflejar cuán importante es una palabra para un documento en una colección o corpus. Este estadístico se divide en dos partes, el primero corresponde a la frecuencia del término en un documento ($tf$) y que en su versión más sencilla se utiliza la frecuencia bruta del término $t$ en el documento $d$ ($f(t,d)$) dividido por la frecuencia de la palabra que más se repite en el documento $d$.  
+$Tf-idf$ (\textit{term frequency - inverse document frequency}) es un estadístico que tiene por objetivo reflejar cuán importante es una palabra para un documento en una colección o corpus. Este estadístico se divide en dos partes, el primero corresponde a la frecuencia del término en un documento ($tf$) y que en su versión más sencilla se utiliza la frecuencia bruta del término $t$ en el documento $d$ ($f(t,d)$) dividido por la frecuencia de la palabra que más se repite en el documento $d$.
 
 \begin{equation}
 \label{formula:tf}
@@ -159,7 +159,7 @@ Este método utiliza una variación del algoritmo Wand tradicional para que trab
 \label{fig:bmw}
 \end{figure}
 
-\section{Predicción de tiempo de respuestas de transacciones de lecturas}
+\section{Predicción de tiempo de respuestas de transacciones de lectura}
 \label{marco:prediccion}
 El rendimiento (\textit{performance}) de una consulta puede medirse de dos formas: Efectividad y eficiencia. La efectividad tiene relación con la calidad de los documentos extraídos para una cierta consulta y la eficiencia corresponde al tiempo que conlleva procesarla. El tiempo que le toma al sistema en resolver una consulta puede variar considerablemente. Con el objetivo de retornar los resultados al usuario dentro de una cota superior de tiempo, en aquellas consultas que toman una mayor cantidad de tiempo en ser procesadas se requiere una mayor cantidad de procesadores para resolverla, de esta forma podemos asegurar esta cota de tiempo. El tener un buen predictor de la eficiencia de una transacción de lectura es muy útil, por ejemplo, si pensamos en un sistema con réplicas, podemos planificar la consulta en el servidor que se desocupará más pronto. 
 
