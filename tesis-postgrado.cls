@@ -387,15 +387,15 @@
         \hspace{7.4cm} Profesor Gu\'ia: {\capitalize{\@profesorguia}}\\
         \hspace{7.4cm} Profesor Co-gu\'ia: {\capitalize{\@profesorcoguia}}\\
         
-%        \vspace{1cm}
-%        \hspace{7.4cm} Tesis de Grado presentado en conformidad\\
-%        \hspace{7.4cm} a los requisitos para obtener el Grado de\\
-%        \hspace{7.4cm} Mag\'ister en Ingenier\'ia Inform\'atica\\
-        
         \vspace{1cm}
-        \hspace{7.4cm} Trabajo de Titulac\'ion presentado en conformidad\\
-        \hspace{7.4cm} a \space los \space requisitos \space para obtener \space el \space T\'itulo \space de\\
-        \hspace{7.4cm} Ingeniero Civil Inform\'atico\\
+        \hspace{7.4cm} Tesis de Grado presentado en conformidad\\
+        \hspace{7.4cm} a los requisitos para obtener el Grado de\\
+        \hspace{7.4cm} Mag\'ister en Ingenier\'ia Inform\'atica\\
+        
+%        \vspace{1cm}
+%        \hspace{7.4cm} Trabajo de Titulac\'ion presentado en conformidad\\
+%        \hspace{7.4cm} a \space los \space requisitos \space para obtener \space el \space T\'itulo \space de\\
+%        \hspace{7.4cm} Ingeniero Civil Inform\'atico\\
         
 
         \end{flushleft}
