@@ -4,7 +4,7 @@ En este capítulo se exponen los conceptos teóricos del presente trabajo de tes
 
 \section{Motores de búsqueda verticales}
 \label{marco:mbv}
-Un motor de búsqueda está construído por diversos componentes, su arquitectura típica se puede ver en la Figura \ref{fig:searchenginearchitecture}. Existe un proceso denominado \textit{crawling}, éste posee una tabla con los documentos iniciales en los que se extrae el contenido de cada uno de ellos. A medida que el \textit{crawler} comienza a encontrar enlaces a otros documentos, la tabla de documentos a visitar crece. El contenido que se extrae en el procedimiento de \textit{crawling} es enviado al proceso de indexamiento, este se encarga de crear un índice de los documentos ya visitados por el \textit{crawler} \citep{Croft:2009}.
+Un motor de búsqueda está construído por diversos componentes, su arquitectura típica se puede ver en la Figura \ref{fig:searchenginearchitecture}. Existe un proceso denominado \textit{crawling}, este posee una tabla con los documentos iniciales en los que se extrae el contenido de cada uno de ellos. A medida que el \textit{crawler} comienza a encontrar enlaces a otros documentos, la tabla de documentos a visitar crece. El contenido que se extrae en el procedimiento de \textit{crawling} es enviado al proceso de indexamiento, este se encarga de crear un índice de los documentos ya visitados por el \textit{crawler} \citep{Croft:2009}.
 
 \begin{figure}[tp]
 \centering
@@ -17,15 +17,15 @@ Dado el volúmen de datos involucrado en el procesamiento, se debe tener una est
 
 En un motor de búsqueda se pueden encontrar diversos servicios tales como (a) cálculo de los mejores documentos para una cierta consulta; (b) construcción de la página Web en la que se mostrará al usuario los resultados; (c) publicidad relacionada con las transacciones de lectura; (d) sugerencias en el momento que el usuario está escribiendo la consulta en el sistema; entre muchos otros servicios.
 
-En los sistemas de recuperación de información como los motores de búsqueda, lo que se hace hoy en día es agrupar computadores para procesar una transacción y obtener la respuesta para ésta. Este conjunto de computadores recibe el nombre de \textit{cluster} \citep{Dean:2009}.
+En los sistemas de recuperación de información como los motores de búsqueda, lo que se hace hoy en día es agrupar computadores para procesar una transacción y obtener la respuesta para esta. Este conjunto de computadores recibe el nombre de \textit{cluster} \citep{Dean:2009}.
 
 La diferencia entre un motor de búsqueda vertical y uno general, es que el primero se centra solo en un contenido específico de la Web \citep{Gil-Costa:2013}. El \textit{crawler} debe extraer contenido solo de aquellas páginas Web que están dentro del dominio permitido. Al ser un dominio acotado, los documentos a procesar serán menos y por lo tanto, la lista de los términos del índice invertido serán eventualmente de menor tamaño. Sin embargo, en un motor de búsqueda vertical las actualizaciones al índice invertido ocurren con mayor frecuencia.
 
 \section{\'Indice invertido}
 \label{marco:ii}
-Es una estructura de datos que contiene todos los términos (palabras) encontrados por el \textit{crawler}. A cada uno de los términos está asociado una lista invertida de documentos (páginas Web) que contienen dicho término. Adicionalmente, se almacena información que permita realizar el \textit{ranking} de documentos para generar la respuesta a las consultas que llegan al sistema, por ejemplo, el número de veces que aparece el término en el documento.
+Es una estructura de datos que contiene todos los términos (palabras) encontrados por el \textit{crawler}. A cada uno de los términos está asociado una lista invertida de documentos (páginas Web) que contienen dicho término. Adicionalmente, se almacena información que permita realizar el \textit{ranking} de documentos para generar la respuesta a las consultas que llegan al sistema, como por ejemplo, el número de veces que aparece el término en el documento.
 
-Para construir un índice invertido \citep{Baeza-Yates:2011, Salton:2003} se debe procesar cada palabra que existe en un documento, registrando su posición y la cantidad de veces que éste se repite. Cuando se procesa el término con la información asociada correspondiente, se almacena en el índice invertido (ver Figura \ref{fig:invertedindex}).
+Para construir un índice invertido \citep{Baeza-Yates:2011, Salton:2003} se debe procesar cada palabra que existe en un documento, registrando su posición y la cantidad de veces que este se repite. Cuando se procesa el término con la información asociada correspondiente, se almacena en el índice invertido (ver Figura \ref{fig:invertedindex}).
 
 \begin{figure}[tp]
 \centering
@@ -42,11 +42,11 @@ Una de las tareas que un motor de búsqueda debe hacer para resolver una consult
 
 \subsection{\textit{Term at a time}}
 \label{marco:TAAT}
-Abreviada TAAT, este tipo de estrategia procesa los términos de las consultas una a una y acumula el puntaje parcial de los documentos. Las listas invertidas asociadas a un término son procesadas secuencialmente, esto significa que todos los documentos presentes en la lista invertida del término $t_{i}$ obtienen un puntaje parcial antes de comenzar el procesamiento del término $t_{i+1}$. La secuencialidad en este caso es con respecto a los términos contenidos en la transacción de lectura.
+Abreviada TAAT, este tipo de estrategia procesa los términos de las consultas uno a uno y acumula el puntaje parcial de los documentos. Las listas invertidas asociadas a un término son procesadas secuencialmente, esto significa que todos los documentos presentes en la lista invertida del término $t_{i}$ obtienen un puntaje parcial antes de comenzar el procesamiento del término $t_{i+1}$. La secuencialidad en este caso es con respecto a los términos contenidos en la transacción de lectura.
 
 \subsection{\textit{Document at a time}}
 \label{marco:DAAT}
-Abreviada DAAT, en este tipo de estrategias se evalúa la contribución de todos los términos de la transacción de lectura con respecto a un documento antes de evaluar el siguiente. Las listas invertidas de cada término de la consulta son procesadas en paralelo, de modo que el puntaje del documento $d_{j}$ se calcula considerando todos los términos de la transacción de lectura al mismo tiempo. Una vez que se obtiene el puntaje del documento $d_{j}$ para la consulta completa, se procede al procesamiento del documento $d_{j+1}$. Este tipo de estrategia posee dos grandes ventajas: (a) Requieren menor cantidad de memoria para su ejecución, ya que el puntaje parcial por documento no necesita ser guardado y (b) Explotan el paralismo de entrada y salida (I/O) más eficientemente procesando las listas invertidas en diferentes discos simultáneamente.
+Abreviada DAAT, en este tipo de estrategias se evalúa la contribución de todos los términos de la transacción de lectura con respecto a un documento antes de evaluar el siguiente. Las listas invertidas de cada término de la consulta son procesadas en paralelo, de modo que el puntaje del documento $d_{j}$ se calcula considerando todos los términos de la transacción de lectura al mismo tiempo. Una vez que se obtiene el puntaje del documento $d_{j}$ para la consulta completa, se procede al procesamiento del documento $d_{j+1}$. Este tipo de estrategia posee dos grandes ventajas: (a) Requieren menor cantidad de memoria para su ejecución, ya que el puntaje parcial por documento no necesita ser guardado y (b) Explotan el paralelismo de entrada y salida (I/O) más eficientemente procesando las listas invertidas en diferentes discos simultáneamente.
 
 \section{Funciones de \textit{Ranking}}
 \label{marco:ranking}
