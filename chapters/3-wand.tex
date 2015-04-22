@@ -14,7 +14,7 @@ La ventaja de este diseño es que ambas opciones son flexibles a utilizar cualqu
 \label{fig:diagramawand}
 \end{figure}
 
-Existen dos formas de implementar Wand. Una de ellas es usando \textit{heaps} locales (LH), es decir, un \textit{heap} por hilo de ejecución y el otro es usando \textit{heaps} compartidos (SH). En el estudio \citep{Rojas:2013} se muestran indicios que el esquema SH es generalmente más eficiente, logrando rápidamente un óptimo valor para el \textit{threshold}. El esquema SH posee las siguientes ventajas: (1) Se puede reducir el número de cálculos de puntajes completos y (2) se ejecutan pocas operaciones de actualización del \textit{heap} (reduciendo el número de \textit{locks} que se hace a la estructura de dato). 
+Existen dos formas de implementar Wand. Una de ellas es usando \textit{heaps} locales (LH), es decir, un \textit{heap} por hilo de ejecución y el otro es usando \textit{heaps} compartidos (SH). En el estudio \citep{Rojas:2013} se muestran indicios que el esquema SH es generalmente más eficiente, logrando rápidamente un óptimo valor para el \textit{threshold}. El esquema SH posee las siguientes ventajas: (1) Se puede reducir el número de cálculos de puntajes completos y (2) se ejecutan pocas operaciones de actualización del \textit{heap} (reduciendo el número de \textit{locks} que se hace a la estructura de datos). 
 A continuación se muestra las dos formas en que se implementó Wand y también la implementación de Block Max Wand.
 
 
@@ -45,7 +45,7 @@ El diseño aplicado para implementar el esquema LH se puede ver en la Figura \re
 	
 	\item \textbf{TopKWandOperator}. Cada hilo tendrá su propio objeto TopKWandOperator encargado de obtener los mejores $K$ documentos. El cálculo de este conjunto se realiza en el método \textit{execute} con la ayuda de un objeto de tipo Wand asociado.
 	
-	\item \textbf{Wand}. Clase que controla la lógica del algoritmo wand. Lleva a cabo el proceso de inserción de documentos en el \textit{heap} y todo lo que esto conlleva. Existen diferentes tipos de objetos Wand que se pueden utilizar, entre ellos están WandBM25, WandFrec y WandTFIDF, donde la única diferencia entre ellos es el método con que se calcula el puntaje de cada documento. Por ejemplo, WandBM25 utiliza BM25 y WandTFIDF utiliza tf-idf. 
+	\item \textbf{Wand}. Clase que controla la lógica del algoritmo Wand. Lleva a cabo el proceso de inserción de documentos en el \textit{heap} y todo lo que esto conlleva. Existen diferentes tipos de objetos Wand que se pueden utilizar, entre ellos están WandBM25, WandFrec y WandTFIDF, donde la única diferencia entre ellos es el método con que se calcula el puntaje de cada documento. Por ejemplo, WandBM25 utiliza BM25 y WandTFIDF utiliza tf-idf. 
 	
 	\item \textbf{ResultObject}. Clase que se utiliza para guardar los mejores $K$ documentos.
 	
@@ -56,9 +56,9 @@ El diseño aplicado para implementar el esquema LH se puede ver en la Figura \re
 
 \section{Wand con \textit{heap} compartido}
 \label{scheduling:whc}
-En el esquema SH cada hebra procesa una parte del índice. Sin embargo, ahora un solo \textit{heap} es creado y accedido por todos los hilos de ejecución. En este caso no se requiere de mezclar los resultados y el proceso de descarte tiende a ser más eficiente porque los documentos con mayor puntaje tienden a estar en el \textit{heap}. El acceso al \textit{heap} debe ser controlado por un \textit{lock} o algún método similar que garantice el acceso exclusivo de los hilos al \textit{heap}. Este esquema es más eficiente que el LH en consultas que toman mayor tiempo en ser resueltas.
+En el esquema SH cada hebra procesa una parte del índice. Sin embargo, ahora un solo \textit{heap} es creado y accedido por todos los hilos de ejecución. En este caso no se requiere mezclar los resultados y el proceso de descarte tiende a ser más eficiente porque los documentos con mayor puntaje tienden a estar en el \textit{heap}. El acceso al \textit{heap} debe ser controlado por un \textit{lock} o algún método similar que garantice el acceso exclusivo de los hilos al \textit{heap}. Este esquema es más eficiente que el LH en consultas que toman mayor tiempo en ser resueltas.
 
-El diseño implementado para este esquema posee como clase principal a TopKMultiThreadWandOperatorLocks y difiere del modelo implementado para el esquema LH en el sentido que ahora se debe controlar el acceso concurrente a los datos compartidos como el \textit{heap} y el \textit{threshold}. A continuación se presenta el diccionario de datos del esquema SH mostrado en la Figura \ref{fig:TopKMultiThreadWandOperatorLocks}.
+El diseño implementado para este esquema posee como clase principal a TopKMultiThreadWandOperatorLocks y difiere del modelo implementado para el esquema LH en el sentido que ahora se debe controlar el acceso concurrente a los datos compartidos como el \textit{heap} y el \textit{threshold}. A continuación se presenta el diccionario de datos del diagrama de clases mostrado en la Figura \ref{fig:TopKMultiThreadWandOperatorLocks}.
 
 \begin{figure}[tp]
 \centering
