@@ -1,6 +1,6 @@
 \chapter{Estrategias de planificación de consultas}
 \label{cap:planificacion}
-Los motores de búsqueda verticales son diseñados con el propósito de lidiar con cargas dinámicas de trabajo. Un ejemplo de un motor de búsqueda vertical, es un motor de publicidad que ejecuta una consulta cada vez que un usuario abre un correo electrónico en por ejemplo, el servicio de \textit{Yahoo! mail}; de esta forma se muestra publicidad de acuerdo al contenido del correo electrónico. Eventualmente millones de usuarios concurrentes están conectados a sus correos electrónicos, por lo que la carga de trabajo esperada para el motor de búsqueda puede llegar a órdenes de las cien mil consultas por segundo \citep{Gil-Costa:2013}. Adicionalmente, el hecho que las actualizaciones en un motor de búsqueda vertical ocurran con mayor frecuencia que en uno de propósito general, hace que el diseño de los algoritmos para procesar las consultas sea diferente; también se debe permitir la actualización del índice invertido.
+Los motores de búsqueda verticales son diseñados con el propósito de lidiar con cargas dinámicas de trabajo. Un ejemplo de un motor de búsqueda vertical, es un motor de publicidad que ejecuta una consulta cada vez que un usuario abre un correo electrónico en por ejemplo, el servicio de \textit{Yahoo! mail}; de esta forma se muestra publicidad de acuerdo al contenido del correo electrónico. Eventualmente, millones de usuarios concurrentes están conectados a sus correos electrónicos, por lo que la carga de trabajo esperada para el motor de búsqueda puede llegar a órdenes de las cien mil consultas por segundo \citep{Gil-Costa:2013}. Adicionalmente, el hecho que las actualizaciones en un motor de búsqueda vertical ocurran con mayor frecuencia que en uno de propósito general, hace que el diseño de los algoritmos para procesar las consultas sea diferente; también se debe permitir la actualización del índice invertido.
 
 Por lo anteriormente mencionado, se hace imperioso tener un sistema diseñado que soporte altas cargas de trabajo, y las respuestas a consultas esten en una cota de tiempo aceptable para el usuario sin mermar la calidad de los resultados obtenidos. También es necesario que las estructuras de datos y algoritmos implementados soporten la concurrencia entre las transacciones de lecturas y escrituras; ya que eventualmente el motor de búsqueda tendrá que dejar de procesar consultas para poder servir las transacciones de escritura que actualizan el índice invertido.
 
@@ -9,7 +9,7 @@ A continuación se muestran las diferentes estrategias de planificación de tran
 
 \section{Estrategias por bloques}
 \label{scheduling:bloques}
-Un sistema de planificación de un motor de búsqueda trabaja en un contexto \textit{online}, esto significa que desconoce las transacciones que vendrán en el futuro y que cuando llega una nueva transacción de lectura, se debe tomar una decisión rápida acerca de qué hacer con ella. Adicionalmente, una transacción de lectura debe ser resuelta dentro de una cota superior de tiempo, al cual se llamará $t_{limite}$. En el contexto del presente trabajo, para que el planificador tome una decisión con respecto a una consulta, debe conocer de ella (1) su tiempo de ejecución y (2) el número de hebras con los que será resuelta. El tiempo de ejecución de cada consulta se obtiene utilizando los métodos de predicción de tiempos mostrados en el Capítulo \ref{cap:prediccion}; una vez que se predice el tiempo esperado $t_{esperado}$ de cada consulta para $1$,$2$,$4$,$8$ y $16$ hebras, se asigna el número de hilos de ejecución tal que se cumpla que $t_{esperado} < t_{limite}$, de esta forma se satisface la condición de que todas las consultas deben ser resueltas en una cota superior de tiempo previamente definida.
+Un sistema de planificación de un motor de búsqueda trabaja en un contexto \textit{online}, esto significa que desconoce las transacciones que vendrán en el futuro y que cuando llega una nueva transacción de lectura, se debe tomar una decisión rápida acerca de qué hacer con ella. Adicionalmente, una transacción de lectura debe ser resuelta dentro de una cota superior de tiempo, al cual se llamará $t_{limite}$. En el contexto del presente trabajo, para que el planificador tome una decisión con respecto a una consulta, debe conocer de ella (1) su tiempo de ejecución y (2) el número de hebras con los que será resuelta. El tiempo de ejecución de cada consulta se obtiene utilizando los métodos de predicción de tiempos mostrados en el Capítulo \ref{cap:prediccion}; una vez que se predice el tiempo esperado $t_{esperado}$ de cada consulta para $1$, $2$, $4$, $8$ y $16$ hebras, se asigna el número de hilos de ejecución tal que se cumpla que $t_{esperado} < t_{limite}$, de esta forma se satisface la condición de que todas las consultas deben ser resueltas en una cota superior de tiempo previamente definida.
 
 Bajo el contexto de un motor de búsqueda en el que se debe planificar transacciones de lecturas que eventualmente serán resueltas de forma paralela por diferentes hilos de ejecución, existe una estrategia teórica llamada RW que aborda este problema \citep{Ye:2007} y se adapta a este escenario de un motor de búsqueda vertical; esta estrategia del estado del arte da pie para que en el presente trabajo de tesis se proponga dos nuevas estrategias siguiendo el mismo enfoque de RW, pero estas enfocadas principalmente en mejorar la asignación de consultas a bloques, para así reducir el tiempo ocioso de las hebras. 
 
@@ -38,19 +38,19 @@ Como se puede ver en el Algoritmo \ref{alg:fr}, cuando una nueva transacción de
 \REQUIRE Una SchedulingList $L$ en donde se hará la planificación, QueryObject $Q$ a planificar
 \ENSURE SchedulingList $L$ con la nueva query planificada
 
-\IF {$isBig(query)$}
+\IF {$isBig(Q)$}
 	\STATE $block = new Wall();$
-	\STATE $block \rightarrow addQuery(query);$
+	\STATE $block \rightarrow addQuery(Q);$
 	\STATE $L \rightarrow addBlock(block);$
 \ELSE
 	\STATE $asignada = false;$
 	\FOR {$ i = L \rightarrow firstOpenBlockLocked() ... L \rightarrow size()$}
 		\STATE $room\_block = L \rightarrow getBlockLocked(i);$
 		
-		\IF {$(room\_block \rightarrow isOpen()) \& \& 
-				(room\_block \rightarrow freeThreads() >= query \rightarrow getThreads())$
+		\IF {$(room\_block \rightarrow isOpen()) \And 
+				(room\_block \rightarrow freeThreads() >= Q \rightarrow getThreads())$
 			}
-			\STATE $room\_block \rightarrow addQuery(query)$
+			\STATE $room\_block \rightarrow addQuery(Q)$
 			\STATE $asignada = true$
 			\STATE $break;$
 		\ENDIF
@@ -58,7 +58,7 @@ Como se puede ver en el Algoritmo \ref{alg:fr}, cuando una nueva transacción de
 	
 	\IF {$!(asignada)$}
 		\STATE $block = new Room();$
-		\STATE $block \rightarrow addQuery(query);$
+		\STATE $block \rightarrow addQuery(Q);$
 		\STATE $L \rightarrow addBlockLocked(block);$		
 	\ENDIF
 \ENDIF
@@ -94,10 +94,10 @@ El Algoritmo \ref{alg:times} muestra el funcionamiento de la estrategia \textit{
 	\STATE $best\_diff = INF;$	
 	\FOR {$ i = L \rightarrow firstOpenBlockLocked() ... L \rightarrow size()$}
 		\STATE $block = L \rightarrow getBlockLocked(i);$		
-		\IF {$ block block \rightarrow freeThreads() \geq query \rightarrow getThreads() $}
+		\IF {$ block block \rightarrow freeThreads() \geq Q \rightarrow getThreads() $}
 			\STATE $tiempo\_min = block \rightarrow getMinimumTime()$			
-			\IF {$ block \rightarrow isSchedulable(query) $}
-				\STATE $L \rightarrow addQuery(query);$
+			\IF {$ block \rightarrow isSchedulable(Q) $}
+				\STATE $L \rightarrow addQuery(Q);$
 				\STATE $assigned = true;$
 				\STATE $break;$
 			\ENDIF						
@@ -107,9 +107,9 @@ El Algoritmo \ref{alg:times} muestra el funcionamiento de la estrategia \textit{
 			\ENDIF			
 		\ENDIF		
 	\ENDFOR	
-	\IF {$ !(assigned)  \& \& (blocks\_viewed \geq MAX\_BLOCKS\_CHECKED) $}
+	\IF {$ !(assigned) \And (blocks\_viewed \geq MAX\_BLOCKS\_CHECKED) $}
 		\STATE $block = new QueryBlock();$
-		\STATE $block \rightarrow addQuery(query);$
+		\STATE $block \rightarrow addQuery(Q);$
 		\STATE $L \rightarrow addBlockLocked(block);$		
 	\ENDIF	
 \end{algorithmic}
@@ -136,20 +136,20 @@ El procedimiento de la estrategia \textit{TimesRanges} se puede ver en el algori
 \begin{algorithmic}[1]
 \REQUIRE Una SchedulingList $L$ en donde se hará la planificación, QueryObject $Q$ a planificar
 \ENSURE SchedulingList $L$ con la nueva query planificada	
-	\STATE $range = getQueryRange(query);;$		
+	\STATE $range = getQueryRange(Q);$		
 	\FOR {$ i = L \rightarrow firstOpenBlockLocked() ... L \rightarrow size()$}
 		\STATE $block = L \rightarrow getBlockLocked(i);$	
-		\IF {$ block block \rightarrow freeThreads() \geq query \rightarrow getThreads() \& \&  block_ranges[i] == range$}
-			\STATE $block = L \rightarrow addQuery(query);$
+		\IF {$ block \rightarrow freeThreads() \geq query \rightarrow getThreads() \And  block\_ranges[i] == range$}
+			\STATE $block = L \rightarrow addQuery(Q);$
 			\STATE $asignada = true;$
 			\STATE $break;$	
 		\ENDIF
 	\ENDFOR
 	\IF {$ !(asignada) $}
 		\STATE $block = new QueryBlock();$	
-		\STATE $block->addQuery(query);$	
+		\STATE $block \rightarrow addQuery(Q);$	
 		\STATE $L \rightarrow addBlockLocked(block);$
-		\STATE $block_ranges[L \rightarrow size - 1] = range;$	
+		\STATE $block\_ranges[L \rightarrow size - 1] = range;$	
 	\ENDIF
 \end{algorithmic}
 \end{algorithm}
