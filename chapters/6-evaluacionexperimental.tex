@@ -168,7 +168,23 @@ Se compararon las estrategias de planificación por bloques \citep{Ye:2007} usan
 
 En la Figura \ref{fig:scheduler_all_16threads} se puede observar el comportamiendo que tienen estas estrategias al resolver consultas divididas en conjuntos de diferentes tamaños (1000, 500, 200, 100 y 50). En cada caso las estrategias resolvieron un total de 10000 consultas con una pausa entre lotes, es decir, en el primer caso se resuelven 200 lotes de 50 consultas cada uno; en el segundo caso se resuelven 100 lotes de 100 consultas cada uno; así sucesivamente hasta llegar a procesar 10 lotes de 1000 consultas cada uno. El tiempo de ejecución total tomado corresponde a la suma de tiempos de ejecución de los lotes. El mejor resultado fue obtenido por la estrategia \textit{Times Ranges} usando el predictor perfecto, ya que al crear bloques de consultas que poseen rangos de tiempos similares, se disminiuye el tiempo pérdido por las hebras al final de cada uno de ellos.
 
-Notar que en estrategias bajo el enfoque de bloques, un predictor con mayor precisión puede conducir a la reducción del tiempo de procesamiento de las consultas, por lo que el rendimiento de estas estrategias está supeditado a la calidad del predictor. 
+Notar que en estrategias bajo el enfoque de bloques, un predictor con mayor precisión puede conducir a la reducción del tiempo de procesamiento de las consultas, por lo que el rendimiento de estas estrategias está supeditado a la calidad del predictor. Si solo nos centramos en el rendimiento de las estrategias por bloques del estado del arte mostradas en la Figura \ref{fig:scheduler_all_16threads}, se puede apreciar que la de menor rendimiento es la de \textit{Rooms} y \textit{Walls}, y que un predictor con mayor precisión no tendría mayor beneficio para esta estrategia, puesto que la ganancia de tiempo que se obtiene al utilizar el predictor multilineal y un predictor perfecto es mínima. Sin embargo, para la estrategia de \textit{Times Ranges} que es la estrategia con mejor rendimiento, se hace importante un predictor con mayor precisión, ya que la ganancia en tiempo es significativa para \textit{batches} de pequeño tamaño. Por ejemplo, para resolver el conjunto completo de consultas en \textit{batches} de tamaño 50 y utilizando un predictor multilineal se requiere de 198069 $ms$, mientras que utilizando un predictor perfecto se requiere de 15277 $ms$. La Tabla \ref{ganancia_predictor} muestra el detalle de los tiempos para los diferentes tamaños de \textit{batches} de consultas, desde la cual podemos inferir la ganancia de tiempo obtenida.
+
+\begin{table}[htbp]
+\caption{Ganancia de tiempo en milisegundos obtenida al utilizar un predictor con mayor precisión}
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+Tam. de \textit{batch} & \textit{Times Ranges} predictor perfecto & \textit{Times Ranges} predictor perfecto ML\\ \hline
+50 & 152777 & 198069 \\ \hline
+100 & 142254 & 187221 \\ \hline
+200 & 139629 & 174326 \\ \hline
+500 & 134633 & 169863 \\ \hline
+1000 & 133660 & 166107 \\ \hline
+\end{tabular}
+\end{center}
+\label{ganancia_predictor}
+\end{table}
 
 \begin{figure}[tp]
 \centering
@@ -179,11 +195,29 @@ Notar que en estrategias bajo el enfoque de bloques, un predictor con mayor prec
 
 En base a experimentación se ha encontrado que en general procesar transacciones de lectura bajo un enfoque de bloques \citep{Ye:2007} es mucho menos eficiente que con el enfoque de 1 hebra por consulta (1TQ) y unidades de trabajo (\textit{Query Units}). Es por esta razón que en las siguientes experimentaciones y comparaciones, solo se utiliza aquella que arrojó mejores resultados: \textit{Times Ranges} con predictor perfecto.
 
-% Se Compara el mejor de bloques: Times Ranges con estrategia de 1TQ y QueryUnits
-%Para observar el comportamiento de la estrategia 1TQ se utiliza una versión de la estrategia unidades de trabajo haciendo uso de una sola unidad de procesamiento por cada consulta, de esta manera las hebras trabajan de forma independiente sobre diferentes transacciones de lectura y es equivalente a la estrategia 1TQ mostrada en la sección %\ref{scheduling:baseline} mostrar como \textit{baseline}. 
-
 Posteriormente se hace una comparación \textit{Times Ranges} con las estrategias de unidades de trabajo y 1TQ. Los resultados de dicha comparación se muestran en la Figura \ref{fig:units_vs_multithread}, aquí se ve claramente que bajo un contexto de un predictor perfecto, la estrategia de unidades de trabajo posee un mejor rendimiento que \textit{Times Ranges}, ya que para todos los escenarios (lotes de diferentes tamaños), se requiere de menos tiempo para el procesamiento del conjunto total de 10000 consultas.
 Es importante notar que a medida que el tamaño de los lotes de consultas crece, la estrategia 1TQ se acerca al rendimiento de unidades de trabajo; esto se debe principalmente a que la estrategia 1TQ no posee un método inteligente de asignación de hebras a consultas, esto implica que eventualmente al final de cada lote, algunas hebras procesen consultas costosas en tiempo, retrasando al conjunto completo de hebras en la sincronización para comenzar el procesamiento del siguiente bloque. De esta forma, mientras mayor sea la cantidad de consultas por lotes, menor será el número de lotes a procesar y por ende menor el tiempo perdido por la estrategia 1TQ.  
+
+La estrategia de \textit{Query Units} posee una ganancia de tiempo considerable para escogerla por sobre la estrategia 1TQ cuando se está procesando batches de tamaño pequeño. A medida que el tamaño de los \textit{batches} crece, la ganancia obtenida por \textit{Query Units} decrece y la política de 1TQ tomaría ventaja por la simplicidad que ofrece. Por otro lado, la estrategia de \textit{Times Ranges} posee un rendimiento lo suficientemente menor para considerar no ocuparla en el presente contexto, ya que por ejemplo para \textit{batches} de tamaño 50, el tiempo de procesamiento de \textit{Times Ranges} es de 192523 $ms$, mientras que para la estrategia de \textit{Query Units} es de 104215 $ms$; esta tendencia se mantiene a medida que el tamaño de los \textit{batches} crece. Por lo dicho anteriormente, las estrategias de planificación del estado del arte adaptadas al contexto del presente trabajo de tesis, en la práctica no son eficientes y son más bien pruebas de concepto.
+
+En la práctica y bajo el presente contexto, sería conveniente utilizar la estrategia propuesta de \textit{Query Units}. Sin embargo, el caso ideal sería implementar una política dependiendo del tamaño de los \textit{batches} a procesar, cuando los \textit{batches} a procesar son de pocas consultas, sería una mejor opción utilizar la estrategia de \textit{Query Units} por sobre la estrategia de 1TQ, ya que se posee una ganancia significativa en tiempo. Sin embargo, cuando los tamaños de los \textit{batches} son de mayor tamaño, entonces sería una mejor opción utilizar la estrategia de 1TQ por la simplicidad de la estrategia. En la Figura \ref{ganancia_queryunits_1tq} se puede apreciar el detalle de los tiempos obtenidos con las dos estrategias recientemente mencionadas y de las cuales se puede inferir la ganancia de tiempo obtenida con la estrategia de \textit{Query Units}. 
+
+\begin{table}[htbp]
+\caption{Tiempo en milisegundos de las estrategias Query Units y 1TQ}
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+Tamaño de \textit{batch} & \textit{Query Units} & 1TQ \\ \hline
+50 & 102184 & 188496 \\ \hline
+100 & 99652 & 144585 \\ \hline
+200 & 98643 & 121595 \\ \hline
+500 & 97684 & 107093 \\ \hline
+1000 & 97496 & 100940 \\ \hline
+\end{tabular}
+\end{center}
+\label{ganancia_queryunits_1tq}
+\end{table}
+
 
 \begin{figure}[tp]
 \centering
@@ -191,7 +225,6 @@ Es importante notar que a medida que el tamaño de los lotes de consultas crece,
 \caption{Tiempos de estrategias de planificación por bloques.}
 \label{fig:units_vs_multithread}
 \end{figure}
-
 
 Finalmente se hizo una comparación del impacto que tienen los métodos de predicción ML y RN sobre el sistema de unidades de trabajo, estos resultados se pueden observar en la Figura \ref{fig:gov2_bmw}; aquí se muestra que el uso de un predictor se hace importante a medida que el tamaño de los lotes decrece, puesto que es cuando la diferencia de tiempos entre 1TQ (que no usa una asignación de hilos de ejecución) y las otras dos estrategias se hace cada vez mayor, siendo mucho menores los tiempos de aquellas estrategias que sí usan un método de asignación de recursos basado en el tiempo predicho de la consulta (aunque este no sea del todo preciso). Por otro lado, a pesar de que existen diferencias de precisión entre ambos métodos (como se mostró en la sección anterior), en el enfoque de unidades de trabajo, esta diferencia no genera un impacto negativo importante en el tiempo total de procesamiento de las consultas; en otras palabras, el rendimiento de la estrategia propuesta no es demasiado sensible a los errores que puedan cometer los predictores de tiempo.
 
