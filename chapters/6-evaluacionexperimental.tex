@@ -69,7 +69,6 @@ Adicionalmente en la Figura \ref{fig:eficiencias_wand} se puede ver en forma gen
 \label{evaluacionexperimental:predicciontiempos}
 En esta sección se muestran los resultados obtenidos de las implementaciones hechas para los métodos de predicción basados en regresión lineal múltiple (ML) y red neuronal (RN). El proceso de entrenamiento para ambos casos se llevó a cabo con 10000 instancias, cada instancia es una transaccion de lectura real desde la cual se precalcularon los 42 descriptores definidos en el Capítulo \ref{cap:prediccion}. 
 
-% Se debe elegir cuáles métodos se comentarán y cuáles se mandarán al apéndice (gov2 para wand y bmw es buen candidato)
 Las Tablas \ref{ml_gov2_wand} y \ref{rn_gov2_wand} muestran los valores obtenidos en el proceso de construcción de los modelos ML y RN en términos del coeficiente de Pearson y la raíz del error cuadrático medio (RMSE) en milisegundos; en ambos procesos mostrados en las tablas anteriores se utilizó el \textit{dataset} Gov2 y el método Wand. Los resultados para los modelos restantes son presentados en el Anexo \ref{ape:apeA}. 
 
 A pesar de que son 42 variables independientes, en forma general se pueden observar buenos valores de los coeficientes de regresión de \textit{Pearson} para cada uno de los modelos, lo que significa que existe una relación lineal entre el tiempo de las consultas y el modelo. Adicionalmente calculando el coeficiente de determinación, se puede notar que en el peor caso del modelo ML el porcentaje de variabilidad del tiempo explicado por el modelo alcanza un $67\%$ ($(0.819^2) * 100$) y en el caso del modelo RN alcanza un $79.5\%$ ($(0.892^2) * 100$) . Con el conjunto de datos Clueweb se obtienen mejores coeficientes de correlación (ver Anexo \ref{ape:apeA}).
@@ -82,7 +81,7 @@ A pesar de que son 42 variables independientes, en forma general se pueden obser
 \hline
 \multicolumn{ 6}{|c|}{Estimador ML – GOV2 – WAND} \\ \hline
  & 1 hebra & 2 hebras & 4 hebras & 8 hebras & 16 hebras \\ \hline
-r & 0,8395167242 & 0,8487027167 & 0,8363882022 & 0,8220135644 & 0,8189326373 \\ \hline
+r & 0,8395167242 & \textbf{0,8487027167} & 0,8363882022 & 0,8220135644 & 0,8189326373 \\ \hline
 RMSE & 89,8191624638 & 49,0317178648 & 22,0735989696 & 12,5486639038 & 9,1536416766 \\ \hline
 \end{tabular}
 \end{center}
@@ -96,7 +95,7 @@ RMSE & 89,8191624638 & 49,0317178648 & 22,0735989696 & 12,5486639038 & 9,1536416
 \hline
 \multicolumn{ 6}{|c|}{Estimador RN – GOV2 – WAND} \\ \hline
  & 1 hebra & 2 hebras & 4 hebras & 8 hebras & 16 hebras \\ \hline
-r & 0,9090139343 & 0,9081674727 & 0,8937170981 & 0,8920354081 & 0,8945066549 \\ \hline
+r & \textbf{0,9090139343} & 0,9081674727 & 0,8937170981 & 0,8920354081 & 0,8945066549 \\ \hline
 RMSE & 67,7757284521 & 90,4311959153 & 66,5232866794 & 23,6964743214 & 7,6274795547 \\ \hline
 \end{tabular}
 \end{center}
@@ -114,14 +113,14 @@ El detalle de los resultados obtenidos en el proceso de evaluación de ambos mé
 \hline
  & \multicolumn{ 2}{c|}{Modelo ML} & \multicolumn{ 2}{c|}{Modelo RN } \\ \hline
  & Entrenamiento & Validación & Entrenamiento & Validación \\ \hline
-RMSE & 36,5253569757 & 49,405170938 & 51,2108329846 & 73,2588845444 \\ \hline
-ERP (\%) & 40,7309501561 & 48,528654817 & 75,1585277033 & 78,7569645709 \\ \hline
+RMSE & \textbf{36,5253569757} & \textbf{49,405170938} & 51,2108329846 & 73,2588845444 \\ \hline
+ERP (\%) & \textbf{40,7309501561} & \textbf{48,528654817} & 75,1585277033 & 78,7569645709 \\ \hline
 \end{tabular}
 \end{center}
 \label{validacion_modelos_gov2_wand}
 \end{table}
 
-Finalmente con el objetivo de entender el por qué del valor de los errores obtenidos anteriormente para el modelo RN, se hizo un análisis exclusivo del coeficiente de correlación de este modelo con las dos muestras de la Web disponibles (Gov2 y Clueweb). Se tomó este estadístico para el proceso de entrenamiento y evaluación para distintos números de neuronas en la capa oculta (2, 10 y 20). Los valores obtenidos para la Clueweb se muestran en la Figura \ref{fig:cluewebRN}, en donde se puede apreciar que la diferencia entre el coeficiente de correlación de entrenamiento y el calculado desde el conjunto de evaluación no parece ser muy importante; sin embargo, cuando se observan los resultados para la Gov2 (Figura \ref{fig:gov2RN}), se puede apreciar una gran diferencia entre sus coeficientes de correlación de entrenamiento y evaluación, por ejemplo, para 20 neuronas se observa un coeficiente de entrenamiento de $0.96$, mientras que el de evaluación es $0.61$. Lo explicado anteriormente muestra que el modelo RN es realmente dependiente de los datos, por lo que no es confiable utilizarlo en todos los escenarios. Además se puede observar que al aumentar significativamente el número de neuronas en la capa oculta, los resultados no son muy diferentes e incluso son peores cuando se ocupa los datos de Gov2, lo que podría ser muestra de un sobreentrenamiento del modelo. Sin embargo, esto no descarta una solución basada en redes neuronales, sino que es necesario encontrar un conjunto más preciso de descriptores.
+Finalmente con el objetivo de entender el por qué del valor de los errores obtenidos anteriormente para el modelo RN, se hizo un análisis exclusivo del coeficiente de correlación de este modelo con las dos muestras de la Web disponibles (Gov2 y Clueweb). Se tomó este estadístico para el proceso de entrenamiento y evaluación para distintos números de neuronas en la capa oculta (2, 10 y 20). Los valores obtenidos para la Clueweb se muestran en la Figura \ref{fig:cluewebRN}, en donde se puede apreciar que la diferencia entre el coeficiente de correlación de entrenamiento y el calculado desde el conjunto de evaluación no parece ser muy importante; sin embargo, cuando se observan los resultados para la Gov2 (Figura \ref{fig:gov2RN}), se puede apreciar una gran diferencia entre sus coeficientes de correlación de entrenamiento y evaluación, por ejemplo, para 20 neuronas se observa un coeficiente de entrenamiento de $0.96$, mientras que el de evaluación es $0.61$. Lo explicado anteriormente indicaría que existe una dependencia de los datos, por lo que no es confiable utilizarlo en todos los escenarios. Además se puede observar que al aumentar significativamente el número de neuronas en la capa oculta, los resultados no son muy diferentes e incluso son peores cuando se ocupa los datos de Gov2, lo que podría ser muestra de un sobreentrenamiento del modelo. Sin embargo, esto no descarta una solución basada en redes neuronales, sino que es necesario encontrar un conjunto más preciso de descriptores.
 
 \begin{figure}[tp]
   \begin{minipage}[][][b]{0.5\linewidth}
@@ -173,14 +172,14 @@ Notar que en estrategias bajo el enfoque de bloques, un predictor con mayor prec
 \begin{table}[htbp]
 \caption{Ganancia de tiempo en milisegundos obtenida al utilizar un predictor con mayor precisión}
 \begin{center}
-\begin{tabular}{|c|c|c|}
+\begin{tabular}{|c|c|c|c|}
 \hline
-Tam. de \textit{batch} & \textit{Times Ranges} predictor perfecto & \textit{Times Ranges} predictor perfecto ML\\ \hline
-50 & 152777 & 198069 \\ \hline
-100 & 142254 & 187221 \\ \hline
-200 & 139629 & 174326 \\ \hline
-500 & 134633 & 169863 \\ \hline
-1000 & 133660 & 166107 \\ \hline
+\textit{batch} & \textit{Times Ranges} predictor perfecto & \textit{Times Ranges} predictor perfecto ML & Ganancia \\ \hline
+50 & 152777 & 198069 & \textbf{22.87\%}   	\\ \hline
+100 & 142254 & 187221 & \textbf{24.02\%}  	\\ \hline
+200 & 139629 & 174326 & \textbf{19.9\%} 		\\ \hline
+500 & 134633 & 169863 & \textbf{20.74\%} 	\\ \hline
+1000 & 133660 & 166107 & \textbf{19.53\%} 	\\ \hline
 \end{tabular}
 \end{center}
 \label{ganancia_predictor}
@@ -205,19 +204,18 @@ En la práctica y bajo el presente contexto, sería conveniente utilizar la estr
 \begin{table}[htbp]
 \caption{Tiempo en milisegundos de las estrategias Query Units y 1TQ}
 \begin{center}
-\begin{tabular}{|c|c|c|}
+\begin{tabular}{|c|c|c|c|}
 \hline
-Tamaño de \textit{batch} & \textit{Query Units} & 1TQ \\ \hline
-50 & 102184 & 188496 \\ \hline
-100 & 99652 & 144585 \\ \hline
-200 & 98643 & 121595 \\ \hline
-500 & 97684 & 107093 \\ \hline
-1000 & 97496 & 100940 \\ \hline
+Tamaño de \textit{batch} & \textit{Query Units} & 1TQ & Ganancia en tiempo \\ \hline
+50 & 102184 & 188496 & \textbf{45.79\%} 	\\ \hline
+100 & 99652 & 144585 & \textbf{31.08\%} 	\\ \hline
+200 & 98643 & 121595 & \textbf{18.88\%} 	\\ \hline
+500 & 97684 & 107093 & \textbf{8.79\%} 	\\ \hline
+1000 & 97496 & 100940 & \textbf{3.41\%} 	\\ \hline
 \end{tabular}
 \end{center}
 \label{ganancia_queryunits_1tq}
 \end{table}
-
 
 \begin{figure}[tp]
 \centering
