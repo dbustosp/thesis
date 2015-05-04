@@ -1,16 +1,5 @@
 \chapter{Conclusiones}
 \label{cap:conclu}
-% Intro general
-% Capítulo de Wand multithreading
-% Conclusión 
-% Capítulo de predicción de tiempos
-% Conclusión
-% Capítulo de estrategias de planificación
-% Conclusión
-% Conclusión objetivos específicos
-% Conclusión general
-% Aportes al área
-% Trabajo futuro
 Por medio del presente trabajo se ha llevado a cabo un estudio del procesamiento y planificación de transacciones de lectura que llegan a un motor de búsqueda haciendo uso de una máquina multinúcleo, en el que se adaptaron diferentes estrategias de planificación del estado del arte al contexto de un motor de búsqueda, y se evaluaron los rendimientos de cada una de ellas mediante el procesamiento de consultas por lotes. Adicionalmente se propone una estrategia de procesamiento de consultas basada en unidades de trabajo, en el que cada consulta es dividida en unidades de procesamiento y los diferentes hilos de ejecución compiten por procesar cada unidad.
 
 El sistema implementado para resolver una transacción de lectura que llega al sistema, es flexible a hacer uso de diferentes números de hilos de ejecución; esta capacidad se logra debido a que se implementó dos versiones paralelas del algoritmo Wand, la primera es una versión con \textit{heaps} locales y la otra hace uso de un solo \textit{heap} compartido. Los resultados arrojan que utilizando la muestra de la Web Gov2 y obteniendo el conjunto de los \textit{top-100} mejores documentos, el enfoque con \textit{heap} compartido posee mejor rendimiento. 
@@ -24,7 +13,9 @@ En condiciones ideales de predicciones de tiempo, la estrategia de unidades de t
 
 En el presente contexto de procesamiento de transacciones de lectura en una máquina multicore, probablemente sea una mejor idea enfocar esfuerzos en crear un predictor más simple y preciso que los vistos en el presente trabajo por sobre intentar reordenar las consultas, de esta manera se obtendrán mejores tiempos para el procesamiento del conjunto completo de consultas.
 
-Finalmente es posible afirmar que se ha cumplido con todos los objetivos planteados al comienzo de este trabajo. Se ha desarrollado dos algoritmos de procesamiento de transacciones de lectura basados en el algoritmo Wand, una con \textit{heap} compartido y otra con \textit{heaps} locales. Se han creado estrategias de planificación \textit{online} que reordenan y adaptan dinámicamente las consultas al tamaño de las estructuras de datos disponibles; estas estrategias fueron adaptadas al contexto de un motor de búsqueda vertical en el que se procesan transacciones de lectura por lotes. Finalmente la evaluación para los métodos de predicción se hizo mediante la medición del RMSE y error relativo porcentual promedio (ERP); por otro lado, la evaluación para los métodos de planificación y procesamiento se hizo en base al tiempo que tarda cada una de ellas en procesar el conjunto completo de consultas.
+Es posible afirmar que se ha cumplido con todos los objetivos planteados al comienzo de este trabajo. Se ha desarrollado dos algoritmos de procesamiento de transacciones de lectura basados en el algoritmo Wand, una con \textit{heap} compartido y otra con \textit{heaps} locales. Se han creado estrategias de planificación \textit{online} que reordenan y adaptan dinámicamente las consultas al tamaño de las estructuras de datos disponibles; estas estrategias fueron adaptadas al contexto de un motor de búsqueda vertical en el que se procesan transacciones de lectura por lotes. Finalmente la evaluación para los métodos de predicción se hizo mediante la medición del RMSE y error relativo porcentual promedio (ERP); por otro lado, la evaluación para los métodos de planificación y procesamiento se hizo en base al tiempo que tarda cada una de ellas en procesar el conjunto completo de consultas.
+
+Finalmente es importante señalar que la estrategia de unidades de trabajo fue creada por el grupo de investigación donde se realizó el presente trabajo de tesis.
 
 \section{Trabajo futuro}
 \label{conclu:trabajofuturo}
