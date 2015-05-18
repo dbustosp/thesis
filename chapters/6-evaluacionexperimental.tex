@@ -127,8 +127,8 @@ A pesar de que son 42 variables independientes, en forma general se pueden obser
 \hline
 \multicolumn{ 6}{|c|}{Estimador ML – GOV2 – WAND} \\ \hline
  & 1 hebra & 2 hebras & 4 hebras & 8 hebras & 16 hebras \\ \hline
-r & 0,8395167242 & \textbf{0,8487027167} & 0,8363882022 & 0,8220135644 & 0,8189326373 \\ \hline
-RMSE & 89,8191624638 & 49,0317178648 & 22,0735989696 & 12,5486639038 & 9,1536416766 \\ \hline
+r & 0,8395167242 & \cellcolor{yellow} \textbf{0,8487027167} & 0,8363882022 & 0,8220135644 & 0,8189326373 \\ \hline
+RMSE & 89,8191624638 & \cellcolor{yellow} 49,0317178648 & 22,0735989696 & 12,5486639038 & 9,1536416766 \\ \hline
 \end{tabular}
 \end{center}
 \label{ml_gov2_wand}
@@ -141,8 +141,8 @@ RMSE & 89,8191624638 & 49,0317178648 & 22,0735989696 & 12,5486639038 & 9,1536416
 \hline
 \multicolumn{ 6}{|c|}{Estimador RN – GOV2 – WAND} \\ \hline
  & 1 hebra & 2 hebras & 4 hebras & 8 hebras & 16 hebras \\ \hline
-r & \textbf{0,9090139343} & 0,9081674727 & 0,8937170981 & 0,8920354081 & 0,8945066549 \\ \hline
-RMSE & 67,7757284521 & 90,4311959153 & 66,5232866794 & 23,6964743214 & 7,6274795547 \\ \hline
+r & \cellcolor{yellow} \textbf{0,9090139343} & 0,9081674727 & 0,8937170981 & 0,8920354081 & 0,8945066549 \\ \hline
+RMSE & \cellcolor{yellow} 67,7757284521 & 90,4311959153 & 66,5232866794 & 23,6964743214 & 7,6274795547 \\ \hline
 \end{tabular}
 \end{center}
 \label{rn_gov2_wand}
@@ -157,10 +157,10 @@ El detalle de los resultados obtenidos en el proceso de evaluación de ambos mé
 \begin{center}
 \begin{tabular}{|c|c|c|c|c|}
 \hline
- & \multicolumn{ 2}{c|}{Modelo ML} & \multicolumn{ 2}{c|}{Modelo RN } \\ \hline
- & Entrenamiento & Validación & Entrenamiento & Validación \\ \hline
-RMSE & \textbf{36,5253569757} & \textbf{49,405170938} & 51,2108329846 & 73,2588845444 \\ \hline
-ERP (\%) & \textbf{40,7309501561} & \textbf{48,528654817} & 75,1585277033 & 78,7569645709 \\ \hline
+ & \multicolumn{ 1}{c|}{Modelo ML} & \multicolumn{ 1}{c|}{Modelo RN } \\ \hline
+ & Validación & Validación \\ \hline
+RMSE & \cellcolor{yellow} \textbf{49,405170938} & 73,2588845444 \\ \hline
+ERP (\%) & \cellcolor{yellow} \textbf{48,528654817} & 78,7569645709 \\ \hline
 \end{tabular}
 \end{center}
 \label{validacion_modelos_gov2_wand}
